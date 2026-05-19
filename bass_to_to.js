@@ -10,51 +10,39 @@ let mistakes = 0;
 let osc;
 let clefImg;
 
-let notes = [
-  "E_low",
-  "F",
-  "G",
-  "A",
-  "B",
-  "C",
-  "D",
-  "E_high"
-];
+let notes = ["G","A","B","C","D","E","F","G_high"];
 
 let keys = [
-  {note: "E_low", x: 140, w: 70},
-  {note: "F", x: 210, w: 70},
-  {note: "G", x: 280, w: 70},
-  {note: "A", x: 350, w: 70},
-  {note: "B", x: 420, w: 70},
-  {note: "C", x: 490, w: 70},
-  {note: "D", x: 560, w: 70},
-  {note: "E_high", x: 630, w: 70}
+  {note: "G", x: 100, w: 70},
+  {note: "A", x: 170, w: 70},
+  {note: "B", x: 240, w: 70},
+  {note: "C", x: 310, w: 70},
+  {note: "D", x: 380, w: 70},
+  {note: "E", x: 450, w: 70},
+  {note: "F", x: 520, w: 70},
+  {note: "G_high", x: 590, w: 70}
 ];
-
 let noteFreq = {
-  "E_low": 165,
-  "F": 175,
   "G": 196,
   "A": 220,
   "B": 247,
   "C": 262,
   "D": 294,
-  "E_high": 330
+  "E": 330,
+  "F": 349,
+  "G_high": 392
 };
 
 function preload() {
   clefImg = loadImage("bass.png");
 }
 let blackKeys = [
-  {note: "D#", x: 122.5, w: 35},
-
-  {note: "F#", x: 262.5, w: 35},
-  {note: "G#", x: 332.5, w: 35},
-  {note: "A#", x: 402.5, w: 35},
-
-  {note: "C#", x: 542.5, w: 35},
-  {note: "D#", x: 612.5, w: 35}
+  {note: "F#", x: 100 - 9, w: 20},   // 下ソの左（半分）
+  {note: "G#", x: 100 + 70 - 20, w: 40},
+  {note: "A#", x: 170 + 70 - 20, w: 40},
+  {note: "C#", x: 310 + 70 - 20, w: 40},
+  {note: "D#", x: 380 + 70 - 20, w: 40},
+  {note: "F#_high", x: 590 + 70 - 11 , w: 20} // 上ソの右（半分）
 ];
 function setup() {
   createCanvas(800, 600);
@@ -87,7 +75,6 @@ function draw() {
     fill(255);
     stroke(0);
     rect(k.x, 450, k.w, 120);
-   
   }
 
   // 黒鍵
@@ -110,10 +97,7 @@ function draw() {
   fill(0);
   textSize(24);
   textAlign(LEFT);
-
-  text("Time: " + remaining, 20, 40);
-  text("せいかい: " + score, 180, 40);
-  text("ミス: " + mistakes, 180, 70);
+  text("Time: " + remaining, 50, 50);
 
   if (remaining <= 0) {
     gameOver = true;
@@ -161,47 +145,29 @@ function drawStaff() {
     line(100, baseY - i * 20, 700, baseY - i * 20);
   }
 
-  image(clefImg, 15, baseY - 108, 115, 115);
+  image(clefImg, 50, baseY - 115, 80, 135);
 }
 
 function drawNote() {
 
   let noteYMap = {
-    "E_low": baseY - 50,   // 第3間
-    "F": baseY - 60,       // 第4線
-    "G": baseY - 70,       // 第4間
-    "A": baseY - 80,       // 第5線
-    "B": baseY - 90,       // 上第1間
-    "C": baseY - 100,      // 上第1線
-    "D": baseY - 110,      // 上第2間
-    "E_high": baseY - 120  // 上第2線
+    "G": baseY + 0,
+    "A": baseY - 10,
+    "B": baseY - 20,
+    "C": baseY - 30,
+    "D": baseY - 40,
+    "E": baseY - 50,
+    "F": baseY - 60,
+    "G_high": baseY - 70
   };
 
   let y = noteYMap[question];
-
-  if (y === undefined) {
-    return;
+  if (y === undefined) return;
+   noFill();     // ←中を白に
+   stroke(0);    // ←枠だけ黒
+   strokeWeight(2);
+   ellipse(300, y, 26, 18);
   }
-
-  noFill();
-  stroke(0);
-  strokeWeight(2);
-
-  ellipse(300, y, 26, 18);
- // 上第1線の加線
- if (
-   question === "C" ||
-   question === "D" ||
-   question === "E_high"
- ) {
-   line(285, baseY - 100, 315, baseY - 100);
- }
-
- // 上第2線の加線
- if (question === "E_high") {
-   line(285, baseY - 120, 315, baseY - 120);
- }
-}
 
 function newQuestion() {
   let i = floor(random(notes.length));
@@ -209,7 +175,7 @@ function newQuestion() {
 }
 
 function mousePressed() {
-  userStartAudio();
+  userStartAudio();  // ←これ必須（iPad対策）
 
   if (!gameStarted) {
     resetGame();
@@ -224,7 +190,7 @@ function mousePressed() {
 
   let answer = "";
 
-  // 黒鍵
+  // 黒鍵（先に！）
   for (let b of blackKeys) {
     if (
       mouseX > b.x &&
@@ -248,20 +214,20 @@ function mousePressed() {
     }
   }
 
-  if (answer === question) {
-    result = "せいかい";
-    score++;
-  } else {
-    result = "ちがう";
-    mistakes++;
-  }
+ if (answer === question) {
+  result = "せいかい";
+  score++;
+} else {
+  result = "ちがう";
+  mistakes++;
+}
 
-  // 音
-  if (answer !== "" && noteFreq[answer] !== undefined) {
-    osc.freq(noteFreq[answer]);
-    osc.amp(0.5, 0.05);
-    osc.amp(0, 0.2);
-  }
+// 音は鍵盤だけ
+if (answer !== "" && noteFreq[answer] !== undefined) {
+  osc.freq(noteFreq[answer]);
+  osc.amp(0.5, 0.05);
+  osc.amp(0, 0.2);
+}
 
-  newQuestion();
+newQuestion();
 }
