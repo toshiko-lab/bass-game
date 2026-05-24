@@ -23,21 +23,21 @@ function getFreq(note) {
   if (note === "G") return 784;
   if (note === "A") return 880;
   if (note === "B") return 987;
-  if (note === "HighC") return 1046;
+  if (note === "G_high") return 784;
 
   return 523;
 }
 
 let noteData = [
-  {name: "C", y: startY + gap * 1.5}, // 第3間
-  {name: "D", y: startY + gap},       // 第4線
-  {name: "E", y: startY + gap * 0.5}, // 第4間
-  {name: "F", y: startY},             // 第5線
-  {name: "G", y: startY - gap * 0.5}, // 第5間
-  {name: "A", y: startY - gap},       // 上第1線
-  {name: "B", y: startY - gap * 1.5}, // 上第1間
-  {name: "HighC", y: startY - gap * 2} // 上第2線
-]
+  {name: "G", y: startY + gap * 3.5}, // 下第3間
+  {name: "A", y: startY + gap * 3},   // 第2線
+  {name: "B", y: startY + gap * 2.5}, // 第2間
+  {name: "C", y: startY + gap * 2},   // 第3線
+  {name: "D", y: startY + gap * 1.5}, // 第3間
+  {name: "E", y: startY + gap},       // 第4線
+  {name: "F", y: startY + gap * 0.5}, // 第4間
+  {name: "G_high", y: startY}         // 第5線
+];
 
 let keys = [
   { name: "C", x: 100, y: 520, w: keyWidth, h: 120 },
@@ -47,8 +47,8 @@ let keys = [
   { name: "G", x: 300, y: 520, w: keyWidth, h: 120 },
   { name: "A", x: 350, y: 520, w: keyWidth, h: 120 },
   { name: "B", x: 400, y: 520, w: keyWidth, h: 120 },
-  { name: "HighC", x: 450, y: 520, w: keyWidth, h: 120 }
-];;
+  { name: "G_high", x: 450, y: 520, w: keyWidth, h: 120 }
+];
 function preload() {
   clefImg = loadImage("treble.png");
 }
@@ -68,7 +68,7 @@ function draw() {
   textAlign(CENTER);
   textSize(30);
   fill(0);
-  text("ト音記号② 2点ハ～3点ハ", width / 2, 55);
+  text("ト音記号 ト～1点ト", width / 2, 55);
 
   stroke(120);
   line(60, 60, 540, 60);
