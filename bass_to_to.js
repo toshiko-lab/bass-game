@@ -100,13 +100,17 @@ function draw() {
   text("Time: " + remaining, 50, 50);
 
   if (remaining <= 0) {
-    gameOver = true;
-  }
+  gameOver = true;
+　}
 
-  // ✅ ここに入れる
-  if (gameOver) {
-    textAlign(CENTER, CENTER);
-    fill(0);
+　fill(0);
+　textSize(28);
+　textAlign(CENTER);
+
+　text("正解数: " + score, width/2 - 120, 50);
+　text("ミス数: " + mistakes, width/2 + 120, 50);
+
+　if (gameOver) {
 
   // ★ 五線より上に固定
     let topY = baseY - 140;
