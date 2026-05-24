@@ -112,8 +112,12 @@ function draw() {
     let topY = baseY - 140;
 
     textSize(28);
-    text("正解数: " + score, width/2 - 120, topY);
-    text("ミス数: " + mistakes, width/2 + 120, topY);
+    fill(0);
+　　textSize(28);
+　　textAlign(CENTER);
+
+　　text("正解数: " + score, width/2 - 120, 50);
+　　text("ミス数: " + mistakes, width/2 + 120, 50);
 
     // ★ 中央（元スタート位置）
     textSize(36);
