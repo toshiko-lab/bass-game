@@ -1,6 +1,8 @@
 let startY = 250;
 let gap = 20;
 
+let clefImg;
+
 let currentNote;
 let noteY;
 
