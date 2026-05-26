@@ -49,6 +49,7 @@ function draw() {
   drawStaff();
   drawNote();
 
+  // 白鍵
   for (let k of keys) {
     fill(255);
     stroke(0);
