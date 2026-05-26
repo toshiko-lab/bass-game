@@ -41,27 +41,29 @@ function draw() {
   textAlign(CENTER);
   textSize(30);
   fill(0);
+
   text("ト音記号 ト～1点ト", width / 2, 55);
-　image(clefImg, 20, startY - 30, 80, 120);
 
-　drawStaff();
-　drawNote();
+  image(clefImg, 20, startY - 30, 80, 120);
 
- for (let k of keys) {
-  fill(255);
-  stroke(0);
-  rect(k.x, k.y, k.w, k.h);
-}
+  drawStaff();
+  drawNote();
 
-// 黒鍵
-fill(0);
+  for (let k of keys) {
+    fill(255);
+    stroke(0);
+    rect(k.x, k.y, k.w, k.h);
+  }
 
-rect(135, 520, 30, 80);
-rect(185, 520, 30, 80);
+  // 黒鍵
+  fill(0);
 
-rect(285, 520, 30, 80);
-rect(335, 520, 30, 80);
-rect(385, 520, 30, 80);
+  rect(135, 520, 30, 80);
+  rect(185, 520, 30, 80);
+
+  rect(285, 520, 30, 80);
+  rect(335, 520, 30, 80);
+  rect(385, 520, 30, 80);
 }
 
 function drawStaff() {
