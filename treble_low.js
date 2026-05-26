@@ -42,9 +42,10 @@ function draw() {
   textSize(30);
   fill(0);
   text("ト音記号 ト～1点ト", width / 2, 55);
-　image(clefImg, 40, startY - 45, 65, 160);
-  drawStaff();
-  drawNote();
+　image(clefImg, 20, startY - 30, 80, 120);
+
+　drawStaff();
+　drawNote();
 
   for (let k of keys) {
     fill(255);
