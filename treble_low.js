@@ -4,7 +4,6 @@ let currentNote = "A";
 let noteY = baseY + gap * 2;
 let notes = ["A", "B", "HighC"];
 let startY = 250;
-let gap = 20;
 let currentNote;
 let clefImg;
 let noteY;
