@@ -47,12 +47,21 @@ function draw() {
 　drawStaff();
 　drawNote();
 
-  for (let k of keys) {
-    fill(255);
-    stroke(0);
-    rect(k.x, k.y, k.w, k.h);
-  }
+ for (let k of keys) {
+  fill(255);
+  stroke(0);
+  rect(k.x, k.y, k.w, k.h);
 }
+
+// 黒鍵
+fill(0);
+
+rect(135, 520, 30, 80);
+rect(185, 520, 30, 80);
+
+rect(285, 520, 30, 80);
+rect(335, 520, 30, 80);
+rect(385, 520, 30, 80);
 
 function drawStaff() {
   stroke(0);
