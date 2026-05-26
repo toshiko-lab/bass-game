@@ -48,6 +48,7 @@ function draw() {
   text("ト音記号 ト～1点ト", width / 2, 55);
 
   image(clefImg, -10, startY - 75, 140, 220);
+
   drawStaff();
   drawNote();
 
@@ -57,8 +58,6 @@ function draw() {
     stroke(0);
     rect(k.x, k.y, k.w, k.h);
   }
-
-  // 黒鍵
 }
 
 function drawNote() {
