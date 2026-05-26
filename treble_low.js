@@ -1,3 +1,8 @@
+let baseY = 300;
+let gap = 20;
+let currentNote = "A";
+let noteY = baseY + gap * 2;
+let notes = ["A", "B", "HighC"];
 let startY = 250;
 let gap = 20;
 let currentNote;
@@ -267,4 +272,20 @@ function mousePressed() {
     }
   }
 }
+}
+function setup() {
+  createCanvas(800, 600);
+}
+
+function draw() {
+  background(255);
+
+  stroke(0);
+
+  // 五線
+  for (let i = 0; i < 5; i++) {
+    line(100, baseY + i * gap, 500, baseY + i * gap);
+  }
+
+  drawNote();
 }
