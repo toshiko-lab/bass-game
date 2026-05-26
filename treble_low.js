@@ -62,6 +62,7 @@ rect(185, 520, 30, 80);
 rect(285, 520, 30, 80);
 rect(335, 520, 30, 80);
 rect(385, 520, 30, 80);
+}
 
 function drawStaff() {
   stroke(0);
