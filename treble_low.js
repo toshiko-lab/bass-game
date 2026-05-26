@@ -20,14 +20,15 @@ let noteData = [
 ];
 
 let keys = [
-  { name: "G", x: 100, y: 520, w: keyWidth, h: 120 },
-  { name: "A", x: 150, y: 520, w: keyWidth, h: 120 },
-  { name: "B", x: 200, y: 520, w: keyWidth, h: 120 },
-  { name: "C", x: 250, y: 520, w: keyWidth, h: 120 },
-  { name: "D", x: 300, y: 520, w: keyWidth, h: 120 },
-  { name: "E", x: 350, y: 520, w: keyWidth, h: 120 },
-  { name: "F", x: 400, y: 520, w: keyWidth, h: 120 },
-  { name: "G_high", x: 450, y: 520, w: keyWidth, h: 120 }
+  { name: "G", x: 80,  y: 520, w: 50, h: 120 },
+  { name: "A", x: 130, y: 520, w: 50, h: 120 },
+  { name: "B", x: 180, y: 520, w: 50, h: 120 },
+  { name: "C", x: 230, y: 520, w: 50, h: 120 },
+  { name: "D", x: 280, y: 520, w: 50, h: 120 },
+  { name: "E", x: 330, y: 520, w: 50, h: 120 },
+  { name: "F", x: 380, y: 520, w: 50, h: 120 },
+  { name: "G_high", x: 430, y: 520, w: 50, h: 120 },
+  { name: "A_high", x: 480, y: 520, w: 50, h: 120 }
 ];
 function preload() {
   clefImg = loadImage("treble.png");
@@ -58,26 +59,7 @@ function draw() {
   }
 
 // 黒鍵
-fill(0);
 
-// ラ#（シ♭）
-rect(135, 520, 30, 80);
-
-// ド#
-rect(285, 520, 30, 80);
-
-// レ#
-rect(335, 520, 30, 80);
-
-// ファ#
-rect(435, 520, 30, 80);
-function drawStaff() {
-  stroke(0);
-
-  for (let i = 0; i < 5; i++) {
-    line(50, startY + i * gap, 550, startY + i * gap);
-  }
-}
 
 function drawNote() {
   fill(255);
