@@ -30,9 +30,11 @@ let keys = [
   { name: "G_high", x: 430, y: 520, w: 50, h: 120 },
   { name: "A_high", x: 480, y: 520, w: 50, h: 120 }
 ];
+
 function preload() {
   clefImg = loadImage("treble.png");
 }
+
 function setup() {
   createCanvas(600, 760);
   newQuestion();
@@ -52,11 +54,18 @@ function draw() {
   drawStaff();
   drawNote();
 
-  // 白鍵
   for (let k of keys) {
     fill(255);
     stroke(0);
     rect(k.x, k.y, k.w, k.h);
+  }
+}
+
+function drawStaff() {
+  stroke(0);
+
+  for (let i = 0; i < 5; i++) {
+    line(50, startY + i * gap, 550, startY + i * gap);
   }
 }
 
@@ -67,6 +76,7 @@ function drawNote() {
 
   ellipse(200, noteY, 20, 15);
 }
+
 function newQuestion() {
   let current = random(noteData);
   currentNote = current.name;
