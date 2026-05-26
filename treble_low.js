@@ -58,8 +58,8 @@ function draw() {
     rect(k.x, k.y, k.w, k.h);
   }
 
-// 黒鍵
-
+  // 黒鍵
+}
 
 function drawNote() {
   fill(255);
