@@ -27,7 +27,9 @@ let keys = [
   { name: "B", x: 400, y: 520, w: keyWidth, h: 120 },
   { name: "G_high", x: 450, y: 520, w: keyWidth, h: 120 }
 ];
-
+function preload() {
+  clefImg = loadImage("treble.png");
+}
 function setup() {
   createCanvas(600, 760);
   newQuestion();
