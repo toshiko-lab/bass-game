@@ -20,13 +20,13 @@ let noteData = [
 ];
 
 let keys = [
-  { name: "C", x: 100, y: 520, w: keyWidth, h: 120 },
-  { name: "D", x: 150, y: 520, w: keyWidth, h: 120 },
-  { name: "E", x: 200, y: 520, w: keyWidth, h: 120 },
-  { name: "F", x: 250, y: 520, w: keyWidth, h: 120 },
-  { name: "G", x: 300, y: 520, w: keyWidth, h: 120 },
-  { name: "A", x: 350, y: 520, w: keyWidth, h: 120 },
-  { name: "B", x: 400, y: 520, w: keyWidth, h: 120 },
+  { name: "G", x: 100, y: 520, w: keyWidth, h: 120 },
+  { name: "A", x: 150, y: 520, w: keyWidth, h: 120 },
+  { name: "B", x: 200, y: 520, w: keyWidth, h: 120 },
+  { name: "C", x: 250, y: 520, w: keyWidth, h: 120 },
+  { name: "D", x: 300, y: 520, w: keyWidth, h: 120 },
+  { name: "E", x: 350, y: 520, w: keyWidth, h: 120 },
+  { name: "F", x: 400, y: 520, w: keyWidth, h: 120 },
   { name: "G_high", x: 450, y: 520, w: keyWidth, h: 120 }
 ];
 function preload() {
@@ -46,7 +46,7 @@ function draw() {
 
   text("ト音記号 ト～1点ト", width / 2, 55);
 
-  image(clefImg, 10, startY - 45, 95, 150);
+  image(clefImg, 0, startY - 55, 110, 170);
   drawStaff();
   drawNote();
 
@@ -57,17 +57,13 @@ function draw() {
     rect(k.x, k.y, k.w, k.h);
   }
 
-  // 黒鍵
-  fill(0);
+ // 黒鍵
+　fill(0);
 
-  rect(135, 520, 30, 80);
-  rect(185, 520, 30, 80);
-
-  rect(285, 520, 30, 80);
-  rect(335, 520, 30, 80);
-  rect(385, 520, 30, 80);
-}
-
+　rect(185, 520, 30, 80);
+　rect(285, 520, 30, 80);
+　rect(335, 520, 30, 80);
+　rect(385, 520, 30, 80);
 function drawStaff() {
   stroke(0);
 
@@ -83,7 +79,6 @@ function drawNote() {
 
   ellipse(200, noteY, 20, 15);
 }
-
 function newQuestion() {
   let current = random(noteData);
   currentNote = current.name;
