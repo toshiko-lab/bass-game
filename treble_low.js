@@ -54,7 +54,7 @@ function draw() {
   drawStaff();
   drawNote();
 
-  for (let k of keys) {
+ for (let k of keys) {
     fill(255);
     stroke(0);
     rect(k.x, k.y, k.w, k.h);
