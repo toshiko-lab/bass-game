@@ -46,8 +46,7 @@ function draw() {
 
   text("ト音記号 ト～1点ト", width / 2, 55);
 
-  image(clefImg, 20, startY - 30, 80, 120);
-
+  image(clefImg, 10, startY - 45, 95, 150);
   drawStaff();
   drawNote();
 
@@ -78,7 +77,10 @@ function drawStaff() {
 }
 
 function drawNote() {
-  fill(0);
+  fill(255);
+  stroke(0);
+  strokeWeight(2);
+
   ellipse(200, noteY, 20, 15);
 }
 
