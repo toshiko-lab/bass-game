@@ -46,7 +46,7 @@ function draw() {
 
   text("ト音記号 ト～1点ト", width / 2, 55);
 
-  image(clefImg, 0, startY - 55, 110, 170);
+  image(clefImg, -10, startY - 75, 140, 220);
   drawStaff();
   drawNote();
 
@@ -57,13 +57,20 @@ function draw() {
     rect(k.x, k.y, k.w, k.h);
   }
 
- // 黒鍵
-　fill(0);
+// 黒鍵
+fill(0);
 
-　rect(185, 520, 30, 80);
-　rect(285, 520, 30, 80);
-　rect(335, 520, 30, 80);
-　rect(385, 520, 30, 80);
+// ラ#（シ♭）
+rect(135, 520, 30, 80);
+
+// ド#
+rect(285, 520, 30, 80);
+
+// レ#
+rect(335, 520, 30, 80);
+
+// ファ#
+rect(435, 520, 30, 80);
 function drawStaff() {
   stroke(0);
 
