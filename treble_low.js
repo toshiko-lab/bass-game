@@ -84,7 +84,7 @@ function drawStaff() {
 }
 
 function drawNote() {
-  fill(255);
+  noFill();
   stroke(0);
   strokeWeight(2);
 
