@@ -83,13 +83,12 @@ function drawStaff() {
 }
 
 function drawNote() {
-  noFill();
+  fill(255);
   stroke(0);
   strokeWeight(2);
 
   ellipse(200, noteY, 20, 15);
 }
-
 function newQuestion() {
   let current = random(noteData);
   currentNote = current.name;
