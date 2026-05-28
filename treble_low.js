@@ -36,7 +36,7 @@ function draw() {
   text("ト音記号 ト～1点ト", width / 2, 55);
 
   // ト音記号
- image(clefImg, 15, 205, 70, 140);
+ image(clefImg, -20, 170, 140, 240);
 
   drawStaff();
   drawNote();
@@ -54,9 +54,9 @@ function drawStaff() {
 function drawNote() {
   fill(255);
   stroke(0);
-  strokeWeight(2);
+  strokeWeight(1);
 
-  ellipse(200, noteY, 20, 15);
+  ellipse(200, noteY, 24, 18);
 }
 
 function drawKeyboard() {
