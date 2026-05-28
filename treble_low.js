@@ -6,8 +6,6 @@ let clefImg;
 let currentNote;
 let noteY;
 
-let keyWidth = 50;
-
 let noteData = [
   {name: "G", y: startY + gap * 3.5},
   {name: "A", y: startY + gap * 3},
@@ -19,18 +17,6 @@ let noteData = [
   {name: "G_high", y: startY}
 ];
 
-let keys = [
-  { name: "F_low", x: 30,  y: 520, w: 50, h: 120 },
-  { name: "G",     x: 80,  y: 520, w: 50, h: 120 },
-  { name: "A",     x: 130, y: 520, w: 50, h: 120 },
-  { name: "B",     x: 180, y: 520, w: 50, h: 120 },
-  { name: "C",     x: 230, y: 520, w: 50, h: 120 },
-  { name: "D",     x: 280, y: 520, w: 50, h: 120 },
-  { name: "E",     x: 330, y: 520, w: 50, h: 120 },
-  { name: "F",     x: 380, y: 520, w: 50, h: 120 },
-  { name: "G_high",x: 430, y: 520, w: 50, h: 120 },
-  { name: "A_high",x: 480, y: 520, w: 50, h: 120 }
-];
 function preload() {
   clefImg = loadImage("treble.png");
 }
@@ -49,55 +35,14 @@ function draw() {
 
   text("ト音記号 ト～1点ト", width / 2, 55);
 
-  image(clefImg, 20, 210, 55, 110);
+  // ト音記号
+  image(clefImg, 20, 225, 45, 90);
 
   drawStaff();
   drawNote();
+  drawKeyboard();
+}
 
-// 白鍵
-fill(255);
-
-rect(40, 520, 50, 120);   // ファ
-rect(90, 520, 50, 120);   // ソ
-rect(140, 520, 50, 120);  // ラ
-rect(190, 520, 50, 120);  // シ
-
-rect(240, 520, 50, 120);  // ド
-rect(290, 520, 50, 120);  // レ
-rect(340, 520, 50, 120);  // ミ
-
-rect(390, 520, 50, 120);  // ファ
-rect(440, 520, 50, 120);  // ソ
-rect(490, 520, 50, 120);  // ラ
-rect(540, 520, 50, 120);  // シ
-
-
-// 黒鍵
-fill(0);
-
-// ファソ
-rect(75, 520, 30, 80);
-
-// ソラ
-rect(125, 520, 30, 80);
-
-// ラシ
-rect(175, 520, 30, 80);
-
-// ドレ
-rect(275, 520, 30, 80);
-
-// レミ
-rect(325, 520, 30, 80);
-
-// ファソ
-rect(425, 520, 30, 80);
-
-// ソラ
-rect(475, 520, 30, 80);
-
-// ラシ
-rect(525, 520, 30, 80);
 function drawStaff() {
   stroke(0);
 
@@ -107,12 +52,46 @@ function drawStaff() {
 }
 
 function drawNote() {
-  fill(255);
+  fill(0);
   stroke(0);
   strokeWeight(2);
 
   ellipse(200, noteY, 20, 15);
 }
+
+function drawKeyboard() {
+
+  // 白鍵
+  fill(255);
+  stroke(0);
+
+  rect(40, 520, 50, 120);   // ファ
+  rect(90, 520, 50, 120);   // ソ
+  rect(140, 520, 50, 120);  // ラ
+  rect(190, 520, 50, 120);  // シ
+
+  rect(240, 520, 50, 120);  // ド
+  rect(290, 520, 50, 120);  // レ
+  rect(340, 520, 50, 120);  // ミ
+
+  rect(390, 520, 50, 120);  // ファ
+  rect(440, 520, 50, 120);  // ソ
+  rect(490, 520, 50, 120);  // ラ
+
+  // 黒鍵
+  fill(0);
+
+  rect(75, 520, 30, 80);    // ファ♯
+  rect(125, 520, 30, 80);   // ソ♯
+  rect(175, 520, 30, 80);   // ラ♯
+
+  rect(275, 520, 30, 80);   // ド♯
+  rect(325, 520, 30, 80);   // レ♯
+
+  rect(425, 520, 30, 80);   // ファ♯
+  rect(475, 520, 30, 80);   // ソ♯
+}
+
 function newQuestion() {
   let current = random(noteData);
   currentNote = current.name;
