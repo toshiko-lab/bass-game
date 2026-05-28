@@ -36,7 +36,7 @@ function draw() {
   text("ト音記号 ト～1点ト", width / 2, 55);
 
   // ト音記号
-　image(clefImg, -10, 206, 110, 160);
+　image(clefImg, -10, 198, 110, 160);
   drawStaff();
   drawNote();
   drawKeyboard();
