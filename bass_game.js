@@ -214,6 +214,7 @@ function touchStarted() {
 
 function mousePressed() {
   userStartAudio();
+  getAudioContext().resume();
 
   if (!gameStarted) {
     resetGame();
