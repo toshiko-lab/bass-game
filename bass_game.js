@@ -207,6 +207,10 @@ function newQuestion() {
   let i = floor(random(notes.length));
   question = notes[i];
 }
+function touchStarted() {
+  mousePressed();
+  return false;
+}
 
 function mousePressed() {
   userStartAudio();
