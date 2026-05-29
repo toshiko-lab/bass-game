@@ -51,11 +51,10 @@ function drawStaff() {
 }
 
 function drawNote() {
-  fill(255);
-  stroke(0);
-  strokeWeight(1);
-
-  ellipse(200, noteY, 24, 18);
+noFill();
+stroke(0);
+strokeWeight(2);
+ellipse(200, noteY, 24, 18);
 }
 
 function drawKeyboard() {
