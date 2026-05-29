@@ -47,9 +47,10 @@ let blackKeys = [
 function setup() {
   createCanvas(800, 600);
 
-  osc = new p5.Oscillator();  // ←追加
-  osc.start();                // ←追加
-  osc.amp(0);                 // ←音を最初は0に
+osc = new p5.Oscillator();
+osc.start();
+osc.amp(0);
+osc.setType('triangle');
 
   newQuestion();
   startTime = millis();
