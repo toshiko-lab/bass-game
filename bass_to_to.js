@@ -194,12 +194,6 @@ function mousePressed() {
     return;
   }
 
-  if (!gameStarted) {
-    resetGame();
-    gameStarted = true;
-    return;
-  }
-
   if (gameOver) {
     gameStarted = false;
     return;
