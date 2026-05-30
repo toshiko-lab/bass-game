@@ -236,7 +236,9 @@ function mousePressed() {
 // 音は鍵盤だけ
 if (answer !== "" && noteFreq[answer] !== undefined) {
   osc.freq(noteFreq[answer]);
-  osc.amp(0.8);
+  osc.amp(0.8, 0.05);
+  osc.amp(0, 1.0);
+}
 
 　setTimeout(() => {
 　  osc.amp(0);
