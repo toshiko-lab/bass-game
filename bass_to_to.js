@@ -249,8 +249,4 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 newQuestion();
 }
 
-function touchStarted() {
-  getAudioContext().resume();
-  userStartAudio();
-  return false;
-}
+
