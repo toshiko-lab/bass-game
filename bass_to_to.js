@@ -184,7 +184,15 @@ function newQuestion() {
 }
 
 function mousePressed() {
-  userStartAudio();  // ←これ必須（iPad対策）
+
+  getAudioContext().resume();
+  userStartAudio();
+
+  if (!gameStarted) {
+    resetGame();
+    gameStarted = true;
+    return;
+  }
 
   if (!gameStarted) {
     resetGame();
