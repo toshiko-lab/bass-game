@@ -240,11 +240,5 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
   osc.amp(0, 1.0);
 }
 
-　setTimeout(() => {
-　  osc.amp(0);
-　}, 300);
-
 newQuestion();
-}
-
 
