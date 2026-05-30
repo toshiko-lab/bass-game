@@ -242,3 +242,5 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 
 newQuestion();
 
+}
+
