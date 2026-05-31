@@ -250,11 +250,20 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 
 newQuestion();
 
+}
+
 }   // ← mousePressed の終わり
 
 
 function touchStarted() {
   getAudioContext().resume();
   userStartAudio();
+
+  if (!gameStarted) {
+    osc.start();
+    osc.amp(0);
+  }
+
+  return false;
 }
 
