@@ -47,10 +47,8 @@ let blackKeys = [
 function setup() {
   createCanvas(800, 600);
 
-osc = new p5.Oscillator();
-osc.start();
-osc.amp(0);
-osc.setType('triangle');
+  osc = new p5.Oscillator();
+  osc.setType('triangle');
 
   newQuestion();
   startTime = millis();
@@ -189,10 +187,14 @@ function mousePressed() {
   userStartAudio();
 
   if (!gameStarted) {
-    resetGame();
-    gameStarted = true;
-    return;
-  }
+
+  osc.start();
+  osc.amp(0);
+
+  resetGame();
+  gameStarted = true;
+  return;
+}
 
   if (gameOver) {
     gameStarted = false;
