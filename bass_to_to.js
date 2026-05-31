@@ -251,9 +251,6 @@ newQuestion();
 
 }   // ← mousePressed の終わり
 
-newQuestion();
-
-}
 
 function touchStarted() {
   getAudioContext().resume();
