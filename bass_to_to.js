@@ -253,12 +253,5 @@ newQuestion();
 }
 
 function touchStarted() {
-  getAudioContext().resume();
-  userStartAudio();
-
-  if (!gameStarted) {
-    osc.start();
-    osc.amp(0);
-  }
+  mousePressed();
 }
-
