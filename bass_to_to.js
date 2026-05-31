@@ -243,27 +243,21 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 
   osc.freq(noteFreq[answer]);
 
-  osc.amp(1);
-
-  setTimeout(() => {
-    osc.amp(0);
-  }, 300);
-
+  osc.amp(0.8, 0.01);
+  osc.amp(0, 0.3);
 }
+
+newQuestion();
+
+}   // ← mousePressed の終わり
 
 newQuestion();
 
 }
 
 function touchStarted() {
-
   getAudioContext().resume();
   userStartAudio();
-
-  if (!gameStarted) {
-    osc.start();
-    osc.amp(0);
-  }
 
   mousePressed();
 }
