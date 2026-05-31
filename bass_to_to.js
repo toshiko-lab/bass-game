@@ -237,9 +237,15 @@ function mousePressed() {
 
 // 音は鍵盤だけ
 if (answer !== "" && noteFreq[answer] !== undefined) {
+
   osc.freq(noteFreq[answer]);
-  osc.amp(0.8, 0.05);
-　osc.amp(0, 0.5);
+
+  osc.amp(1);
+  
+  setTimeout(() => {
+    osc.amp(0);
+  }, 300);
+
 }
 function touchStarted() {
   getAudioContext().resume();
