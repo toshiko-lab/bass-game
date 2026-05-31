@@ -239,7 +239,7 @@ function mousePressed() {
 if (answer !== "" && noteFreq[answer] !== undefined) {
   osc.freq(noteFreq[answer]);
   osc.amp(0.8, 0.05);
-  osc.amp(0, 1.0);
+　osc.amp(0, 0.5);
 }
 
 newQuestion();
