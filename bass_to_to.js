@@ -260,7 +260,5 @@ function touchStarted() {
     osc.start();
     osc.amp(0);
   }
-
-  return false;
 }
 
