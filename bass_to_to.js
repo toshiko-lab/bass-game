@@ -94,16 +94,13 @@ function draw() {
   let remaining = max(0, timeLimit - elapsed);
 
   fill(0);
-  textSize(24);
-  textAlign(LEFT);
-  text("Time: " + remaining, 50, 50);
+textSize(24);
+textAlign(LEFT);
+text("Time: " + remaining, 50, 50);
 
-  fill(255,0,0);
-　textSize(20);
-　text(getAudioContext().state, 50, 150);
-  if (remaining <= 0) {
+if (remaining <= 0) {
   gameOver = true;
-　}
+}
 
 　fill(0);
 　textSize(28);
