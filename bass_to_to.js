@@ -256,6 +256,10 @@ function touchStarted() {
   getAudioContext().resume();
   userStartAudio();
 
+  osc.freq(440);
+  osc.amp(0.8, 0.01);
+  osc.amp(0, 0.5);
+
   if (!gameStarted) {
     resetGame();
     gameStarted = true;
