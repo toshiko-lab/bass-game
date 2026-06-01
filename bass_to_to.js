@@ -1,5 +1,4 @@
-let version = "iPadテスト6/1";
-let audioState = "";
+
 
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
@@ -53,7 +52,7 @@ function draw() {
 
   fill(0);
   textSize(16);
-  text(audioState, 600, 40);
+  
 
   if (!gameStarted) {
     background(230);
@@ -70,7 +69,7 @@ function draw() {
 
   fill(0);
   textSize(14);
-  text(version, 650, 20);
+  
 
   // 鍵盤
   for (let k of keys) {
