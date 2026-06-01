@@ -270,7 +270,3 @@ function touchStarted() {
   mousePressed();
   return false;
 }
-
-  mousePressed();
-  return false;
-}
