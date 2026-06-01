@@ -10,6 +10,7 @@ let mistakes = 0;
 let osc;
 let clefImg;
 let version = "iPadテスト6/1";
+let audioState = "";
 
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
@@ -61,6 +62,10 @@ function setup() {
 function draw() {
   background(230);
 
+  fill(0);
+  textSize(16);
+  text(audioState, 600, 40);
+
   if (!gameStarted) {
     background(230);
     textAlign(CENTER, CENTER);
@@ -69,6 +74,7 @@ function draw() {
     text("クリックでスタート", width/2, height/2);
     return;
   }
+
 
   drawStaff();
   drawNote();
@@ -252,6 +258,8 @@ newQuestion();
 
 
 function touchStarted() {
+
+  audioState = getAudioContext().state;
 
   getAudioContext().resume();
   userStartAudio();
