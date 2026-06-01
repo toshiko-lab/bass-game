@@ -190,20 +190,12 @@ function newQuestion() {
 }
 function mousePressed() {
 
-  result = "押された";
+  gameStarted = true;
 
   getAudioContext().resume();
   userStartAudio();
 
-  if (!gameStarted) {
-
-  osc.start();
-  osc.amp(0);
-
-  resetGame();
-  gameStarted = true;
-  return;
-}
+  result = "押された";
 
   if (gameOver) {
     gameStarted = false;
