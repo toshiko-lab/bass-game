@@ -9,6 +9,7 @@ let score = 0;
 let mistakes = 0;
 let osc;
 let clefImg;
+let version = "iPadテスト6/1";
 
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
@@ -61,13 +62,20 @@ function draw() {
   background(230);
 
   if (!gameStarted) {
+    background(230);
+    textAlign(CENTER, CENTER);
+    textSize(32);
+    fill(0);
+    text("クリックでスタート", width/2, height/2);
+    return;
+  }
 
-  resetGame();
-  gameStarted = true;
-  return;
-}
   drawStaff();
   drawNote();
+
+  fill(0);
+  textSize(14);
+  text(version, 650, 20);
 
   // 鍵盤
   for (let k of keys) {
@@ -94,9 +102,9 @@ function draw() {
   let remaining = max(0, timeLimit - elapsed);
 
   fill(0);
-textSize(24);
-textAlign(LEFT);
-text("Time: " + remaining, 50, 50);
+　textSize(24);
+　textAlign(LEFT);
+　text("Time: " + remaining, 50, 50);
 
 if (remaining <= 0) {
   gameOver = true;
