@@ -1,14 +1,3 @@
-let baseY = 300;
-let question = "G";
-let result = "";
-let startTime;
-let timeLimit = 60;
-let gameOver = false;
-let gameStarted = false;
-let score = 0;
-let mistakes = 0;
-let osc;
-let clefImg;
 let version = "iPadテスト6/1";
 let audioState = "";
 
@@ -199,9 +188,6 @@ function mousePressed() {
 
   gameStarted = true;
 
-  getAudioContext().resume();
-  userStartAudio();
-
   result = "押された";
 
   if (gameOver) {
@@ -261,12 +247,7 @@ function touchStarted() {
 
   audioState = "タッチ";
 
-  if (!gameStarted) {
-    resetGame();
-    gameStarted = true;
-    return false;
-  }
-
   mousePressed();
+
   return false;
 }
