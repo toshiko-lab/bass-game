@@ -188,6 +188,7 @@ function newQuestion() {
   let i = floor(random(notes.length));
   question = notes[i];
 }
+result = "押された";
 function mousePressed() {
 
   gameStarted = true;
@@ -251,5 +252,16 @@ newQuestion();
 
 
 function touchStarted() {
+
+  getAudioContext().resume();
+  userStartAudio();
+
+  if (!gameStarted) {
+    resetGame();
+    gameStarted = true;
+    return false;
+  }
+
+  mousePressed();
   return false;
 }
