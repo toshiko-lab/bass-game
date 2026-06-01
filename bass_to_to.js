@@ -185,8 +185,9 @@ function newQuestion() {
   let i = floor(random(notes.length));
   question = notes[i];
 }
-
 function mousePressed() {
+
+  result = "押された";
 
   getAudioContext().resume();
   userStartAudio();
@@ -255,10 +256,5 @@ newQuestion();
 
 
 function touchStarted() {
-  getAudioContext().resume();
-  userStartAudio();
-
-  result = "タッチした";
-
   return false;
 }
