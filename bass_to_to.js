@@ -62,18 +62,10 @@ function draw() {
 
   if (!gameStarted) {
 
-  osc.start();
-  osc.amp(0);
-
-  osc.freq(440);
-  osc.amp(0.8, 0.01);
-  osc.amp(0, 0.3);
-
   resetGame();
   gameStarted = true;
   return;
 }
-
   drawStaff();
   drawNote();
 
