@@ -188,7 +188,7 @@ function mousePressed() {
 
   gameStarted = true;
 
-  result = "押された";
+  result = "マウス";
 
   if (gameOver) {
     gameStarted = false;
