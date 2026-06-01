@@ -50,6 +50,9 @@ function setup() {
   osc = new p5.Oscillator();
   osc.setType('triangle');
 
+  osc.start();
+  osc.amp(0);
+
   newQuestion();
   startTime = millis();
 }
