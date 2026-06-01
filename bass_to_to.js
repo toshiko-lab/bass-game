@@ -259,20 +259,17 @@ newQuestion();
 
 function touchStarted() {
 
-  audioState = getAudioContext().state;
-
-  getAudioContext().resume();
-  userStartAudio();
-
-  osc.freq(440);
-  osc.amp(0.8, 0.01);
-  osc.amp(0, 0.5);
+  audioState = "タッチ";
 
   if (!gameStarted) {
     resetGame();
     gameStarted = true;
     return false;
   }
+
+  mousePressed();
+  return false;
+}
 
   mousePressed();
   return false;
