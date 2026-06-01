@@ -257,5 +257,8 @@ newQuestion();
 function touchStarted() {
   getAudioContext().resume();
   userStartAudio();
+
+  result = "タッチした";
+
   return false;
 }
