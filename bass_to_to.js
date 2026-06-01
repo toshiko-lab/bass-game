@@ -58,13 +58,18 @@ function draw() {
   background(230);
 
   if (!gameStarted) {
-    background(230);
-    textAlign(CENTER, CENTER);
-    textSize(32);
-    fill(0);
-    text("クリックでスタート", width/2, height/2);
-    return;
-  }
+
+  osc.start();
+  osc.amp(0);
+
+  osc.freq(440);
+  osc.amp(0.8, 0.01);
+  osc.amp(0, 0.3);
+
+  resetGame();
+  gameStarted = true;
+  return;
+}
 
   drawStaff();
   drawNote();
@@ -252,6 +257,5 @@ newQuestion();
 function touchStarted() {
   getAudioContext().resume();
   userStartAudio();
-
-  mousePressed();
+  return false;
 }
