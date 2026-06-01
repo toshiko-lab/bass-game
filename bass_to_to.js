@@ -1,4 +1,6 @@
 let baseY = 300;
+alert("6月2日テスト");
+
 let question = "G";
 let result = "";
 let startTime;
