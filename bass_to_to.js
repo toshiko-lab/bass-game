@@ -1,4 +1,14 @@
-
+let baseY = 300;
+let question = "G";
+let result = "";
+let startTime;
+let timeLimit = 60;
+let gameOver = false;
+let gameStarted = false;
+let score = 0;
+let mistakes = 0;
+let osc;
+let clefImg;
 
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
@@ -40,19 +50,12 @@ function setup() {
   osc = new p5.Oscillator();
   osc.setType('triangle');
 
-  osc.start();
-  osc.amp(0);
-
   newQuestion();
   startTime = millis();
 }
 
 function draw() {
   background(230);
-
-  fill(0);
-  textSize(16);
-  
 
   if (!gameStarted) {
     background(230);
@@ -63,13 +66,8 @@ function draw() {
     return;
   }
 
-
   drawStaff();
   drawNote();
-
-  fill(0);
-  textSize(14);
-  
 
   // 鍵盤
   for (let k of keys) {
@@ -96,9 +94,9 @@ function draw() {
   let remaining = max(0, timeLimit - elapsed);
 
   fill(0);
-　textSize(24);
-　textAlign(LEFT);
-　text("Time: " + remaining, 50, 50);
+textSize(24);
+textAlign(LEFT);
+text("Time: " + remaining, 50, 50);
 
 if (remaining <= 0) {
   gameOver = true;
@@ -182,12 +180,24 @@ function newQuestion() {
   let i = floor(random(notes.length));
   question = notes[i];
 }
-result = "押された";
+
 function mousePressed() {
 
+  getAudioContext().resume();
+  userStartAudio();
+
   if (!gameStarted) {
-    resetGame();
-    gameStarted = true;
+
+  osc.start();
+  osc.amp(0);
+
+  resetGame();
+  gameStarted = true;
+  return;
+}
+
+  if (gameOver) {
+    gameStarted = false;
     return;
   }
 
@@ -240,6 +250,9 @@ newQuestion();
 
 
 function touchStarted() {
+  getAudioContext().resume();
+  userStartAudio();
+
   mousePressed();
-  return false;
 }
+
