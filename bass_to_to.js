@@ -185,12 +185,9 @@ function newQuestion() {
 result = "押された";
 function mousePressed() {
 
-  gameStarted = true;
-
-  result = "マウス";
-
-  if (gameOver) {
-    gameStarted = false;
+  if (!gameStarted) {
+    resetGame();
+    gameStarted = true;
     return;
   }
 
@@ -243,10 +240,6 @@ newQuestion();
 
 
 function touchStarted() {
-
-  audioState = "タッチ";
-
   mousePressed();
-
   return false;
 }
