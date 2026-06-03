@@ -70,7 +70,10 @@ function draw() {
 
   drawStaff();
   drawNote();
-
+　fill(0);
+　textSize(16);
+　textAlign(LEFT);
+　text(getAudioContext().state, 50, 80);
   // 鍵盤
   for (let k of keys) {
     fill(255);
