@@ -249,9 +249,4 @@ newQuestion();
 }   // ← mousePressed の終わり
 
 
-function touchStarted() {
-  getAudioContext().resume();
-  userStartAudio();
 
-  mousePressed();
-}
