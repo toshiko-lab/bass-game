@@ -57,12 +57,11 @@ function draw() {
   background(230);
 
  if (!gameStarted) {
-
-  osc.start();
-  osc.amp(0);
-
-  resetGame();
-  gameStarted = true;
+  background(230);
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  fill(0);
+  text("クリックでスタート", width/2, height/2);
   return;
 }
 
@@ -71,7 +70,7 @@ function draw() {
 　fill(0);
 　textSize(16);
 　textAlign(LEFT);
-　text(getAudioContext().state, 50, 80);
+　
   // 鍵盤
   for (let k of keys) {
     fill(255);
@@ -188,7 +187,10 @@ function mousePressed() {
  getAudioContext().resume();
   userStartAudio();
 
-  if (!gameStarted) {
+ if (!gameStarted) {
+
+  osc.start();
+  osc.amp(0);
 
   resetGame();
   gameStarted = true;
