@@ -47,10 +47,8 @@ let blackKeys = [
 function setup() {
   createCanvas(800, 600);
 
-  osc = new p5.Oscillator('sine');
-
-  osc.start();
-  osc.amp(0);
+  osc = new p5.Oscillator();
+  osc.setType('triangle');
 
   newQuestion();
   startTime = millis();
@@ -58,14 +56,15 @@ function setup() {
 function draw() {
   background(230);
 
-  if (!gameStarted) {
-    background(230);
-    textAlign(CENTER, CENTER);
-    textSize(32);
-    fill(0);
-    text("クリックでスタート", width/2, height/2);
-    return;
-  }
+ if (!gameStarted) {
+
+  osc.start();
+  osc.amp(0);
+
+  resetGame();
+  gameStarted = true;
+  return;
+}
 
   drawStaff();
   drawNote();
