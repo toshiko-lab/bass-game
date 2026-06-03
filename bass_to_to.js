@@ -253,5 +253,6 @@ newQuestion();
 function touchStarted() {
   getAudioContext().resume();
   userStartAudio();
-  return false;
+
+  mousePressed();
 }
