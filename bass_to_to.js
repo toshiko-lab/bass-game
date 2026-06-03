@@ -48,6 +48,8 @@ function setup() {
   createCanvas(800, 600);
 
   osc = new p5.Oscillator();
+  osc.start();
+  osc.amp(0);
   osc.setType('triangle');
 
   newQuestion();
@@ -187,10 +189,7 @@ function mousePressed() {
  getAudioContext().resume();
   userStartAudio();
 
- if (!gameStarted) {
-
-  osc.start();
-  osc.amp(0);
+if (!gameStarted) {
 
   resetGame();
   gameStarted = true;
