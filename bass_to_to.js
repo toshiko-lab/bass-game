@@ -243,9 +243,7 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 
   osc.amp(0.8);
 }
-if (answer !== "") {
-  result = answer;
-}
+
 newQuestion();
 
 }   // ← mousePressed の終わり
