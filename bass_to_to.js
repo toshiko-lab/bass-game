@@ -240,10 +240,11 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 
   osc.freq(noteFreq[answer]);
 
-  osc.amp(0.8, 0.01);
-  osc.amp(0, 0.3);
+  osc.amp(0.8);
 }
-
+if (answer !== "") {
+  result = answer;
+}
 newQuestion();
 
 }   // ← mousePressed の終わり
@@ -252,6 +253,5 @@ newQuestion();
 function touchStarted() {
   getAudioContext().resume();
   userStartAudio();
-
-  mousePressed();
+  return false;
 }
