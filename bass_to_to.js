@@ -184,10 +184,7 @@ function newQuestion() {
 }
 
 function mousePressed() {
-
-  alert("mousePressed");
-
-  getAudioContext().resume();
+ getAudioContext().resume();
   userStartAudio();
 
   if (!gameStarted) {
