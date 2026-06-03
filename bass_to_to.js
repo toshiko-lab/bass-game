@@ -23,16 +23,15 @@ let keys = [
   {note: "G_high", x: 590, w: 70}
 ];
 let noteFreq = {
-  "G": 196,
-  "A": 220,
-  "B": 247,
-  "C": 262,
-  "D": 294,
-  "E": 330,
-  "F": 349,
-  "G_high": 392
+  "G": 784,
+  "A": 880,
+  "B": 987,
+  "C": 523,
+  "D": 587,
+  "E": 659,
+  "F": 698,
+  "G_high": 784
 };
-
 function preload() {
   clefImg = loadImage("bass.png");
 }
