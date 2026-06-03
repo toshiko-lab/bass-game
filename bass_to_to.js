@@ -47,8 +47,7 @@ let blackKeys = [
 function setup() {
   createCanvas(800, 600);
 
-  osc = new p5.Oscillator();
-  osc.setType('triangle');
+  osc = new p5.Oscillator('sine');
 
   osc.start();
   osc.amp(0);
@@ -241,7 +240,8 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 
   osc.freq(noteFreq[answer]);
 
-  osc.amp(0.8);
+  osc.amp(0.8, 0.01);
+  osc.amp(0, 0.5);
 }
 
 newQuestion();
