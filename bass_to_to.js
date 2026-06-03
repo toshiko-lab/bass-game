@@ -68,9 +68,7 @@ function draw() {
 
   drawStaff();
   drawNote();
-　fill(0);
-　textSize(16);
-　textAlign(LEFT);
+　
 　
   // 鍵盤
   for (let k of keys) {
@@ -185,15 +183,14 @@ function newQuestion() {
 }
 
 function mousePressed() {
- getAudioContext().resume();
+
   userStartAudio();
 
-if (!gameStarted) {
-
-  resetGame();
-  gameStarted = true;
-  return;
-}
+  if (!gameStarted) {
+    resetGame();
+    gameStarted = true;
+    return;
+  }
 
   if (gameOver) {
     gameStarted = false;
