@@ -183,18 +183,20 @@ function newQuestion() {
 
 function mousePressed() {
 
+  alert("mousePressed");
+
   getAudioContext().resume();
   userStartAudio();
 
   if (!gameStarted) {
 
-  osc.start();
-  osc.amp(0);
+    osc.start();
+    osc.amp(0);
 
-  resetGame();
-  gameStarted = true;
-  return;
-}
+    resetGame();
+    gameStarted = true;
+    return;
+  }
 
   if (gameOver) {
     gameStarted = false;
