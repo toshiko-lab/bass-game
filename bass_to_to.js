@@ -228,27 +228,18 @@ function mousePressed() {
     }
   }
 
- if (answer === question) {
-  result = "せいかい";
-  score++;
-} else {
-  result = "ちがう";
-  mistakes++;
-}
-
-// 音は鍵盤だけ
 if (answer !== "" && noteFreq[answer] !== undefined) {
-osc.freq(noteFreq[answer]);
-  
-osc.amp(1);
 
-setTimeout(() => {
-  osc.amp(0);
-}, 300);
+  osc.freq(noteFreq[answer]);
+
+  osc.amp(1);
+
+  setTimeout(() => {
+    osc.amp(0);
+  }, 300);
+}
 
 newQuestion();
 
 }   // ← mousePressed の終わり
-
-
 
