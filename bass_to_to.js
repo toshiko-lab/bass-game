@@ -46,6 +46,8 @@ let blackKeys = [
 function setup() {
   createCanvas(800, 600);
 
+  getAudioContext().suspend();
+
   osc = new p5.Oscillator();
   osc.start();
   osc.amp(0);
@@ -184,6 +186,7 @@ function newQuestion() {
 
 function mousePressed() {
 
+  getAudioContext().resume();
   userStartAudio();
 
   if (!gameStarted) {
