@@ -24,13 +24,13 @@ let keys = [
 ];
 let noteFreq = {
   "G": 392,
-　"A": 440,
-　"B": 494,
-　"C": 523,
-　"D": 587,
-　"E": 659,
-　"F": 698,
-　"G_high": 784
+  "A": 440,
+  "B": 494,
+  "C": 523,
+  "D": 587,
+  "E": 659,
+  "F": 698,
+  "G_high": 784
 };
 function preload() {
   clefImg = loadImage("bass.png");
