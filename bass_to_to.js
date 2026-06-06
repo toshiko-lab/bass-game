@@ -204,7 +204,7 @@ function mousePressed() {
 
   let answer = "";
 
-  // 黒鍵（先に！）
+  // 黒鍵
   for (let b of blackKeys) {
     if (
       mouseX > b.x &&
@@ -228,18 +228,25 @@ function mousePressed() {
     }
   }
 
-if (answer !== "" && noteFreq[answer] !== undefined) {
+  if (answer === question) {
+    result = "せいかい";
+    score++;
+  } else {
+    result = "ちがう";
+    mistakes++;
+  }
 
-  osc.freq(noteFreq[answer]);
+  if (answer !== "" && noteFreq[answer] !== undefined) {
 
-  osc.amp(1);
+    osc.freq(noteFreq[answer]);
 
-  setTimeout(() => {
-    osc.amp(0);
-  }, 300);
+    osc.amp(1);
+
+    setTimeout(() => {
+      osc.amp(0);
+    }, 300);
+  }
+
+  newQuestion();
+
 }
-
-newQuestion();
-
-}   // ← mousePressed の終わり
-
