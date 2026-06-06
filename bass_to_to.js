@@ -50,8 +50,8 @@ function setup() {
 
   osc = new p5.Oscillator();
 　osc.start();
-　osc.amp(0);
-　osc.setType('sine');
+  osc.amp(0);
+  osc.setType('sine');
 
   newQuestion();
   startTime = millis();
@@ -97,6 +97,7 @@ if (gameOver) {
 
   return;
 }
+}  
 function resetGame() {
   score = 0;
   mistakes = 0;   // ←忘れやすい
