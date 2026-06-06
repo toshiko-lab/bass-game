@@ -71,76 +71,31 @@ function draw() {
   drawStaff();
   drawNote();
 　fill(0);
-　textSize(20);
-　text(getAudioContext().state, 600, 50);
-　
-  // 鍵盤
-  for (let k of keys) {
-    fill(255);
-    stroke(0);
-    rect(k.x, 450, k.w, 120);
-  }
+textSize(28);
+textAlign(CENTER);
 
-  // 黒鍵
-  for (let b of blackKeys) {
-    fill(0);
-    noStroke();
-    rect(b.x, 450, b.w, 80);
-  }
+text("正解数: " + score, width/2 - 120, 50);
+text("ミス数: " + mistakes, width/2 + 120, 50);
 
-  // 結果表示
+if (gameOver) {
+
+  textSize(28);
   fill(0);
-  textSize(32);
   textAlign(CENTER);
-  text(result, 400, 100);
 
-  // --- 時間表示 ---
-  let elapsed = int((millis() - startTime) / 1000);
-  let remaining = max(0, timeLimit - elapsed);
+  text("正解数: " + score, width/2 - 120, 50);
+  text("ミス数: " + mistakes, width/2 + 120, 50);
 
-  fill(0);
-textSize(24);
-textAlign(LEFT);
-text("Time: " + remaining, 50, 50);
+  textSize(36);
+  text("終了！", width/2, height/2 + 60);
 
-if (remaining <= 0) {
-  gameOver = true;
-}
+  textSize(24);
+  text("クリックでリスタート", width/2, height/2 + 100);
 
-　fill(0);
-　textSize(28);
-　textAlign(CENTER);
+  textSize(14);
+  text("© 2026 松井音楽教室教材", width/2, height - 20);
 
-　text("正解数: " + score, width/2 - 120, 50);
-　text("ミス数: " + mistakes, width/2 + 120, 50);
-
-　if (gameOver) {
-
-  // ★ 五線より上に固定
-    let topY = baseY - 140;
-
-    textSize(28);
-    fill(0);
-　　textSize(28);
-　　textAlign(CENTER);
-
-　　text("正解数: " + score, width/2 - 120, 50);
-　　text("ミス数: " + mistakes, width/2 + 120, 50);
-
-    // ★ 中央（元スタート位置）
-    textSize(36);
-    text("終了！", width/2, height/2 + 60);
-
-    // ★ 下にずらす（五線回避）
-    textSize(24);
-    text("クリックでリスタート", width/2, height/2 + 100);
-
-    // コピーライト
-    textSize(14);
-    text("© 2026 松井音楽教室教材", width/2, height - 20);
-
-    return;
-  }
+  return;
 }
 function resetGame() {
   score = 0;
