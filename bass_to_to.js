@@ -49,9 +49,9 @@ function setup() {
   getAudioContext().suspend();
 
   osc = new p5.Oscillator();
-  osc.start();
-  osc.amp(0);
-  osc.setType('triangle');
+　osc.start();
+　osc.amp(0);
+　osc.setType('sine');
 
   newQuestion();
   startTime = millis();
@@ -238,12 +238,13 @@ function mousePressed() {
 
 // 音は鍵盤だけ
 if (answer !== "" && noteFreq[answer] !== undefined) {
+osc.freq(noteFreq[answer]);
+  
+osc.amp(1);
 
-  osc.freq(noteFreq[answer]);
-
-  osc.amp(0.8, 0.01);
-  osc.amp(0, 0.5);
-}
+setTimeout(() => {
+  osc.amp(0);
+}, 300);
 
 newQuestion();
 
