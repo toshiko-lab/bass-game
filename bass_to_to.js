@@ -23,14 +23,14 @@ let keys = [
   {note: "G_high", x: 590, w: 70}
 ];
 let noteFreq = {
-  "G": 784,
-  "A": 880,
-  "B": 987,
-  "C": 523,
-  "D": 587,
-  "E": 659,
-  "F": 698,
-  "G_high": 784
+  "G": 392,
+　"A": 440,
+　"B": 494,
+　"C": 523,
+　"D": 587,
+　"E": 659,
+　"F": 698,
+　"G_high": 784
 };
 function preload() {
   clefImg = loadImage("bass.png");
@@ -70,7 +70,9 @@ function draw() {
 
   drawStaff();
   drawNote();
-　
+　fill(0);
+　textSize(20);
+　text(getAudioContext().state, 600, 50);
 　
   // 鍵盤
   for (let k of keys) {
