@@ -138,9 +138,14 @@ function drawStaff() {
     line(100, baseY - i * 20, 700, baseY - i * 20);
   }
 
-  // image(clefImg, 50, baseY - 115, 80, 135);
+  if (clefImg) {
+    image(clefImg, 50, baseY - 115, 80, 135);
+  } else {
+    fill("red");
+    textSize(20);
+    text("画像なし", 50, 200);
+  }
 }
-
 function drawNote() {
 
   let noteYMap = {
