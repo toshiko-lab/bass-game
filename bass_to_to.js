@@ -218,14 +218,14 @@ function mousePressed() {
 
   if (answer !== "" && noteFreq[answer] !== undefined) {
 
-   osc.freq(noteFreq[answer]);
+  osc.freq(noteFreq[answer]);
 
-   osc.amp(0.5, 0.05);
+  osc.amp(0.5, 0.05);
 
-   setTimeout(() => {
-   osc.amp(0, 0.1);
-   }, 300);
+  setTimeout(() => {
+    osc.amp(0, 0.1);
+  }, 300);
+}
 
-  newQuestion();
-
+newQuestion();
 }
