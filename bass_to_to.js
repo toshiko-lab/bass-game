@@ -138,7 +138,7 @@ function drawStaff() {
     line(100, baseY - i * 20, 700, baseY - i * 20);
   }
 
-  image(clefImg, 35, baseY - 90, 80, 120);
+  image(clefImg, 20, 150, 120, 180);
 }
 function drawNote() {
 
