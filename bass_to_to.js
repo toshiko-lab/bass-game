@@ -48,10 +48,10 @@ function setup() {
 
   getAudioContext().suspend();
 
-  osc = new p5.Oscillator();
-　osc.start();
-  osc.amp(0);
-  osc.setType('sine');
+ osc = new p5.Oscillator();
+ osc.start();
+ osc.amp(0);
+ osc.setType('sine');
 
   newQuestion();
   startTime = millis();
@@ -169,7 +169,6 @@ function newQuestion() {
 
 function mousePressed() {
 
-  getAudioContext().resume();
   userStartAudio();
 
   if (!gameStarted) {
@@ -219,14 +218,13 @@ function mousePressed() {
 
   if (answer !== "" && noteFreq[answer] !== undefined) {
 
-    osc.freq(noteFreq[answer]);
+   osc.freq(noteFreq[answer]);
 
-    osc.amp(1);
+   osc.amp(0.5, 0.05);
 
-    setTimeout(() => {
-      osc.amp(0);
-    }, 300);
-  }
+   setTimeout(() => {
+   osc.amp(0, 0.1);
+   }, 300);
 
   newQuestion();
 
