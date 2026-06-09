@@ -9,7 +9,6 @@ let score = 0;
 let mistakes = 0;
 let osc;
 let clefImg;
-let osc;
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
 let keys = [
