@@ -11,7 +11,13 @@ function draw() {
 }
 
 function mousePressed() {
+
   userStartAudio();
 
-  alert("AudioContext = " + getAudioContext().state);
+  getAudioContext().resume();
+
+  setTimeout(() => {
+    alert("AudioContext = " + getAudioContext().state);
+  }, 300);
+
 }
