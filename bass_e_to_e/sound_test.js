@@ -1,23 +1,22 @@
+let synth;
+
 function setup() {
   createCanvas(400, 200);
-
-  textAlign(CENTER, CENTER);
-  textSize(24);
+  synth = new p5.MonoSynth();
 }
 
 function draw() {
   background(220);
-  text("画面をタップ", width / 2, height / 2);
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  text("画面をタップ", width/2, height/2);
 }
 
 function mousePressed() {
 
   userStartAudio();
-
   getAudioContext().resume();
 
-  setTimeout(() => {
-    alert("AudioContext = " + getAudioContext().state);
-  }, 300);
+  synth.play("C4", 0.8, 0, 0.5);
 
 }
