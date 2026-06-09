@@ -9,7 +9,8 @@ let score = 0;
 let mistakes = 0;
 let osc;
 let clefImg;
-
+let osc;
+let oscStarted = false;
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
 let keys = [
@@ -47,7 +48,6 @@ function setup() {
   createCanvas(800, 600);
 
   osc = new p5.Oscillator();
-  osc.amp(0);
   osc.setType('sine');
 
   newQuestion();
@@ -167,6 +167,12 @@ function mousePressed() {
 
   userStartAudio();
   getAudioContext().resume();
+
+  if (!oscStarted) {
+    osc.start();
+    osc.amp(0);
+    oscStarted = true;
+  }
 
   if (!gameStarted) {
     resetGame();
