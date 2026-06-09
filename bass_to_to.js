@@ -169,6 +169,7 @@ function newQuestion() {
 function mousePressed() {
 
   userStartAudio();
+  getAudioContext().resume();
 
   if (!gameStarted) {
     resetGame();
