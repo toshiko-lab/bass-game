@@ -32,7 +32,7 @@ let noteFreq = {
   "G_high": 392
 };
 function preload() {
-  clefImg = loadImage("bass.png");
+  // clefImg = loadImage("bass.png");
 }
 let blackKeys = [
   {note: "F#", x: 100 - 9, w: 20},   // 下ソの左（半分）
@@ -135,7 +135,7 @@ function drawStaff() {
     line(100, baseY - i * 20, 700, baseY - i * 20);
   }
 
- image(clefImg, 50, baseY - 115, 80, 135);
+// image(clefImg, 50, baseY - 115, 80, 135);
 }
 function drawNote() {
 
