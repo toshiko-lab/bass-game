@@ -12,18 +12,21 @@ function draw() {
 
 function mousePressed() {
 
-  alert("タップ認識");
-
   userStartAudio();
   getAudioContext().resume();
 
-  let osc = new p5.Oscillator('sine');
-
-  osc.freq(440);
-  osc.start();
-  osc.amp(0.5, 0.05);
-
   setTimeout(() => {
-    osc.stop();
-  }, 500);
+
+    let osc = new p5.Oscillator('sine');
+
+    osc.freq(440);
+    osc.start();
+    osc.amp(0.5, 0.05);
+
+    setTimeout(() => {
+      osc.stop();
+    }, 500);
+
+  }, 300);
+
 }
