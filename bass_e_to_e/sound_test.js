@@ -12,6 +12,8 @@ function draw() {
 
 function mousePressed() {
 
+  alert("タップ認識");
+
   userStartAudio();
   getAudioContext().resume();
 
