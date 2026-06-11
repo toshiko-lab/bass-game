@@ -168,10 +168,9 @@ function mousePressed() {
     gameStarted = true;
     return;
   }
-  if (gameOver) {
-    gameStarted = false;
-    return;
-  }
+ if (gameOver) {
+  return;
+}
 
   let answer = "";
 
