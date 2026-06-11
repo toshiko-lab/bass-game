@@ -160,6 +160,8 @@ function newQuestion() {
 
 function mousePressed() {
 
+  alert("タップした");
+
   userStartAudio();
   getAudioContext().resume();
 
