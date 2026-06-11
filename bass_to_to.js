@@ -228,3 +228,7 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 }
 newQuestion();
 }
+
+function touchStarted() {
+  return false;
+}
