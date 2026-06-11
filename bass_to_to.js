@@ -169,6 +169,7 @@ function mousePressed() {
     return;
   }
  if (gameOver) {
+  gameStarted = false;
   return;
 }
 
