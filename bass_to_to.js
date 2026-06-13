@@ -40,6 +40,7 @@ let blackKeys = [
   {note: "A#", x: 170 + 70 - 20, w: 40},
   {note: "C#", x: 310 + 70 - 20, w: 40},
   {note: "D#", x: 380 + 70 - 20, w: 40},
+  {note: "F#_middle", x: 520 + 70 - 20, w: 40},
   {note: "F#_high", x: 590 + 70 - 11 , w: 20} // 上ソの右（半分）
 ];
 function setup() {
