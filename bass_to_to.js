@@ -7,7 +7,7 @@ let gameOver = false;
 let gameStarted = false;
 let score = 0;
 let mistakes = 0;
-let osc;
+let synth;
 let clefImg;
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
@@ -45,6 +45,8 @@ let blackKeys = [
 ];
 function setup() {
   createCanvas(800, 600);
+
+  synth = new p5.MonoSynth();
 
   newQuestion();
   startTime = millis();
