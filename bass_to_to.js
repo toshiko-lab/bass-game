@@ -146,6 +146,10 @@ function drawNote() {
     "G_high": baseY - 70
   };
 
+  fill(255, 0, 0);
+  textSize(30);
+  text(question, 100, 100);
+
   let y = noteYMap[question];
   if (y === undefined) return;
    noFill();     // ←中を白に
