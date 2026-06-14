@@ -166,7 +166,7 @@ function newQuestion() {
 }
 
 function mousePressed() {
-
+　alert(getAudioContext().state);
   userStartAudio();
   getAudioContext().resume();
 
