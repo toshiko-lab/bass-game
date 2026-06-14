@@ -7,7 +7,7 @@ let gameOver = false;
 let gameStarted = false;
 let score = 0;
 let mistakes = 0;
-let osc;
+let synth;
 let clefImg;
 let notes = ["G","A","B","C","D","E","F","G_high"];
 
@@ -45,6 +45,8 @@ let blackKeys = [
 ];
 function setup() {
   createCanvas(800, 600);
+
+  synth = new p5.MonoSynth();
 
   newQuestion();
   startTime = millis();
@@ -213,21 +215,14 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
   userStartAudio();
 　getAudioContext().resume();
 
-　alert(getAudioContext().state);
+ if (answer !== "" && noteFreq[answer] !== undefined) {
 
-  setTimeout(() => {
-
-    let osc = new p5.Oscillator('sine');
-
-    osc.freq(noteFreq[answer]);
-    osc.start();
-    osc.amp(0.5, 0.05);
-
-    setTimeout(() => {
-      osc.stop();
-    }, 300);
-
-  }, 300);
+  synth.play(
+    noteFreq[answer],
+    0.5,
+    0,
+    0.3
+  );
 }
 newQuestion();
 }
