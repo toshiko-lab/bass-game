@@ -229,8 +229,5 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 }
 newQuestion();
 }
-function touchStarted() {
-  mousePressed();
-  return false;
-}
+
 
