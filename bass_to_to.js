@@ -211,7 +211,9 @@ function mousePressed() {
 if (answer !== "" && noteFreq[answer] !== undefined) {
 
   userStartAudio();
-  getAudioContext().resume();
+　getAudioContext().resume();
+
+　alert(getAudioContext().state);
 
   setTimeout(() => {
 
