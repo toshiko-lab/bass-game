@@ -212,11 +212,6 @@ function mousePressed() {
 
 if (answer !== "" && noteFreq[answer] !== undefined) {
 
-  userStartAudio();
-　getAudioContext().resume();
-
- if (answer !== "" && noteFreq[answer] !== undefined) {
-
   synth.play(
     noteFreq[answer],
     0.5,
@@ -224,6 +219,7 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
     0.3
   );
 }
+
 newQuestion();
 }
 
