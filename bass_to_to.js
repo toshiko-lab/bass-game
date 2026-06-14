@@ -216,12 +216,15 @@ function mousePressed() {
 
 if (answer !== "" && noteFreq[answer] !== undefined) {
 
-  synth.play(
-    noteFreq[answer],
-    0.5,
-    0,
-    0.3
-  );
+  let osc = new p5.Oscillator('sine');
+
+  osc.freq(noteFreq[answer]);
+  osc.start();
+  osc.amp(0.5, 0.05);
+
+  setTimeout(() => {
+    osc.stop();
+  }, 300);
 }
 
 newQuestion();
