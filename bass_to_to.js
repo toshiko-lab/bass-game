@@ -44,7 +44,7 @@ let blackKeys = [
   {note: "F#_high", x: 590 + 70 - 11 , w: 20} // 上ソの右（半分）
 ];
 function setup() {
-  createCanvas(800, 600);
+  createCanvas(min(windowWidth, 800), 600);
 
   newQuestion();
   startTime = millis();
@@ -81,7 +81,7 @@ function draw() {
   fill(0);
   textSize(32);
   textAlign(CENTER);
-  text(result, 400, 100);
+  text(result, width/2, 100);
 
   // 時間
   let elapsed = int((millis() - startTime) / 1000);
@@ -128,7 +128,10 @@ function drawStaff() {
   stroke(0);
 
   for (let i = 0; i < 5; i++) {
-    line(100, baseY - i * 20, 700, baseY - i * 20);
+   line(width * 0.12,
+     baseY - i * 20,
+     width * 0.88,
+     baseY - i * 20);
   }
 
 image(clefImg, 50, baseY - 115, 80, 135);
