@@ -44,14 +44,20 @@ let blackKeys = [
   {note: "F#_high", x: 590 + 70 - 11 , w: 20} // 上ソの右（半分）
 ];
 function setup() {
-  createCanvas(800, 600);
+  let canvas = createCanvas(800, 600);
 
-  let c = document.querySelector("canvas");
-  c.style.touchAction = "manipulation";
+  canvas.elt.addEventListener('touchstart', function(e) {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  canvas.elt.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+  }, { passive: false });
 
   newQuestion();
   startTime = millis();
-}
 function draw() {
   background(230);
 
