@@ -56,8 +56,21 @@ function setup() {
     e.preventDefault();
   }, { passive: false });
 
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+
+  document.addEventListener('gesturechange', function(e) {
+    e.preventDefault();
+  });
+
+  document.addEventListener('gestureend', function(e) {
+    e.preventDefault();
+  });
+
   newQuestion();
   startTime = millis();
+}
 function draw() {
   background(230);
 
