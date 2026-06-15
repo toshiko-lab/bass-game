@@ -44,7 +44,10 @@ let blackKeys = [
   {note: "F#_high", x: 590 + 70 - 11 , w: 20} // 上ソの右（半分）
 ];
 function setup() {
-  createCanvas(min(windowWidth, 800), 600);
+  createCanvas(800, 600);
+
+  let c = document.querySelector("canvas");
+  c.style.touchAction = "manipulation";
 
   newQuestion();
   startTime = millis();
