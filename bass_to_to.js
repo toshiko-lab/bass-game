@@ -253,4 +253,8 @@ if (answer !== "" && noteFreq[answer] !== undefined) {
 newQuestion();
 }
 
+document.addEventListener('dblclick', function(e) {
+  e.preventDefault();
+}, { passive: false });
+
 
