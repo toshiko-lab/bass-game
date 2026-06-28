@@ -77,9 +77,9 @@ function draw() {
   let elapsed = started ? int((millis() - startTime) / 1000) : 0;
   let remaining = started ? max(0, timeLimit - elapsed) : timeLimit;
 
-  // ⭐ここ追加（これが重要）
-  if (remaining <= 0) {
+  if (started && remaining <= 0 && !gameOver) {
     gameOver = true;
+    started = false;
   }
 
   // スコア
