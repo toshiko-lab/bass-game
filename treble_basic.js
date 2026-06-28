@@ -12,7 +12,7 @@ let correctCount = 0;
 let missCount = 0;
 let resultText = "";
 let keyWidth = 50;
-let osc;
+let synth;
 
 // 音データ
 function getFreq(note) {
@@ -56,10 +56,8 @@ function preload() {
 function setup() {
   createCanvas(600, 760);
 
-  osc = new p5.Oscillator();
-  osc.start();
-  osc.amp(0);
-  osc.setType('triangle');
+  synth = new p5.MonoSynth();
+
   newQuestion();
 }
 
@@ -245,11 +243,9 @@ function mousePressed() {
     ) {
 
       // 音
-      let freq = getFreq(k.name);
+     let freq = getFreq(k.name);
 
-      osc.freq(freq);
-      osc.amp(0.5, 0.05);
-      osc.amp(0, 0.3);
+     synth.play(freq, 0.5, 0, 0.3);
 
       // 正解判定
       if (k.name === currentNote) {
