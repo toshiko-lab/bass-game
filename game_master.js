@@ -52,3 +52,38 @@ function newQuestion() {
   currentNote = current.name;
   noteY = current.y;
 }
+// --- マウス（PC）用の操作 ---
+function mousePressed() {
+  handleInteraction();
+}
+
+// --- タッチ（スマホ・iPad）用の操作 ---
+function touchStarted() {
+  handleInteraction();
+  return false; // 画面のズームやスクロールを防ぐため
+}
+
+// --- 共通の操作ロジック ---
+function handleInteraction() {
+  // 1. まず音を有効にする（iPad/スマホのセキュリティ対策）
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
+  }
+
+  // 2. スタート画面ならゲームを開始する
+  if (!gameStarted) {
+    gameStarted = true;
+    return;
+  }
+
+  // 3. 鍵盤をタッチした時の処理
+  for (let k of config.keys) {
+    // 先生の鍵盤の座標に合わせて判定
+    if (mouseX > k.x && mouseX < k.x + k.w && mouseY > k.y && mouseY < k.y + k.h) {
+      console.log("タッチした音: " + k.note);
+      // ここで音を鳴らす処理や正解判定を呼び出してください
+      // 例えば： playNote(k.note); など
+      return;
+    }
+  }
+}
