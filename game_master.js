@@ -1,7 +1,7 @@
 let config; 
 let synth, clefImg;
 let currentNote, noteY;
-let gameStarted = false; // ★ここが重要です！
+let gameStarted = false; 
 
 function preload() {
   if (config) clefImg = loadImage(config.clefImg);
@@ -9,12 +9,23 @@ function preload() {
 
 function setup() {
   createCanvas(600, 760);
-  newQuestion();
+  // newQuestion(); // スタートボタンを押してから呼ぶためにここでは呼ばない
 }
 
 function draw() {
   if (!config) return;
   background(255);
+
+  // ★ここを追加：ゲーム開始前なら「クリックでスタート」を表示する
+  if (!gameStarted) {
+    textAlign(CENTER, CENTER);
+    textSize(40);
+    fill(0);
+    text("クリックでスタート", width/2, height/2);
+    return; // ここで描画を止めるので、楽譜などはまだ出ない
+  }
+
+  // 以下はゲーム中の描画
   textAlign(CENTER); textSize(30); fill(0);
   text(config.title, width / 2, 55);
 
@@ -37,16 +48,10 @@ function drawNote() {
 }
 
 function drawKeyboard() {
-  // 白鍵
   fill(255); stroke(0);
-  for (let k of config.keys) {
-    rect(k.x, k.y, k.w, k.h);
-  }
-  // 黒鍵
+  for (let k of config.keys) rect(k.x, k.y, k.w, k.h);
   fill(0); noStroke();
-  for (let b of config.blackKeys) {
-    rect(b.x, b.y, b.w, b.h);
-  }
+  for (let b of config.blackKeys) rect(b.x, b.y, b.w, b.h);
 }
 
 function newQuestion() {
@@ -54,42 +59,8 @@ function newQuestion() {
   currentNote = current.name;
   noteY = current.y;
 }
-// --- マウス（PC）用の操作 ---
-function mousePressed() {
-  handleInteraction();
-}
 
-// --- タッチ（スマホ・iPad）用の操作 ---
-function touchStarted() {
-  handleInteraction();
-  return false; // 画面のズームやスクロールを防ぐため
-}
-
-// --- 共通の操作ロジック ---
-function handleInteraction() {
-  // 1. まず音を有効にする
-  if (getAudioContext().state !== 'running') {
-    getAudioContext().resume();
-  }
-
-  // 2. まだスタートしていなければ開始する
-  if (gameStarted === false) {
-    gameStarted = true;
-    console.log("ゲームを開始しました");
-    return;
-  }
-
-  // 3. 鍵盤をタッチした時の処理
-  for (let k of config.keys) {
-    if (mouseX > k.x && mouseX < k.x + k.w && mouseY > k.y && mouseY < k.y + k.h) {
-      console.log("タッチした音: " + k.note);
-      // ここに音を鳴らす関数などを追加してください
-      return;
-    }
-  }
-}
-
-// 念のため、マウス用とタッチ用の両方に割り当て
+// --- 操作系（重複を削除し、簡潔にまとめました） ---
 function mousePressed() {
   handleInteraction();
 }
@@ -97,4 +68,25 @@ function mousePressed() {
 function touchStarted() {
   handleInteraction();
   return false; 
+}
+
+function handleInteraction() {
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
+  }
+
+  if (!gameStarted) {
+    gameStarted = true;
+    newQuestion(); // ★ここで初めて問題を出す
+    return;
+  }
+
+  // 鍵盤判定
+  for (let k of config.keys) {
+    if (mouseX > k.x && mouseX < k.x + k.w && mouseY > k.y && mouseY < k.y + k.h) {
+      console.log("タッチした音: " + k.note);
+      // ここに音を鳴らす処理を後で追加しましょう
+      return;
+    }
+  }
 }
