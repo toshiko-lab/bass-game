@@ -1,5 +1,7 @@
-let config; // 設定データを受け取る箱
-let clefImg, currentNote, noteY;
+let config; 
+let synth, clefImg;
+let currentNote, noteY;
+let gameStarted = false; // ★ここが重要です！
 
 function preload() {
   if (config) clefImg = loadImage(config.clefImg);
