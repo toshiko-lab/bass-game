@@ -1,73 +1,54 @@
-// --- プログラムの心臓部 ---
-// 設定ファイル（config_treble.jsなど）からデータを受け取る箱
-let config; 
-let synth, clefImg;
-let question, score = 0, mistakes = 0, gameStarted = false, result = "";
+let config; // 設定データを受け取る箱
+let clefImg, currentNote, noteY;
 
-// 1. 設定データが読み込まれた後に画像を読み込む
 function preload() {
-  if (config) {
-    clefImg = loadImage(config.clefImg);
-  }
+  if (config) clefImg = loadImage(config.clefImg);
 }
 
 function setup() {
-  let canvas = createCanvas(800, 600);
-  // iPadタッチ対策
-  canvas.elt.addEventListener('touchstart', (e) => { if(e.touches.length > 1) e.preventDefault(); }, {passive: false});
-  synth = new p5.MonoSynth();
-  
-  // 最初の問題をセット
-  if (typeof newQuestion === 'function') {
-    newQuestion();
-  }
+  createCanvas(600, 760);
+  newQuestion();
 }
 
 function draw() {
-  background(230);
-  
-  // まだconfigが読み込まれていない場合はここでストップ
-  if (!config) {
-    textAlign(CENTER, CENTER);
-    text("設定ファイルを読み込んでいます...", width/2, height/2);
-    return;
-  }
+  if (!config) return;
+  background(255);
+  textAlign(CENTER); textSize(30); fill(0);
+  text(config.title, width / 2, 55);
 
-  if (!gameStarted) {
-    textAlign(CENTER, CENTER);
-    textSize(32);
-    text("クリックでスタート", width/2, height/2);
-    return;
-  }
-
-  // --- 共通の描画処理 ---
+  image(clefImg, config.clefX, config.clefY, config.clefW, config.clefH);
   drawStaff();
   drawNote();
   drawKeyboard();
-
-  // (※以下、先生の既存の得点・時間表示ロジックをここに移植してください)
 }
 
-// 共通の鍵盤描画関数
+function drawStaff() {
+  stroke(0);
+  for (let i = 0; i < 5; i++) {
+    line(50, config.startY + i * config.gap, 550, config.startY + i * config.gap);
+  }
+}
+
+function drawNote() {
+  noFill(); stroke(0); strokeWeight(2);
+  ellipse(200, noteY, 24, 18);
+}
+
 function drawKeyboard() {
   // 白鍵
+  fill(255); stroke(0);
   for (let k of config.keys) {
-    fill(255); stroke(0);
-    rect(k.x, 450, k.w, 120);
+    rect(k.x, k.y, k.w, k.h);
   }
   // 黒鍵
   fill(0); noStroke();
   for (let b of config.blackKeys) {
-    rect(b.x, 450, b.w, 80);
+    rect(b.x, b.y, b.w, b.h);
   }
 }
 
-// --- 共通のクリック判定 ---
-function mousePressed() {
-  // iPadで音を出すための必須処理
-  if (getAudioContext().state !== 'running') {
-    getAudioContext().resume();
-  }
-  
-  // (※ここに、config.keys を使ったクリック判定ロジックを移植してください)
+function newQuestion() {
+  let current = random(config.noteData);
+  currentNote = current.name;
+  noteY = current.y;
 }
