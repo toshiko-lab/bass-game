@@ -67,25 +67,34 @@ function touchStarted() {
 
 // --- 共通の操作ロジック ---
 function handleInteraction() {
-  // 1. まず音を有効にする（iPad/スマホのセキュリティ対策）
+  // 1. まず音を有効にする
   if (getAudioContext().state !== 'running') {
     getAudioContext().resume();
   }
 
-  // 2. スタート画面ならゲームを開始する
-  if (!gameStarted) {
+  // 2. まだスタートしていなければ開始する
+  if (gameStarted === false) {
     gameStarted = true;
+    console.log("ゲームを開始しました");
     return;
   }
 
   // 3. 鍵盤をタッチした時の処理
   for (let k of config.keys) {
-    // 先生の鍵盤の座標に合わせて判定
     if (mouseX > k.x && mouseX < k.x + k.w && mouseY > k.y && mouseY < k.y + k.h) {
       console.log("タッチした音: " + k.note);
-      // ここで音を鳴らす処理や正解判定を呼び出してください
-      // 例えば： playNote(k.note); など
+      // ここに音を鳴らす関数などを追加してください
       return;
     }
   }
+}
+
+// 念のため、マウス用とタッチ用の両方に割り当て
+function mousePressed() {
+  handleInteraction();
+}
+
+function touchStarted() {
+  handleInteraction();
+  return false; 
 }
