@@ -6,6 +6,12 @@ let gameState = "START";
 let currentNote = "";
 let resultMessage = "";
 
+// 消えていたスコアとタイマーの変数を復活
+let scoreCorrect = 0;
+let scoreWrong = 0;
+let timer = 60;
+let lastSeconds = 0;
+
 function setup() {
   createCanvas(800, 600);
   newQuestion();
@@ -19,8 +25,19 @@ function draw() {
     textSize(40);
     fill(0);
     text("クリックしてスタート", width / 2, height / 2);
-  } else {
-    // 1. 五線譜
+  } else if (gameState === "PLAYING") {
+    
+    // --- タイマーのカウントダウン処理 ---
+    if (second() !== lastSeconds) {
+      if (timer > 0) {
+        timer--;
+      } else {
+        gameState = "END"; // 0秒になったら終了
+      }
+      lastSeconds = second();
+    }
+
+    // 1. 五线譜（ごせんふ）
     stroke(0);
     strokeWeight(2);
     let baseLineY = 200;
@@ -32,47 +49,79 @@ function draw() {
     textAlign(LEFT, CENTER);
     textSize(60);
     fill(0);
+    noStroke();
     text('?:', 40, baseLineY + 40); 
 
-    // 3. 音符
+    // 3. 音符（黒丸から、綺麗な「全音符（白抜き）」に修正）
     let noteObj = config.noteData.find(n => n.name === currentNote);
     if (noteObj) {
-      fill(0); noStroke();
-      ellipse(width / 2, noteObj.y, 25, 20);
+      fill(255);       // 中は白抜き
+      stroke(0);       // 周りは黒線
+      strokeWeight(3); // 少し太めの線
+      ellipse(width / 2, noteObj.y, 28, 20); // 全音符
     }
 
-    // 4. UI（メッセージ）
-    textAlign(CENTER);
-    textSize(30);
-    text(resultMessage, width / 2, 80);
+    // 4. UI（文字情報の表示）
+    textAlign(LEFT, TOP);
+    textSize(24);
+    fill(0);
+    noStroke();
     
-    // 5. 鍵盤（common.jsの関数）
+    // 消えていた「Time」と「正解・まちがい」をここに復活！
+    text("Time: " + timer, 50, 40);
+    text("正解: " + scoreCorrect, 200, 40);
+    text("まちがい: " + scoreWrong, 350, 40);
+
+    // 画面中央に「正解！」「まちがい」を大きく出す
+    textAlign(CENTER, TOP);
+    textSize(35);
+    if (resultMessage === "正解！") fill(0, 150, 0); // 緑色
+    if (resultMessage === "まちがい") fill(250, 0, 0); // 赤色
+    text(resultMessage, width / 2, 100);
+    
+    // 5. 鍵盤の描画（common.jsから呼び出し）
     if (typeof drawKeyboard === 'function') {
         drawKeyboard();
     }
+  } else if (gameState === "END") {
+    // 終了画面
+    textAlign(CENTER, CENTER);
+    textSize(40);
+    fill(250, 0, 0);
+    text("タイムアップ！", width / 2, height / 2 - 30);
+    textSize(28);
+    fill(0);
+    text("正解数: " + scoreCorrect + " 回", width / 2, height / 2 + 30);
   }
 }
 
 function newQuestion() {
   currentNote = config.noteData[floor(random(config.noteData.length))].name;
-  resultMessage = "";
 }
 
 function mousePressed() {
   if (gameState === "START") {
     gameState = "PLAYING";
-  } else {
-    // 鍵盤クリック判定（common.jsのconfigを使用）
+    timer = config.timeLimit || 60; // 60秒リセット
+    scoreCorrect = 0;
+    scoreWrong = 0;
+    resultMessage = "";
+  } else if (gameState === "PLAYING") {
+    // 鍵盤クリック判定
     for (let k of config.keys) {
       if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 450 && mouseY < 570) {
         if (k.note === currentNote) {
           resultMessage = "正解！";
+          scoreCorrect++;
         } else {
           resultMessage = "まちがい";
+          scoreWrong++;
         }
         newQuestion();
         break;
       }
     }
+  } else if (gameState === "END") {
+    gameState = "START"; // クリックで最初に戻る
   }
 }
