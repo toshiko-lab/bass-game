@@ -2,7 +2,7 @@
 // --- Keep this ---
 // --- Keep this ---
 
-let resultMessage = ""; // 結果を表示するための変数
+let resultMessage = "";
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -12,16 +12,16 @@ function setup() {
 function draw() {
   background(220);
   
-  // 1. 五線譜の描画
+  // 1. 五線譜の固定位置
+  let baseLineY = 150; // 少し上に配置
   stroke(0);
   strokeWeight(2);
-  let baseLineY = 250; 
   for (let i = 0; i < 5; i++) {
     let lineY = baseLineY + i * 20;
     line(100, lineY, windowWidth - 100, lineY);
   }
   
-  // ヘ音記号の表示
+  // ヘ音記号の表示（位置調整）
   noStroke(); fill(0);
   textSize(80);
   text('?:', 30, baseLineY + 65);
@@ -30,33 +30,36 @@ function draw() {
   let noteObj = config.noteData.find(n => n.name === currentNote);
   if (noteObj) {
     fill(0);
-    ellipse(windowWidth / 2, noteObj.y, 25, 20);
+    // 五線譜の各行(150, 170, 190, 210, 230)に合わせて調整
+    ellipse(width / 2, noteObj.y, 25, 20);
   }
 
-  // 3. 正解・不正解メッセージの表示
-  textSize(40);
+  // 3. 正解・不正解メッセージ
   textAlign(CENTER);
-  text(resultMessage, width / 2, 100);
+  textSize(30);
+  text(resultMessage, width / 2, 50);
   
-  // 4. 鍵盤の描画
+  // 4. 鍵盤の描画（画面下部に配置）
+  let keyTopY = height - 150; // 画面下の余白を考慮
   fill(255); stroke(0);
   for (let k of config.keys) {
-    rect(k.x, 450, k.w, 120);
+    rect(k.x, keyTopY, k.w, 120);
   }
   fill(0); noStroke();
   for (let b of config.blackKeys) {
-    rect(b.x, 450, b.w, 80);
+    rect(b.x, keyTopY, b.w, 80);
   }
 }
 
 function newQuestion() {
   currentNote = config.noteData[floor(random(config.noteData.length))].name;
+  resultMessage = ""; // 問題が変わったらメッセージを消す
 }
 
 function mousePressed() {
+  let keyTopY = height - 150;
   for (let k of config.keys) {
-    // クリック判定（鍵盤の高さに合わせる）
-    if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 450 && mouseY < 570) {
+    if (mouseX > k.x && mouseX < k.x + k.w && mouseY > keyTopY && mouseY < keyTopY + 120) {
       if (k.note === currentNote) {
         resultMessage = "正解！";
       } else {
