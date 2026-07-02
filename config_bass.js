@@ -4,8 +4,14 @@ config = {
   clefX: 50, clefY: 185, clefW: 80, clefH: 135,
   startY: 300, timeLimit: 60,
   noteData: [
-    {name: "G", y: 260}, {name: "A", y: 270}, {name: "B", y: 280}, {name: "C", y: 290},
-    {name: "D", y: 300}, {name: "E", y: 310}, {name: "F", y: 320}, {name: "G_high", y: 330}
+    {name: "G", y: 270},
+    {name: "A", y: 260},
+    {name: "B", y: 250},
+    {name: "C", y: 240},
+    {name: "D", y: 230},
+    {name: "E", y: 220},
+    {name: "F", y: 210},
+    {name: "G_high", y: 200}
   ],
   keys: [
     {note: "G", x: 100, w: 70}, {note: "A", x: 170, w: 70}, {note: "B", x: 240, w: 70},
