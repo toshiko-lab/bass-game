@@ -1,4 +1,4 @@
-config = {
+  config = {
   title: "ヘ音記号 ト～ト",
   clefImg: "bass.png",
   clefX: 50, clefY: 185, clefW: 80, clefH: 135,
