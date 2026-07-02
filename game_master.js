@@ -10,26 +10,29 @@ function setup() {
 function draw() {
   background(220);
   
-  // 1. 五線譜の描画（第4線が F = 210 になるように設定）
+  // 1. 五線譜の描画（Y位置を下げて中央に寄せます）
   stroke(0);
-  strokeWeight(2); // 線の太さを少し見やすくします
-  let fLineY = 210; 
+  strokeWeight(2);
+  let baseLineY = 250; // 全体的に五線譜を下に配置
   for (let i = 0; i < 5; i++) {
-    // 上から i=0,1,2,3,4 と数える
-    // i=3 が F(210) になるよう調整
-    let lineY = fLineY - (3 - i) * 20; 
-    line(50, lineY, windowWidth - 50, lineY);
+    let lineY = baseLineY + i * 20;
+    line(100, lineY, windowWidth - 100, lineY);
   }
   
+  // ヘ音記号の表示（仮としてテキストで表示）
+  noStroke(); fill(0);
+  textSize(80);
+  text('?:', 30, baseLineY + 30); // 簡易ヘ音記号
+
   // 2. 音符の描画
   let noteObj = config.noteData.find(n => n.name === currentNote);
   if (noteObj) {
     fill(0);
-    noStroke();
+    // 音符のY座標を五線譜に合わせて調整（configの数値による）
     ellipse(windowWidth / 2, noteObj.y, 25, 20);
   }
   
-  // 3. 鍵盤の描画（共通処理）
+  // 3. 鍵盤の描画（修正版）
   // 白鍵
   fill(255); stroke(0);
   for (let k of config.keys) {
