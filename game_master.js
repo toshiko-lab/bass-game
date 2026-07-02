@@ -8,11 +8,15 @@ function setup() {
 function draw() {
   background(220);
   
-  // 1. 五線譜の描画
-  stroke(0);
-  for (let i = 0; i < 5; i++) {
-    line(50, 200 + i * 20, windowWidth - 50, 200 + i * 20);
-  }
+ // 五線譜の基準となるFのラインを210に合わせる
+let fLineY = 210; 
+stroke(0);
+for (let i = 0; i < 5; i++) {
+  // 第4線がF(210)になるように計算：ラインは20px間隔
+  // 上から順に: 150, 170, 190, 210(F), 230
+  let lineY = fLineY - (3 - i) * 20; 
+  line(50, lineY, windowWidth - 50, lineY);
+}
   
   // 2. 音符の描画（configのY座標をそのまま使う）
   let noteObj = config.noteData.find(n => n.name === currentNote);
