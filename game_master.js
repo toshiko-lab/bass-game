@@ -10,34 +10,37 @@ function setup() {
 function draw() {
   background(220);
   
- // 五線譜の基準となるFのラインを210に合わせる
-let fLineY = 210; 
-stroke(0);
-for (let i = 0; i < 5; i++) {
-  // 第4線がF(210)になるように計算：ラインは20px間隔
-  // 上から順に: 150, 170, 190, 210(F), 230
-  let lineY = fLineY - (3 - i) * 20; 
-  line(50, lineY, windowWidth - 50, lineY);
-}
+  // 1. 五線譜の描画（第4線が F = 210 になるように設定）
+  stroke(0);
+  strokeWeight(2); // 線の太さを少し見やすくします
+  let fLineY = 210; 
+  for (let i = 0; i < 5; i++) {
+    // 上から i=0,1,2,3,4 と数える
+    // i=3 が F(210) になるよう調整
+    let lineY = fLineY - (3 - i) * 20; 
+    line(50, lineY, windowWidth - 50, lineY);
+  }
   
-  // 2. 音符の描画（configのY座標をそのまま使う）
+  // 2. 音符の描画
   let noteObj = config.noteData.find(n => n.name === currentNote);
   if (noteObj) {
     fill(0);
+    noStroke();
     ellipse(windowWidth / 2, noteObj.y, 25, 20);
   }
   
-  // 3. 鍵盤の描画
+  // 3. 鍵盤の描画（共通処理）
+  // 白鍵
   fill(255); stroke(0);
   for (let k of config.keys) {
-    rect(k.x, 400, k.w, 100);
+    rect(k.x, 450, k.w, 120);
   }
-  fill(0);
-  for (let bk of config.blackKeys) {
-    rect(bk.x, 400, bk.w, 60);
+  // 黒鍵
+  fill(0); noStroke();
+  for (let b of config.blackKeys) {
+    rect(b.x, 450, b.w, 80);
   }
 }
-
 function newQuestion() {
   currentNote = config.noteData[floor(random(config.noteData.length))].name;
 }
