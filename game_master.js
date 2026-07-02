@@ -1,4 +1,6 @@
-let currentNote;
+// --- Start of file ---
+// --- Keep this ---
+// --- Keep this ---
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
