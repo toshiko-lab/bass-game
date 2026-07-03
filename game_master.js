@@ -10,34 +10,40 @@ let lastSeconds = 0;
 // 🔊 電子音（シンセサイザー）用の変数
 let synth;
 
-// 🎹 鍵盤の配置データ（画面の並びを綺麗にするためにここで定義します）
-// 白鍵9本（低いソから高いソまで：G, A, B, C, D, E, F, G, A）
+// 🎹 【仕様通りに修正】白鍵10本（低いファ から 高いラ まで）
+// 左端のG(ソ)問題の前の「F(ファ)」からスタートし、生徒が位置を理解できるように10本並べます
 const whiteKeysData = [
-  { note: "G",      x: 100 },
-  { note: "A",      x: 160 },
-  { note: "B",      x: 220 },
-  { note: "C",      x: 280 },
-  { note: "D",      x: 340 },
-  { note: "E",      x: 400 },
-  { note: "F",      x: 460 },
-  { note: "G_high", x: 520 },
-  { note: "A_high", x: 580 } // 右端の予備
+  { note: "F_low",  x: 100 }, // 1: 低いファ
+  { note: "G",      x: 155 }, // 2: 低いソ (第1線)
+  { note: "A",      x: 210 }, // 3: 低いラ
+  { note: "B",      x: 265 }, // 4: 低いシ
+  { note: "C",      x: 320 }, // 5: ド
+  { note: "D",      x: 375 }, // 6: レ
+  { note: "E",      x: 430 }, // 7: ミ
+  { note: "F",      x: 485 }, // 8: ファ
+  { note: "G_high", x: 540 }, // 9: 高いソ (第4間)
+  { note: "A_high", x: 595 }  // 10:高いラ
 ];
 
-// 黒鍵5本（白鍵の並び [G, A, B, C, D, E, F, G, A] に完全に合わせた正しいピアノ配置）
+// 🎹 【仕様通りに修正】黒鍵（白鍵10本の隙間に完全に合わせた配置）
+// 幅55pxの白鍵に対して、境界線の真上に綺麗にまたがるように座標を計算しています
 const blackKeysData = [
-  { name: "G#",  x: 142 }, // 1本目：ソ(G) と ラ(A) の間
-  { name: "A#",  x: 202 }, // 2本目：ラ(A) と シ(B) の間
+  // --- 最初の3本の塊 ---
+  { name: "F#_low", x: 137 }, // ファ と ソ の間
+  { name: "G#",     x: 192 }, // ソ と ラ の間
+  { name: "A#",     x: 247 }, // ラ と シ の間 ★被らず綺麗な位置！
   
-  // 💡 シ(B) と ド(C) の間（260px〜280px付近）は黒鍵なし！綺麗な隙間になります
+  // 💡 シ と ド の間（265〜320px）は「無し」
 
-  { name: "C#",  x: 322 }, // 3本目：ド(C) と レ(D) の間
-  { name: "D#",  x: 382 }, // 4本目：レ(D) と ミ(E) の間
+  // --- 次の2本の塊 ---
+  { name: "C#",     x: 357 }, // ド と レ の間
+  { name: "D#",     x: 412 }, // レ と ミ の間
   
-  // 💡 ミ(E) と ファ(F) の間（440px〜460px付近）も黒鍵なし！綺麗な隙間になります
+  // 💡 ミ と ファ の間（430〜485px）は「無し」
 
-  { name: "F#",  x: 502 }, // 5本目：ファ(F) と ソ(G) の間
-  { name: "G#2", x: 562 }  // 6本目：ソ(G) と ラ(A) の間
+  // --- 次の2本の塊 ---
+  { name: "F#",     x: 522 }, // ファ と ソ の間
+  { name: "G#_high",x: 577 }  // ソ と ラ の間
 ];
 
 function setup() {
@@ -45,7 +51,7 @@ function setup() {
   
   // p5.jsの電子音（サイン波）を準備
   synth = new p5.Oscillator('sine');
-  synth.amp(0); // 最初は音量を0に
+  synth.amp(0); 
   synth.start();
   
   newQuestion();
@@ -66,7 +72,7 @@ function draw() {
       if (timer > 0) {
         timer--;
       } else {
-        gameState = "END"; // 0秒になったら終了
+        gameState = "END";
       }
       lastSeconds = second();
     }
@@ -79,25 +85,25 @@ function draw() {
       line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
     }
     
-   // 2. ヘ音記号（𝄢）の描画
-    // ★サイズを「80」から「65」に小さくし、位置を下に下げて五線譜にジャストフィットさせます
+    // 2. ヘ音記号（𝄢）の描画
+    // ★サイズを「65」に抑え、第2線〜第5線にピッタリ美しく収まる位置にコントロールします
     push();
     textAlign(LEFT, TOP);
-    textSize(65);      // ★高さを五線譜の幅に合わせるためにサイズダウン
+    textSize(65);      
     fill(0);
     noStroke();
     textFont("Georgia"); 
-    // ★位置を baseLineY + 22 にすることで、4線目を2つの点が綺麗に挟みます
-    text("𝄢", 110, baseLineY + 22); 
+    // 横位置105、縦位置を第5線(200)の少し下(23px)に下げることで、第4線を2つの点が綺麗に挟みます
+    text("𝄢", 105, baseLineY + 23); 
     pop();
 
-    // 3. 音符（config_bass.jsの修正値に合わせて正確に中央描画）
+    // 3. 音符
     let noteObj = config.noteData.find(n => n.name === currentNote);
     if (noteObj) {
-      noFill();         // 中を透明にして五線譜を透けさせる
-      stroke(0);        // 側（輪郭）は黒
-      strokeWeight(3);  // 少し太めの綺麗な線
-      ellipse(width / 2, noteObj.y, 28, 18); // 全音符の形
+      noFill();         
+      stroke(0);        
+      strokeWeight(3);  
+      ellipse(width / 2, noteObj.y, 28, 18); 
     }
 
     // 4. UI（文字情報の表示）
@@ -113,12 +119,12 @@ function draw() {
     // 画面中央に「正解！」「まちがい」を大きく出す
     textAlign(CENTER, TOP);
     textSize(35);
-    if (resultMessage === "正解！") fill(0, 150, 0); // 緑色
-    if (resultMessage === "まちがい") fill(250, 0, 0); // 赤色
+    if (resultMessage === "正解！") fill(0, 150, 0); 
+    if (resultMessage === "まちがい") fill(250, 0, 0); 
     text(resultMessage, width / 2, 100);
     
-    // 5. 🛠️ 鍵盤の描画（ズレをなくすため、ここで直接綺麗に描画します）
-    let kw = 60;  // 白鍵の幅
+    // 5. 🛠️ 鍵盤の描画（白鍵10本・黒鍵7本を完璧なサイズで配置）
+    let kw = 55;  // 白鍵の幅（10本が画面に綺麗に収まるサイズ）
     let kh = 140; // 白鍵の高さ
     let bY = 430; // 鍵盤の開始Y座標
     
@@ -130,18 +136,30 @@ function draw() {
       rect(k.x, bY, kw, kh);
     }
     
-    // ② 黒鍵の描画（音を出すためではなく、目印として綺麗に配置）
-    let b_kw = 36; // 黒鍵の幅
-    let b_kh = 85; // 黒鍵の高さ
-    for (let b of blackKeysData) {
-      stroke(0);
-      strokeWeight(1);
-      fill(0);
-      rect(b.x, bY, b_kw, b_kh);
-    }
+    // 🎹 黒鍵（右端に生徒の認識を助ける「半分の黒鍵」を追加）
+const blackKeysData = [
+  // --- 最初の3本の塊 ---
+  { name: "F#_low", x: 137, w: 32 }, // ファ と ソ の間
+  { name: "G#",     x: 192, w: 32 }, // ソ と ラ の間
+  { name: "A#",     x: 247, w: 32 }, // ラ と シ の間
+  
+  // 💡 シ と ド の間（265〜320px）は「無し」
+
+  // --- 次の2本の塊 ---
+  { name: "C#",     x: 357, w: 32 }, // ド と レ の間
+  { name: "D#",     x: 412, w: 32 }, // レ と ミ の間
+  
+  // 💡 ミ と ファ の間（430〜485px）は「無し」
+
+  // --- 次の3本の塊（ここを 3・2・3 に見せるための修正） ---
+  { name: "F#",     x: 522, w: 32 }, // ファ と ソ の間
+  { name: "G#_high",x: 577, w: 32 }, // ソ と ラ の間
+  
+  // ★【追加】最後の「ラ」の右端に置く、次の「シ」との間の黒鍵（幅を半分にして枠内に収めます）
+  { name: "A#_high",x: 632, w: 18 }  // ラ と 次のシ の間（幅を通常の32から18に狭めて、鍵盤の右端にピッタリ合わせました）
+];
 
   } else if (gameState === "END") {
-    // 終了画面
     textAlign(CENTER, CENTER);
     textSize(40);
     fill(250, 0, 0);
@@ -159,6 +177,7 @@ function newQuestion() {
 // 🔊 指定した周波数でピッと電子音を鳴らす関数
 function playTone(noteName) {
   let frequencies = {
+    "F_low": 174.61,    // 低いファ
     "G": 196.00,       // 低いソ
     "A": 220.00,       // 低いラ
     "B": 246.94,       // 低いシ
@@ -166,7 +185,8 @@ function playTone(noteName) {
     "D": 293.66,       // レ
     "E": 329.63,       // ミ
     "F": 349.23,       // ファ
-    "G_high": 392.00   // 高いソ
+    "G_high": 392.00,  // 高いソ
+    "A_high": 440.00   // 高いラ
   };
   
   let freq = frequencies[noteName] || 440;
@@ -193,12 +213,12 @@ function mousePressed() {
   } else if (gameState === "PLAYING") {
     
     let bY = 430;
-    let b_kw = 36;
+    let b_kw = 32;
     let b_kh = 85;
-    let kw = 60;
+    let kw = 55;
     let kh = 140;
 
-    // 【判定1】黒鍵がクリックされたら「まちがい」（音は鳴らさない）
+    // 【判定1】黒鍵がクリックされたら「まちがい」
     let clickedBlack = false;
     for (let b of blackKeysData) {
       if (mouseX > b.x && mouseX < b.x + b_kw && mouseY > bY && mouseY < bY + b_kh) { 
@@ -210,12 +230,11 @@ function mousePressed() {
       }
     }
 
-    // 【判定2】黒鍵が押されていなければ、白鍵の判定を行う
+    // 【判定2】白鍵の判定を行う
     if (!clickedBlack) {
       for (let k of whiteKeysData) {
         if (mouseX > k.x && mouseX < k.x + kw && mouseY > bY && mouseY < bY + kh) {
           
-          // 🔊 押した鍵盤の音を鳴らす！
           playTone(k.note);
 
           if (k.note === currentNote) {
