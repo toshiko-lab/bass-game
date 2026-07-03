@@ -53,13 +53,17 @@ function draw() {
       line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
     }
     
-    // 2. ヘ音記号（基準線にぴったり合わせる）
-    textAlign(LEFT, CENTER);
-    textSize(80);
-    fill(0);
-    noStroke();
-    // ヘ音記号の「：」の点が、上から2番目の線（第4線=ファ）を挟む位置に修正
-    text('𝄢', 40, baseLineY -20); 
+   /* ヘ音記号（𝄢）のスタイル修正 */
+.bass-clef {
+    position: absolute;
+    left: 10px;          /* 左端からの余白（お好みで調整） */
+    top: 22px;           /* ★位置調整：五線譜の4線目に丸が重なるように（環境に合わせて微調整してください） */
+    font-size: 42px;     /* ★サイズ調整：大きすぎず小さすぎないサイズに */
+    line-height: 1;
+    font-family: "Noto Music", "Times New Roman", serif; /* 綺麗な楽譜フォントがあれば優先 */
+    user-select: none;
+    pointer-events: none;
+}
 
     // 3. 音符（config_bass.jsの修正値に合わせて正確に中央描画）
     let noteObj = config.noteData.find(n => n.name === currentNote);
