@@ -145,22 +145,37 @@ function mousePressed() {
     scoreWrong = 0;
     resultMessage = "";
   } else if (gameState === "PLAYING") {
-    // 白鍵のクリック判定（Y: 430〜570）
-    for (let k of config.keys) {
-      if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 430 && mouseY < 570) {
-        
-        // 🔊 押した鍵盤の音を鳴らす！
-        playTone(k.note);
-
-        if (k.note === currentNote) {
-          resultMessage = "正解！";
-          scoreCorrect++;
-        } else {
-          resultMessage = "まちがい";
-          scoreWrong++;
-        }
+    
+    // 【追加】先に黒鍵のクリック判定を行う（黒鍵が押されたら「まちがい」にする処理）
+    let clickedBlack = false;
+    for (let b of config.blackKeys) {
+      if (mouseX > b.x && mouseX < b.x + b.w && mouseY > 430 && mouseY < 515) { // 黒鍵の高さの範囲
+        resultMessage = "まちがい";
+        scoreWrong++;
         newQuestion();
+        clickedBlack = true;
         break;
+      }
+    }
+
+    // 黒鍵が押されていなければ、白鍵の判定を行う
+    if (!clickedBlack) {
+      for (let k of config.keys) {
+        if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 430 && mouseY < 570) {
+          
+          // 🔊 押した鍵盤の音を鳴らす！
+          playTone(k.note);
+
+          if (k.note === currentNote) {
+            resultMessage = "正解！";
+            scoreCorrect++;
+          } else {
+            resultMessage = "まちがい";
+            scoreWrong++;
+          }
+          newQuestion();
+          break;
+        }
       }
     }
   } else if (gameState === "END") {
