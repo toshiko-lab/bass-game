@@ -45,20 +45,20 @@ function draw() {
       line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
     }
     
-    // 2. ヘ音記号
+    // 2. ヘ音記号（本物の記号を最適な位置に描画）
     textAlign(LEFT, CENTER);
-    textSize(60);
+    textSize(80);
     fill(0);
     noStroke();
-    text('?:', 40, baseLineY + 40); 
+    text('𝄢', 40, baseLineY + 30); // 上から2番目の線(ファ)にぴったり合う位置
 
-    // 3. 音符（黒丸から、綺麗な「全音符（白抜き）」に修正）
+    // 3. 音符（側は黒、中は透明で下の線が見える全音符）
     let noteObj = config.noteData.find(n => n.name === currentNote);
     if (noteObj) {
-      fill(255);       // 中は白抜き
-      stroke(0);       // 周りは黒線
-      strokeWeight(3); // 少し太めの線
-      ellipse(width / 2, noteObj.y, 28, 20); // 全音符
+      noFill();         // ★ 中を透明にして五線譜を透けさせる
+      stroke(0);        // ★ 側（輪郭）は黒
+      strokeWeight(3);  // 少し太めの綺麗な線
+      ellipse(width / 2, noteObj.y, 28, 18); // 全音符の形
     }
 
     // 4. UI（文字情報の表示）
