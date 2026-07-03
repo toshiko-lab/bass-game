@@ -1,7 +1,3 @@
-// --- Start of file ---
-// --- Keep this ---
-// --- Keep this ---
-
 let gameState = "START";
 let currentNote = "";
 let resultMessage = "";
@@ -53,17 +49,18 @@ function draw() {
       line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
     }
     
-   /* ヘ音記号（𝄢）のスタイル修正 */
-.bass-clef {
-    position: absolute;
-    left: 10px;          /* 左端からの余白（お好みで調整） */
-    top: 22px;           /* ★位置調整：五線譜の4線目に丸が重なるように（環境に合わせて微調整してください） */
-    font-size: 42px;     /* ★サイズ調整：大きすぎず小さすぎないサイズに */
-    line-height: 1;
-    font-family: "Noto Music", "Times New Roman", serif; /* 綺麗な楽譜フォントがあれば優先 */
-    user-select: none;
-    pointer-events: none;
-}
+    // 2. ヘ音記号（𝄢）の描画
+    // CSSではなく、p5.jsのtext機能を使って五線譜の正しい位置（4線目を中心に）に描画します
+    push();
+    textAlign(LEFT, CENTER);
+    textSize(52); // ★巨大化を防ぐちょうどいいサイズ
+    fill(0);
+    noStroke();
+    // ヘ音記号のフォント指定（音楽用フォントがなければ標準フォントで綺麗に出る位置に調整）
+    textFont("Georgia", 60); 
+    // 五線譜の第4線（上から2本目の線 = baseLineY + 20）にヘ音記号の2つの点が挟まるように位置を調整
+    text("𝄢", 110, baseLineY + 28); 
+    pop();
 
     // 3. 音符（config_bass.jsの修正値に合わせて正確に中央描画）
     let noteObj = config.noteData.find(n => n.name === currentNote);
@@ -150,10 +147,11 @@ function mousePressed() {
     resultMessage = "";
   } else if (gameState === "PLAYING") {
     
-    // 【追加】先に黒鍵のクリック判定を行う（黒鍵が押されたら「まちがい」にする処理）
+    // 【修正】黒鍵のクリック判定（枠線からはみ出さないようサイズと位置の判定を正確に）
     let clickedBlack = false;
     for (let b of config.blackKeys) {
-      if (mouseX > b.x && mouseX < b.x + b.w && mouseY > 430 && mouseY < 515) { // 黒鍵の高さの範囲
+      // ラとシの間の黒鍵（A#など）を含め、config側で設定された正しい黒鍵の幅(b.w)と高さで判定
+      if (mouseX > b.x && mouseX < b.x + b.w && mouseY > 430 && mouseY < 515) { 
         resultMessage = "まちがい";
         scoreWrong++;
         newQuestion();
