@@ -102,14 +102,14 @@ function newQuestion() {
 function mousePressed() {
   if (gameState === "START") {
     gameState = "PLAYING";
-    timer = config.timeLimit || 60; // 60秒リセット
+    timer = config.timeLimit || 60;
     scoreCorrect = 0;
     scoreWrong = 0;
     resultMessage = "";
   } else if (gameState === "PLAYING") {
-    // 鍵盤クリック判定
+    // 鍵盤クリック判定（新サイズ Y: 430〜570 に合わせて修正）
     for (let k of config.keys) {
-      if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 450 && mouseY < 570) {
+      if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 430 && mouseY < 570) {
         if (k.note === currentNote) {
           resultMessage = "正解！";
           scoreCorrect++;
@@ -122,6 +122,6 @@ function mousePressed() {
       }
     }
   } else if (gameState === "END") {
-    gameState = "START"; // クリックで最初に戻る
+    gameState = "START";
   }
 }
