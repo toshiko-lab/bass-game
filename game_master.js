@@ -59,7 +59,7 @@ function draw() {
     fill(0);
     noStroke();
     // ヘ音記号の「：」の点が、上から2番目の線（第4線=ファ）を挟む位置に修正
-    text('𝄢', 40, baseLineY + 50); 
+    text('𝄢', 40, baseLineY + 60); 
 
     // 3. 音符（config_bass.jsの修正値に合わせて正確に中央描画）
     let noteObj = config.noteData.find(n => n.name === currentNote);
