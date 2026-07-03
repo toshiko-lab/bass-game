@@ -10,6 +10,30 @@ let lastSeconds = 0;
 // 🔊 電子音（シンセサイザー）用の変数
 let synth;
 
+// 🎹 鍵盤の配置データ（画面の並びを綺麗にするためにここで定義します）
+// 白鍵9本（低いソから高いソまで：G, A, B, C, D, E, F, G, A）
+const whiteKeysData = [
+  { note: "G",      x: 100 },
+  { note: "A",      x: 160 },
+  { note: "B",      x: 220 },
+  { note: "C",      x: 280 },
+  { note: "D",      x: 340 },
+  { note: "E",      x: 400 },
+  { note: "F",      x: 460 },
+  { note: "G_high", x: 520 },
+  { note: "A_high", x: 580 } // 右端の予備
+];
+
+// 黒鍵6本（白鍵の隙間に正しく配置：ラ#のズレも解消）
+const blackKeysData = [
+  { name: "G#",  x: 142 }, // ソ と ラ の間
+  { name: "A#",  x: 202 }, // ★ラ と シ の間（枠線に被らない位置）
+  { name: "C#",  x: 322 }, // ド と レ の間
+  { name: "D#",  x: 382 }, // レ と ミ の間
+  { name: "F#",  x: 502 }, // ファ と ソ の間
+  { name: "G#2", x: 562 }  // 高いソ と 高いラ の間
+];
+
 function setup() {
   createCanvas(800, 600);
   
@@ -50,16 +74,15 @@ function draw() {
     }
     
     // 2. ヘ音記号（𝄢）の描画
-    // CSSではなく、p5.jsのtext機能を使って五線譜の正しい位置（4線目を中心に）に描画します
+    // ★大きさを「第2線から第5線」の幅（60px分）に合わせ、2つの点が第4線を挟むように調整
     push();
-    textAlign(LEFT, CENTER);
-    textSize(52); // ★巨大化を防ぐちょうどいいサイズ
+    textAlign(LEFT, TOP);
+    textSize(105); // サイズを大きくして第2〜第5線に合わせます
     fill(0);
     noStroke();
-    // ヘ音記号のフォント指定（音楽用フォントがなければ標準フォントで綺麗に出る位置に調整）
-    textFont("Georgia", 60); 
-    // 五線譜の第4線（上から2本目の線 = baseLineY + 20）にヘ音記号の2つの点が挟まるように位置を調整
-    text("𝄢", 110, baseLineY + 28); 
+    textFont("Georgia"); 
+    // 横位置110、縦位置は第5線(200)の上付近から描画すると綺麗に収まります
+    text("𝄢", 110, baseLineY - 26); 
     pop();
 
     // 3. 音符（config_bass.jsの修正値に合わせて正確に中央描画）
@@ -88,10 +111,29 @@ function draw() {
     if (resultMessage === "まちがい") fill(250, 0, 0); // 赤色
     text(resultMessage, width / 2, 100);
     
-    // 5. 鍵盤の描画（common.jsから呼び出し）
-    if (typeof drawKeyboard === 'function') {
-        drawKeyboard();
+    // 5. 🛠️ 鍵盤の描画（ズレをなくすため、ここで直接綺麗に描画します）
+    let kw = 60;  // 白鍵の幅
+    let kh = 140; // 白鍵の高さ
+    let bY = 430; // 鍵盤の開始Y座標
+    
+    // ① 白鍵の描画
+    for (let k of whiteKeysData) {
+      stroke(0);
+      strokeWeight(1.5);
+      fill(255);
+      rect(k.x, bY, kw, kh);
     }
+    
+    // ② 黒鍵の描画（音を出すためではなく、目印として綺麗に配置）
+    let b_kw = 36; // 黒鍵の幅
+    let b_kh = 85; // 黒鍵の高さ
+    for (let b of blackKeysData) {
+      stroke(0);
+      strokeWeight(1);
+      fill(0);
+      rect(b.x, bY, b_kw, b_kh);
+    }
+
   } else if (gameState === "END") {
     // 終了画面
     textAlign(CENTER, CENTER);
@@ -110,7 +152,6 @@ function newQuestion() {
 
 // 🔊 指定した周波数でピッと電子音を鳴らす関数
 function playTone(noteName) {
-  // 音名ごとの周波数（Hz）マッピング
   let frequencies = {
     "G": 196.00,       // 低いソ
     "A": 220.00,       // 低いラ
@@ -122,19 +163,17 @@ function playTone(noteName) {
     "G_high": 392.00   // 高いソ
   };
   
-  let freq = frequencies[noteName] || 440; // 見つからない場合は基本のラ(440Hz)
+  let freq = frequencies[noteName] || 440;
   
   synth.freq(freq);
-  synth.amp(0.3, 0.05); // 音量0.3に（0.05秒かけてフェードイン）
+  synth.amp(0.3, 0.05);
   
-  // 0.2秒後に音を止める
   setTimeout(() => {
-    synth.amp(0, 0.1); // 0.1秒かけてフェードアウト
+    synth.amp(0, 0.1);
   }, 200);
 }
 
 function mousePressed() {
-  // ブラウザのセキュリティ制限解除のため、クリック時にオーディオコンテキストを再開
   if (getAudioContext().state !== 'running') {
     getAudioContext().resume();
   }
@@ -147,11 +186,16 @@ function mousePressed() {
     resultMessage = "";
   } else if (gameState === "PLAYING") {
     
-    // 【修正】黒鍵のクリック判定（枠線からはみ出さないようサイズと位置の判定を正確に）
+    let bY = 430;
+    let b_kw = 36;
+    let b_kh = 85;
+    let kw = 60;
+    let kh = 140;
+
+    // 【判定1】黒鍵がクリックされたら「まちがい」（音は鳴らさない）
     let clickedBlack = false;
-    for (let b of config.blackKeys) {
-      // ラとシの間の黒鍵（A#など）を含め、config側で設定された正しい黒鍵の幅(b.w)と高さで判定
-      if (mouseX > b.x && mouseX < b.x + b.w && mouseY > 430 && mouseY < 515) { 
+    for (let b of blackKeysData) {
+      if (mouseX > b.x && mouseX < b.x + b_kw && mouseY > bY && mouseY < bY + b_kh) { 
         resultMessage = "まちがい";
         scoreWrong++;
         newQuestion();
@@ -160,10 +204,10 @@ function mousePressed() {
       }
     }
 
-    // 黒鍵が押されていなければ、白鍵の判定を行う
+    // 【判定2】黒鍵が押されていなければ、白鍵の判定を行う
     if (!clickedBlack) {
-      for (let k of config.keys) {
-        if (mouseX > k.x && mouseX < k.x + k.w && mouseY > 430 && mouseY < 570) {
+      for (let k of whiteKeysData) {
+        if (mouseX > k.x && mouseX < k.x + kw && mouseY > bY && mouseY < bY + kh) {
           
           // 🔊 押した鍵盤の音を鳴らす！
           playTone(k.note);
