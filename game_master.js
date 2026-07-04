@@ -4,22 +4,10 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// 音名リスト（白鍵10本：低いファ[F3] 〜 高いラ[A4]）
-const WHITE_KEYS = ["F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4"];
-
-// 五線譜の音階位置（ヘ音記号用：第1線の下から順に配置するためのマッピング）
-// ヘ音記号の第1線（一番下の線）＝ ソ(G3) となるのが一般的です。
-const NOTE_POSITIONS = {
-    "F3": 0,  // 第1線の下のスペース
-    "G3": 1,  // 第1線（一番下の線）
-    "A3": 2,  // 第1間
-    "B3": 3,  // 第2線
-    "C4": 4,  // 第2間（中央のドより1オクターブ下）
-    "D4": 5,  // 第3線
-    "E4": 6,  // 第3間
-    "F4": 7,  // 第4線（ヘ音記号の基準線）
-    "G4": 8,  // 第4間
-    "A4": 9   // 第5線
+// configがあればそこから読み込み、なければデフォルト値を使う（今後の拡張に対応！）
+const WHITE_KEYS = (typeof config !== "undefined" && config.WHITE_KEYS) ? config.WHITE_KEYS : ["F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4"];
+const NOTE_POSITIONS = (typeof config !== "undefined" && config.NOTE_POSITIONS) ? config.NOTE_POSITIONS : {
+    "F3": 0, "G3": 1, "A3": 2, "B3": 3, "C4": 4, "D4": 5, "E4": 6, "F4": 7, "G4": 8, "A4": 9
 };
 
 let currentNote = "";
