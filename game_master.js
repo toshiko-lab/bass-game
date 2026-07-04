@@ -1,255 +1,210 @@
-let gameState = "START";
+// game_master.js
+
+// --- 1. グローバル変数・設定の定義 ---
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// 音名リスト（白鍵10本：低いファ[F3] 〜 高いラ[A4]）
+const WHITE_KEYS = ["F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4"];
+
+// 五線譜の音階位置（ヘ音記号用：第1線の下から順に配置するためのマッピング）
+// ヘ音記号の第1線（一番下の線）＝ ソ(G3) となるのが一般的です。
+const NOTE_POSITIONS = {
+    "F3": 0,  // 第1線の下のスペース
+    "G3": 1,  // 第1線（一番下の線）
+    "A3": 2,  // 第1間
+    "B3": 3,  // 第2線
+    "C4": 4,  // 第2間（中央のドより1オクターブ下）
+    "D4": 5,  // 第3線
+    "E4": 6,  // 第3間
+    "F4": 7,  // 第4線（ヘ音記号の基準線）
+    "G4": 8,  // 第4間
+    "A4": 9   // 第5線
+};
+
 let currentNote = "";
-let resultMessage = "";
+let score = 0;
 
-let scoreCorrect = 0;
-let scoreWrong = 0;
-let timer = 60;
-let lastSeconds = 0;
+// 画像の読み込み（config_bass.jsで定義されている前提、なければここで代入）
+const clefImage = new Image();
+clefImage.src = "bass_clef.png"; // ヘ音記号の画像パス
 
-// 🔊 電子音（シンセサイザー）用の変数
-let synth;
+// ページ読み込み時に初期化
+window.onload = function() {
+    initGame();
+};
 
-// 🎹 【仕様通りに修正】白鍵10本（低いファ から 高いラ まで）
-// 左端のG(ソ)問題の前の「F(ファ)」からスタートし、生徒が位置を理解できるように10本並べます
-const whiteKeysData = [
-  { note: "F_low",  x: 100 }, // 1: 低いファ
-  { note: "G",      x: 155 }, // 2: 低いソ (第1線)
-  { note: "A",      x: 210 }, // 3: 低いラ
-  { note: "B",      x: 265 }, // 4: 低いシ
-  { note: "C",      x: 320 }, // 5: ド
-  { note: "D",      x: 375 }, // 6: レ
-  { note: "E",      x: 430 }, // 7: ミ
-  { note: "F",      x: 485 }, // 8: ファ
-  { note: "G_high", x: 540 }, // 9: 高いソ (第4間)
-  { note: "A_high", x: 595 }  // 10:高いラ
-];
-
-// 🎹 【仕様通りに修正】黒鍵（白鍵10本の隙間に完全に合わせた配置）
-// 幅55pxの白鍵に対して、境界線の真上に綺麗にまたがるように座標を計算しています
-const blackKeysData = [
-  // --- 最初の3本の塊 ---
-  { name: "F#_low", x: 137 }, // ファ と ソ の間
-  { name: "G#",     x: 192 }, // ソ と ラ の間
-  { name: "A#",     x: 247 }, // ラ と シ の間 ★被らず綺麗な位置！
-  
-  // 💡 シ と ド の間（265〜320px）は「無し」
-
-  // --- 次の2本の塊 ---
-  { name: "C#",     x: 357 }, // ド と レ の間
-  { name: "D#",     x: 412 }, // レ と ミ の間
-  
-  // 💡 ミ と ファ の間（430〜485px）は「無し」
-
-  // --- 次の2本の塊 ---
-  { name: "F#",     x: 522 }, // ファ と ソ の間
-  { name: "G#_high",x: 577 }  // ソ と ラ の間
-];
-
-function setup() {
-  createCanvas(800, 600);
-  
-  // p5.jsの電子音（サイン波）を準備
-  synth = new p5.Oscillator('sine');
-  synth.amp(0); 
-  synth.start();
-  
-  newQuestion();
+function initGame() {
+    generateNewNote();
+    draw();
 }
 
+// --- 2. 問題生成 ---
+function generateNewNote() {
+    const randomIndex = Math.floor(Math.random() * WHITE_KEYS.length);
+    currentNote = WHITE_KEYS[randomIndex];
+    
+    // UIのテキスト更新（必要に応じて）
+    const noteDisplay = document.getElementById("noteDisplay");
+    if (noteDisplay) noteDisplay.innerText = "この音はな〜んだ？";
+}
+
+// --- 3. 判定ロジック ---
+function checkAnswer(inputNote) {
+    // 答えの文字（例: "C4" の "C" のみ、または日本語対応ならconfig側で吸収）
+    // ここでは単純に、入力された音名（"C"など）と currentNote の頭文字を比較
+    const currentLetter = currentNote.charAt(0);
+    
+    if (inputNote.toUpperCase() === currentLetter) {
+        score += 10;
+        alert("正解！");
+        generateNewNote();
+        draw();
+    } else {
+        alert("ざんねん！ちがうよ。");
+    }
+    
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    if (scoreDisplay) scoreDisplay.innerText = "スコア: " + score;
+}
+
+// --- 4. 描画メイン処理 ---
 function draw() {
-  background(220);
+    // 画面のクリア
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (gameState === "START") {
-    textAlign(CENTER, CENTER);
-    textSize(40);
-    fill(0);
-    text("クリックしてスタート", width / 2, height / 2);
-  } else if (gameState === "PLAYING") {
-    
-    // --- タイマーのカウントダウン処理 ---
-    if (second() !== lastSeconds) {
-      if (timer > 0) {
-        timer--;
-      } else {
-        gameState = "END";
-      }
-      lastSeconds = second();
-    }
+    // 各パーツの描画
+    drawStaff();
+    drawClef();
+    drawNote(currentNote);
+    drawPiano();
+}
 
-    // 1. 五線譜（ごせんふ）
-    stroke(0);
-    strokeWeight(2);
-    let baseLineY = 200; // 一番上の線（第5線 = ラ）
+// --- 5. 五線譜の描画 ---
+const staffTop = 80;       // 五線譜の第5線（一番上の線）のY座標
+const lineDistance = 20;   // 線と線の間隔（1間）
+
+function drawStaff() {
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 2;
+
+    // 5本の線を描画（上から順に、第5線、第4線、第3線、第2線、第1線）
     for (let i = 0; i < 5; i++) {
-      line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
+        let y = staffTop + i * lineDistance;
+        ctx.beginPath();
+        ctx.moveTo(50, y);
+        ctx.lineTo(canvas.width - 50, y);
+        ctx.stroke();
     }
-    
-    // 2. ヘ音記号（𝄢）の描画
-    // ★サイズを「65」に抑え、第2線〜第5線にピッタリ美しく収まる位置にコントロールします
-    push();
-    textAlign(LEFT, TOP);
-    textSize(65);      
-    fill(0);
-    noStroke();
-    textFont("Georgia"); 
-    // 横位置105、縦位置を第5線(200)の少し下(23px)に下げることで、第4線を2つの点が綺麗に挟みます
-    text("𝄢", 105, baseLineY + 23); 
-    pop();
-
-    // 3. 音符
-    let noteObj = config.noteData.find(n => n.name === currentNote);
-    if (noteObj) {
-      noFill();         
-      stroke(0);        
-      strokeWeight(3);  
-      ellipse(width / 2, noteObj.y, 28, 18); 
-    }
-
-    // 4. UI（文字情報の表示）
-    textAlign(LEFT, TOP);
-    textSize(24);
-    fill(0);
-    noStroke();
-    
-    text("Time: " + timer, 50, 40);
-    text("正解: " + scoreCorrect, 200, 40);
-    text("まちがい: " + scoreWrong, 350, 40);
-
-    // 画面中央に「正解！」「まちがい」を大きく出す
-    textAlign(CENTER, TOP);
-    textSize(35);
-    if (resultMessage === "正解！") fill(0, 150, 0); 
-    if (resultMessage === "まちがい") fill(250, 0, 0); 
-    text(resultMessage, width / 2, 100);
-    
-    // 5. 🛠️ 鍵盤の描画（白鍵10本・黒鍵7本を完璧なサイズで配置）
-    let kw = 55;  // 白鍵の幅（10本が画面に綺麗に収まるサイズ）
-    let kh = 140; // 白鍵の高さ
-    let bY = 430; // 鍵盤の開始Y座標
-    
-    // ① 白鍵の描画
-    for (let k of whiteKeysData) {
-      stroke(0);
-      strokeWeight(1.5);
-      fill(255);
-      rect(k.x, bY, kw, kh);
-    }
-    
-    // 🎹 黒鍵（右端に生徒の認識を助ける「半分の黒鍵」を追加）
-const blackKeysData = [
-  // --- 最初の3本の塊 ---
-  { name: "F#_low", x: 137, w: 32 }, // ファ と ソ の間
-  { name: "G#",     x: 192, w: 32 }, // ソ と ラ の間
-  { name: "A#",     x: 247, w: 32 }, // ラ と シ の間
-  
-  // 💡 シ と ド の間（265〜320px）は「無し」
-
-  // --- 次の2本の塊 ---
-  { name: "C#",     x: 357, w: 32 }, // ド と レ の間
-  { name: "D#",     x: 412, w: 32 }, // レ と ミ の間
-  
-  // 💡 ミ と ファ の間（430〜485px）は「無し」
-
-  // --- 次の3本の塊（ここを 3・2・3 に見せるための修正） ---
-  { name: "F#",     x: 522, w: 32 }, // ファ と ソ の間
-  { name: "G#_high",x: 577, w: 32 }, // ソ と ラ の間
-  
-  // ★【追加】最後の「ラ」の右端に置く、次の「シ」との間の黒鍵（幅を半分にして枠内に収めます）
-  { name: "A#_high",x: 632, w: 18 }  // ラ と 次のシ の間（幅を通常の32から18に狭めて、鍵盤の右端にピッタリ合わせました）
-];
-
-  } else if (gameState === "END") {
-    textAlign(CENTER, CENTER);
-    textSize(40);
-    fill(250, 0, 0);
-    text("タイムアップ！", width / 2, height / 2 - 30);
-    textSize(28);
-    fill(0);
-    text("正解数: " + scoreCorrect + " 回", width / 2, height / 2 + 30);
-  }
 }
 
-function newQuestion() {
-  currentNote = config.noteData[floor(random(config.noteData.length))].name;
-}
-
-// 🔊 指定した周波数でピッと電子音を鳴らす関数
-function playTone(noteName) {
-  let frequencies = {
-    "F_low": 174.61,    // 低いファ
-    "G": 196.00,       // 低いソ
-    "A": 220.00,       // 低いラ
-    "B": 246.94,       // 低いシ
-    "C": 261.63,       // ド
-    "D": 293.66,       // レ
-    "E": 329.63,       // ミ
-    "F": 349.23,       // ファ
-    "G_high": 392.00,  // 高いソ
-    "A_high": 440.00   // 高いラ
-  };
-  
-  let freq = frequencies[noteName] || 440;
-  
-  synth.freq(freq);
-  synth.amp(0.3, 0.05);
-  
-  setTimeout(() => {
-    synth.amp(0, 0.1);
-  }, 200);
-}
-
-function mousePressed() {
-  if (getAudioContext().state !== 'running') {
-    getAudioContext().resume();
-  }
-
-  if (gameState === "START") {
-    gameState = "PLAYING";
-    timer = config.timeLimit || 60;
-    scoreCorrect = 0;
-    scoreWrong = 0;
-    resultMessage = "";
-  } else if (gameState === "PLAYING") {
+// --- 6. ヘ音記号の描画（位置とサイズの修正） ---
+function drawClef() {
+    // ヘ音記号を第2線〜第5線の幅（間隔3つ分 = lineDistance * 3）に収める
+    const clefHeight = lineDistance * 3; 
+    const clefWidth = clefHeight * 0.85; // 一般的なヘ音記号の縦横比（約1:0.85）
     
-    let bY = 430;
-    let b_kw = 32;
-    let b_kh = 85;
-    let kw = 55;
-    let kh = 140;
+    const x = 60; // 描画するX位置
+    
+    // 【重要】ヘ音記号の「書き始めの大きなドット」は第4線上にきます。
+    // 画像自体のデザインにもよりますが、上端を「第5線」に合わせると綺麗に収まります。
+    // 第5線のY座標は staffTop です。
+    const y = staffTop; 
 
-    // 【判定1】黒鍵がクリックされたら「まちがい」
-    let clickedBlack = false;
-    for (let b of blackKeysData) {
-      if (mouseX > b.x && mouseX < b.x + b_kw && mouseY > bY && mouseY < bY + b_kh) { 
-        resultMessage = "まちがい";
-        scoreWrong++;
-        newQuestion();
-        clickedBlack = true;
-        break;
-      }
+    if (clefImage.complete) {
+        ctx.drawImage(clefImage, x, y, clefWidth, clefHeight);
+    } else {
+        clefImage.onload = function() {
+            ctx.drawImage(clefImage, x, y, clefWidth, clefHeight);
+        };
+    }
+}
+
+// --- 7. 音符（たま）の描画 ---
+function drawNote(note) {
+    const noteIndex = NOTE_POSITIONS[note];
+    if (noteIndex === undefined) return;
+
+    // 第1線の一番下（F3）を基準としたY座標の計算
+    // 音階が1つ上がる（ステップが1増える）ごとに、lineDistanceの「半分」ずつ上に移動します。
+    // 基準となる第1線（G3、インデックス1）のY座標は staffTop + lineDistance * 4
+    const firstLineY = staffTop + lineDistance * 4;
+    const y = firstLineY - (noteIndex - 1) * (lineDistance / 2);
+    const x = canvas.width / 2; // 画面中央に表示
+
+    // 音符の描画
+    ctx.fillStyle = "#000000";
+    ctx.beginPath();
+    // 綺麗な楕円を描画（横幅を少し広く）
+    ctx.ellipse(x, y, 14, 10, 0, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // 符尾（ぼう：縦の棒）の描画（第3線より上なら下向き、下なら上向きが一般的）
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (noteIndex >= 5) { // D4（第3線）以上の場合は左側に下向きの棒
+        ctx.moveTo(x - 14, y);
+        ctx.lineTo(x - 14, y + 40);
+    } else { // それ未満の場合は右側に上向きの棒
+        ctx.moveTo(x + 14, y);
+        ctx.lineTo(x + 14, y - 40);
+    }
+    ctx.stroke();
+}
+
+// --- 8. 鍵盤の描画（黒鍵の配置：3・2・半分） ---
+function drawPiano() {
+    const pianoTop = 260;       // 鍵盤の上端Y座標
+    const whiteKeyWidth = 50;   // 白鍵1本の幅
+    const whiteKeyHeight = 150; // 白鍵の長さ
+    const startX = (canvas.width - (whiteKeyWidth * 10)) / 2; // 中央寄せ
+
+    // 白鍵の描画（10本）
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 10; i++) {
+        let x = startX + i * whiteKeyWidth;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x, pianoTop, whiteKeyWidth, whiteKeyHeight);
+        ctx.strokeRect(x, pianoTop, whiteKeyWidth, whiteKeyHeight);
     }
 
-    // 【判定2】白鍵の判定を行う
-    if (!clickedBlack) {
-      for (let k of whiteKeysData) {
-        if (mouseX > k.x && mouseX < k.x + kw && mouseY > bY && mouseY < bY + kh) {
-          
-          playTone(k.note);
+    // 黒鍵の設定
+    const blackKeyWidth = whiteKeyWidth * 0.6; // 白鍵の60%の幅
+    const blackKeyHeight = whiteKeyHeight * 0.6; // 白鍵の60%の長さ
 
-          if (k.note === currentNote) {
-            resultMessage = "正解！";
-            scoreCorrect++;
-          } else {
-            resultMessage = "まちがい";
-            scoreWrong++;
-          }
-          newQuestion();
-          break;
+    // 白鍵10本（F, G, A, B, C, D, E, F, G, A）の「間」に黒鍵を置くかどうかのパターン
+    // インデックス i の白鍵と i+1 の白鍵の間に黒鍵があるかを true/false で指定
+    // F-G(テ), G-A(テ), A-B(テ), B-C(×), C-D(テ), D-E(テ), E-F(×), F-G(テ), G-A(テ), A-B(半分)
+    // ※ 右端（9番目）は、A4の右側（A4と次のB4の間）に半分の黒鍵を描画するためのフラグ
+    const blackKeyPattern = [
+        true,  // F-G 間 （3本組の1本目）
+        true,  // G-A 間 （3本組の2本目）
+        true,  // A-B 間 （3本組の3本目）
+        false, // B-C 間 （隙間）
+        true,  // C-D 間 （2本組の1本目）
+        true,  // D-E 間 （2本組の2本目）
+        false, // E-F 間 （隙間）
+        true,  // F-G 間 （3本組の1本目）
+        true,  // G-A 間 （3本組の2本目）
+        "half" // A-B 間 （右端：次のシとの間を半分だけ描画）
+    ];
+
+    // 黒鍵の描画
+    ctx.fillStyle = "#000000";
+    for (let i = 0; i < blackKeyPattern.length; i++) {
+        if (!blackKeyPattern[i]) continue;
+
+        // 白鍵と白鍵の境目をまたぐようにX座標を計算
+        let x = startX + (i + 1) * whiteKeyWidth - (blackKeyWidth / 2);
+
+        if (blackKeyPattern[i] === true) {
+            // 通常の黒鍵
+            ctx.fillRect(x, pianoTop, blackKeyWidth, blackKeyHeight);
+        } else if (blackKeyPattern[i] === "half") {
+            // 右端の半分だけ描画する黒鍵（白鍵の右端を超えないように幅を半分に制限）
+            const halfWidth = blackKeyWidth / 2;
+            ctx.fillRect(x, pianoTop, halfWidth, blackKeyHeight);
         }
-      }
     }
-  } else if (gameState === "END") {
-    gameState = "START";
-  }
 }
