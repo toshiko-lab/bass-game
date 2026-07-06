@@ -2,44 +2,52 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ヘ音記号ゲーム</title>
     <style>
-        body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
-        .container { background: white; width: 400px; margin: 20px auto; padding: 20px; border-radius: 10px; }
+        body { text-align: center; font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 10px; }
+        .container { background: white; width: 400px; margin: 0 auto; padding: 20px; border-radius: 10px; }
+        
+        /* 譜面エリア */
         #staff { width: 360px; height: 160px; border: 1px solid #ccc; margin: 10px auto; position: relative; }
+        .line { width: 100%; height: 1px; background: black; position: absolute; }
+        /* 音符の大きさを2/3に調整 */
+        #note { width: 13.3px; height: 10px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 180px; }
+        
+        /* 鍵盤エリア */
         .piano { display: inline-block; margin-top: 10px; border: 2px solid #000; }
         .key { width: 36px; height: 100px; background: white; border: 1px solid #ccc; display: inline-block; vertical-align: top; }
-        .key:active { background: #ddd; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="timer">01:00</div>
-    <button onclick="startTimer()">スタート</button>
+    <div id="timer" style="font-size:2rem; font-weight:bold;">01:00</div>
+    <button onclick="startTimer()" style="padding:10px 20px; margin:10px;">スタート</button>
+    
     <div id="staff">
-        <div style="position:absolute; top:40px; width:100%; border-top:1px solid #000;"></div>
-        <div style="position:absolute; top:70px; width:100%; border-top:1px solid #000;"></div>
-        <div style="position:absolute; top:100px; width:100%; border-top:1px solid #000;"></div>
-        <div style="position:absolute; top:130px; width:100%; border-top:1px solid #000;"></div>
-        <div style="position:absolute; top:160px; width:100%; border-top:1px solid #000;"></div>
-        <div style="position:absolute; top:50px; left:20px; font-size:60px;">𝄢</div>
-        <div id="note" style="width:20px; height:15px; border:2px solid #000; border-radius:50%; position:absolute; top:110px; left:180px;"></div>
+        <div class="line" style="top:40px;"></div>
+        <div class="line" style="top:60px;"></div>
+        <div class="line" style="top:80px;"></div>
+        <div class="line" style="top:100px;"></div>
+        <div class="line" style="top:120px;"></div>
+        <div style="position:absolute; top:35px; left:20px; font-size:50px;">𝄢</div>
+        <div id="note" style="top:90px;"></div>
     </div>
+
     <div class="piano" id="piano"></div>
-    <div id="score">せいかい：0回 ｜ まちがい：0回</div>
+    <div id="score" style="margin-top:10px;">せいかい：0回 ｜ まちがい：0回</div>
 </div>
 
 <script>
-    // 鍵盤を10個作る
+    // 鍵盤10個生成
     const piano = document.getElementById('piano');
     for(let i=0; i<10; i++) {
         let div = document.createElement('div');
         div.className = 'key';
-        div.onclick = function() { alert('クリックされました！'); };
         piano.appendChild(div);
     }
-
+    
     function startTimer() {
         let time = 60;
         let t = setInterval(() => {
