@@ -3,68 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ヘ音記号ゲーム ♪</title>
+    <title>ヘ音記号 音読みゲーム</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f4f8; margin: 0; padding: 10px; }
         .container { background: white; max-width: 600px; margin: 0 auto; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        #time-label { font-size: 2rem; font-weight: bold; color: #333; margin: 10px 0; }
-        .btn-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        #time-label { font-size: 2rem; font-weight: bold; color: #333; }
         button { padding: 10px 20px; font-size: 1rem; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: bold; }
         #start-btn { background-color: #4caf50; } #stop-btn { background-color: #f44336; }
-        canvas { border: 1px solid #ccc; width: 100%; height: auto; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="music-label">♪ 集中タイム ♪</div>
     <div id="time-label">01:00</div>
-    <div class="btn-group">
-        <button id="start-btn" onclick="startTimer()">スタート</button>
-        <button id="stop-btn" onclick="stopTimer()">ストップ</button>
-    </div>
-
-    <h2>ヘ音記号 音読みゲーム</h2>
-    <canvas id="staffCanvas" width="400" height="160"></canvas>
-    <div id="message" style="font-size: 20px; font-weight: bold; margin: 10px 0;"></div>
-    <div id="score">せいかい：0回 ｜ まちがい：0回</div>
+    <button id="start-btn" onclick="startTimer()">スタート</button>
+    <button id="stop-btn" onclick="stopTimer()">ストップ</button>
+    <div id="score">せいかい：0回</div>
 </div>
 
 <script>
-    // --- タイマーとゲームの全機能をここに合体 ---
     let remainingTime = 60;
     let timerId = null;
-    let isRunning = false;
-    let correctAnswers = 0;
-    let wrongAnswers = 0;
 
     function startTimer() {
-        if (!isRunning) {
-            isRunning = true;
+        if (!timerId) {
             timerId = setInterval(() => {
-                if (remainingTime > 0) {
-                    remainingTime--;
-                    document.getElementById('time-label').innerText = "00:" + remainingTime.toString().padStart(2, '0');
-                } else {
-                    stopTimer();
-                    alert("お疲れ様！");
-                }
+                remainingTime--;
+                document.getElementById('time-label').innerText = "00:" + remainingTime.toString().padStart(2, '0');
+                if (remainingTime <= 0) { clearInterval(timerId); timerId = null; }
             }, 1000);
         }
     }
 
-    function stopTimer() {
-        clearInterval(timerId);
-        isRunning = false;
+    function stopTimer() { clearInterval(timerId); timerId = null; }
+
+    // p5.js による描画
+    function setup() {
+        let cnv = createCanvas(400, 400);
+        cnv.parent('container');
     }
 
-    // ここに元のゲームの canvas 描画ロジックなどを追加
-    window.onload = () => {
-        const canvas = document.getElementById('staffCanvas');
-        const ctx = canvas.getContext('2d');
-        ctx.font = '74px Arial';
-        ctx.fillText('𝄢', 32, 80);
-    };
+    function draw() {
+        background(255);
+        // 五線譜
+        stroke(0);
+        for(let i=0; i<5; i++) line(50, 100 + i*20, 350, 100 + i*20);
+        // 音符（例）
+        fill(0); ellipse(200, 180, 20, 15);
+        // 鍵盤
+        fill(255); rect(50, 250, 300, 100);
+    }
 </script>
 </body>
 </html>
