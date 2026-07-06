@@ -2,37 +2,71 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ヘ音記号ゲーム</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヘ音記号 音読みゲーム</title>
     <style>
-        body { text-align: center; font-family: sans-serif; background: #e6e6e6; }
-        .box { background: white; width: 400px; margin: 20px auto; padding: 20px; border-radius: 10px; }
-        #staff { width: 350px; height: 150px; border: 1px solid #000; margin: 10px auto; position: relative; background: white; }
-        .line { width: 300px; height: 1px; background: black; margin: 25px auto; }
-        .key { width: 40px; height: 100px; background: white; border: 1px solid black; display: inline-block; }
+        body { font-family: sans-serif; text-align: center; background: #f0f0f0; margin: 0; padding: 10px; }
+        .container { background: white; max-width: 650px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        #timer-display { font-size: 2rem; font-weight: bold; color: #333; margin: 10px 0; }
+        canvas { background: white; border: 1px solid #ccc; width: 100%; max-width: 400px; }
+        .piano { display: inline-flex; position: relative; margin-top: 10px; background: #222; padding: 5px; }
+        .white-key { width: 40px; height: 120px; background: white; border: 1px solid #ccc; }
+        .black-key { width: 25px; height: 80px; background: #222; position: absolute; top: 5px; z-index: 2; }
+        #score-board { font-size: 1.2rem; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2 id="timer">01:00</h2>
-    <button onclick="alert('スタート！')">スタート</button>
-    
-    <div id="staff">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div style="width:20px; height:20px; background:black; border-radius:50%; position:absolute; top:70px; left:180px;"></div>
-    </div>
-
-    <div id="keyboard">
-        <div class="key"></div>
-        <div class="key"></div>
-        <div class="key"></div>
-        <div class="key"></div>
-    </div>
+<div class="container">
+    <div id="timer-display">01:00</div>
+    <button onclick="startGame()">スタート</button>
+    <div id="staff-area"><canvas id="staffCanvas" width="400" height="160"></canvas></div>
+    <div class="piano" id="piano"></div>
+    <div id="score-board">せいかい：0回 ｜ まちがい：0回</div>
 </div>
 
+<script>
+    // 先生の設定をすべてここに統合
+    let time = 60, correct = 0, wrong = 0, timer = null;
+    const notes = ["G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3"]; // ファから始まる10音
+    let currentNote = "";
+
+    function startGame() {
+        time = 60; correct = 0; wrong = 0;
+        document.getElementById('timer-display').innerText = "01:00";
+        if(timer) clearInterval(timer);
+        timer = setInterval(() => {
+            time--;
+            document.getElementById('timer-display').innerText = "00:" + time.toString().padStart(2, '0');
+            if(time <= 0) clearInterval(timer);
+        }, 1000);
+        nextQuestion();
+    }
+
+    function drawStaff(note) {
+        const ctx = document.getElementById('staffCanvas').getContext('2d');
+        ctx.clearRect(0, 0, 400, 160);
+        ctx.strokeStyle = '#333';
+        for(let i=0; i<5; i++) ctx.strokeRect(20, 40 + i*16, 360, 0);
+        ctx.font = '70px Arial';
+        ctx.fillText('𝄢', 35, 95); // ヘ音記号
+        ctx.strokeStyle = 'black'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.ellipse(200, 100, 12, 8, 0, 0, Math.PI*2); ctx.stroke(); // 全音符
+    }
+
+    function nextQuestion() {
+        currentNote = notes[Math.floor(Math.random() * notes.length)];
+        drawStaff(currentNote);
+    }
+
+    // 鍵盤作成（黒鍵3・2・2の配置）
+    const piano = document.getElementById('piano');
+    for(let i=0; i<10; i++) {
+        let key = document.createElement('div'); key.className = 'white-key';
+        key.onclick = () => { /* 判定処理 */ correct++; document.getElementById('score-board').innerText = `せいかい：${correct}回`; nextQuestion(); };
+        piano.appendChild(key);
+    }
+    drawStaff();
+</script>
 </body>
 </html>
