@@ -12,15 +12,15 @@
         .key { width: 35px; height: 100px; background: white; border: 1px solid #000; display: inline-block; vertical-align: top; }
         #note { width: 20px; height: 15px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 180px; }
         
-     #clef { 
+    #clef { 
             position: absolute; 
             left: 15px; 
-            top: 22px;       /* 15pxに7px足して、下げました */
+            top: 22px; 
             font-size: 70px; 
             line-height: 1;
-            /* 少し縦に伸ばして、点の位置を微調整します */
-            transform: scaleY(1.2); 
-            transform-origin: top left;
+            /* 縦に引き伸ばしつつ、transform-originを下にずらして下方向に伸ばす */
+            transform: scaleY(1.3); 
+            transform-origin: 0% 20%; 
         }
     </style>
 </head>
