@@ -40,11 +40,29 @@
 </div>
 
 <script>
-    // 鍵盤10個生成
+   // 鍵盤の設定：10個の音（ファから始まる）
+    const noteNames = ["F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3"];
+    let correctCount = 0;
+    let wrongCount = 0;
+    let currentTarget = "G2"; // 最初の正解を仮に設定
+
     const piano = document.getElementById('piano');
     for(let i=0; i<10; i++) {
         let div = document.createElement('div');
         div.className = 'key';
+        div.dataset.note = noteNames[i]; // 各鍵盤に音の名前を覚えさせる
+        
+        // 鍵盤が押されたときの処理
+        div.onclick = function() {
+            let clickedNote = this.dataset.note;
+            if(clickedNote === currentTarget) {
+                correctCount++;
+                alert("せいかい！");
+            } else {
+                wrongCount++;
+            }
+            document.getElementById('score').innerText = `せいかい：${correctCount}回 ｜ まちがい：${wrongCount}回`;
+        };
         piano.appendChild(div);
     }
     
