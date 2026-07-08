@@ -15,9 +15,12 @@
       #clef { 
             position: absolute; 
             left: 15px; 
-            top: 25px;      /* 記号を下げます */
-            font-size: 70px; /* 一回り小さくします */
-            line-height: 1; 
+            top: 15px;       /* 全体を上に配置 */
+            font-size: 70px; 
+            line-height: 1;
+            /* 縦に1.2倍引き伸ばして、点とてっぺんのバランスを取ります */
+            transform: scaleY(1.2); 
+            transform-origin: top left;
         }
     </style>
 </head>
