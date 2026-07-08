@@ -12,15 +12,12 @@
         .key { width: 35px; height: 100px; background: white; border: 1px solid #000; display: inline-block; vertical-align: top; }
         #note { width: 20px; height: 15px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 180px; }
         
-    #clef { 
+        #clef { 
             position: absolute; 
-            left: 15px; 
-            top: 22px; 
-            font-size: 70px; 
-            line-height: 1;
-            /* 縦に引き伸ばしつつ、transform-originを下にずらして下方向に伸ばす */
-            transform: scaleY(1.3); 
-            transform-origin: 0% 20%; 
+            left: 20px; 
+            top: 25px; 
+            font-size: 80px; 
+            line-height: 1; 
         }
     </style>
 </head>
@@ -41,14 +38,30 @@
 </div>
 
 <script>
+    // 音符の高さ設定（五線譜の線に合わせて調整）
+    const notePositions = [110, 100, 90, 80, 70, 60, 50, 40, 30, 20];
+    let correctCount = 0;
+    let wrongCount = 0;
+
     const piano = document.getElementById('piano');
     for(let i=0; i<10; i++) {
         let div = document.createElement('div');
         div.className = 'key';
-        div.onclick = () => { document.getElementById('score').innerText = "音" + (i+1) + " をタップ！"; };
+        div.onclick = () => {
+            // ここでクリック判定（今は単純に正解カウントを増やすテスト）
+            correctCount++;
+            document.getElementById('score').innerText = `せいかい：${correctCount}回 ｜ まちがい：${wrongCount}回`;
+            // 音符をランダムに動かす
+            let randomIndex = Math.floor(Math.random() * notePositions.length);
+            document.getElementById('note').style.top = notePositions[randomIndex] + "px";
+        };
         piano.appendChild(div);
     }
-    function start() { document.getElementById('timer').innerText = "01:00"; }
+    
+    function start() {
+        document.getElementById('timer').innerText = "01:00";
+        document.getElementById('score').innerText = "ゲーム中！";
+    }
 </script>
 </body>
 </html>
