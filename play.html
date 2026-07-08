@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヘ音記号ゲーム</title>
+</head>
+<body style="text-align:center; font-family:sans-serif;">
+    <h1 id="timer">01:00</h1>
+    <button onclick="start()" style="padding:20px; font-size:20px;">スタート</button>
+    <div id="status" style="font-size:20px; margin:20px;">スタートを押してね</div>
+    <div id="piano"></div>
+
+<script>
+    const piano = document.getElementById('piano');
+    for(let i=0; i<10; i++) {
+        let btn = document.createElement('button');
+        btn.innerText = "鍵盤" + (i+1);
+        btn.style.width = "40px";
+        btn.style.height = "100px";
+        btn.onclick = () => document.getElementById('status').innerText = "タップ確認！";
+        piano.appendChild(btn);
+    }
+    function start() { document.getElementById('status').innerText = "ゲーム開始！"; }
+</script>
+</body>
+</html>
