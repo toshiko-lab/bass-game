@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ヘ音記号ゲーム</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
+        .container { background: white; width: 450px; margin: 20px auto; padding: 20px; border-radius: 10px; }
+        
+        #staff { width: 360px; height: 160px; border: 1px solid #ccc; margin: 10px auto; position: relative; background: white; }
+        .line { width: 100%; height: 1px; background: black; position: absolute; }
+        #note { width: 22px; height: 16px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 170px; background: transparent; z-index: 10; transition: top 0.1s; }
+        #clef { position: absolute; left: 20px; top: 25px; font-size: 80px; line-height: 1; }
+        
+        /* ピアノのレイアウト */
+        .piano { display: flex; justify-content: center; margin-top: 20px; height: 120px; position: relative; }
+        .key-white { width: 40px; height: 120px; background: white; border: 1px solid #000; margin-left: -1px; cursor: pointer; z-index: 1; }
+        .key-black { width: 25px; height: 80px; background: black; margin-left: -12.5px; margin-right: -12.5px; z-index: 2; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="timer">01:00</h1>
+    <div id="stats">せいかい：<span id="correct">0</span> ｜ まちがい：<span id="wrong">0</span></div>
+    <button onclick="start()">スタート</button>
+    
+    <div id="staff">
+        <div class="line" style="top:40px;"></div><div class="line" style="top:60px;"></div>
+        <div class="line" style="top:80px;"></div><div class="line" style="top:100px;"></div>
+        <div class="line" style="top:120px;"></div>
+        <div id="clef">𝄢</div>
+        <div id="note" style="top:120px;"></div>
+    </div>
+    
+    <div class="piano" id="piano-container"></div>
+</div>
+
+<script>
+    const notePositions = [120, 110, 100, 90, 80, 70, 60, 50, 40, 30];
+    let correct = 0, wrong = 0, currentTarget = 0, timeLeft = 60, timer;
+
+    // ファから始まる10音の鍵盤構造（0=白, 1=黒）
+    // F(白), F#(黒), G(白), G#(黒), A(白), A#(黒), B(白), C(白), C#(黒), D(白), D#(黒), E(白), F(白)...
+    // 指定された並び：白・黒・白・黒・白(ここまでファソラ) + 白・黒・白・黒・白(ドレミファソラ)
+    // 先生のご希望に合わせた白鍵10個の並びを生成します
+    const keys = [
+        {type:'white', index:0}, {type:'black'},
+        {type:'white', index:1}, {type:'black'},
+        {type:'white', index:2},
+        {type:'white', index:3}, {type:'black'},
+        {type:'white', index:4}, {type:'black'},
+        {type:'white', index:5}, {type:'black'},
+        {type:'white', index:6},
+        {type:'white', index:7}, {type:'black'},
+        {type:'white', index:8}, {type:'black'},
+        {type:'white', index:9}
+    ];
+
+    const container = document.getElementById('piano-container');
+    keys.forEach(k => {
+        let div = document.createElement('div');
+        div.className = k.type === 'white' ? 'key-white' : 'key-black';
+        if(k.type === 'white') {
+            div.onclick = function() { check(k.index); };
+        }
+        container.appendChild(div);
+    });
+
+    function check(i) {
+        if(i === currentTarget) {
+            correct++;
+            document.getElementById('correct').innerText = correct;
+        } else {
+            wrong++;
+            document.getElementById('wrong').innerText = wrong;
+        }
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        currentTarget = Math.floor(Math.random() * 10);
+        document.getElementById('note').style.top = notePositions[currentTarget] + "px";
+    }
+
+    function start() {
+        correct = 0; wrong = 0; timeLeft = 60;
+        clearInterval(timer);
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = "00:" + (timeLeft < 10 ? "0" : "") + timeLeft;
+            if(timeLeft <= 0) { clearInterval(timer); alert("終了！正解数：" + correct); }
+        }, 1000);
+        nextQuestion();
+    }
+</script>
+</body>
+</html>
