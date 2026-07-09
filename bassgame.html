@@ -13,7 +13,7 @@
         
         .piano { display: flex; justify-content: center; margin-top: 20px; height: 120px; }
         .key-white { width: 40px; height: 120px; background: white; border: 1px solid #000; margin-left: -1px; cursor: pointer; z-index: 1; }
-        .key-black { width: 25px; height: 80px; background: black; margin-left: -12.5px; margin-right: -12.5px; z-index: 2; cursor: default; }
+        .key-black { width: 25px; height: 80px; background: black; margin-left: -12.5px; margin-right: -12.5px; z-index: 2; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -38,25 +38,24 @@
     const notePositions = [120, 110, 100, 90, 80, 70, 60, 50, 40, 30];
     let correct = 0, wrong = 0, currentTarget = 0, timeLeft = 60, timer;
 
-    // ファからの配置: 白(黒)白(黒)白 白(黒)白(黒)白(黒)白
-    // 0:白, 1:黒
+    // ファからの並び順: 白(黒)白(黒)白 白(黒)白(黒)白(黒)白
+    // 1=黒鍵, 0=白鍵
     const layout = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
     const container = document.getElementById('piano-container');
     
-    let wCount = 0;
+    let whiteIndex = 0;
     layout.forEach((isBlack) => {
-        if(wCount >= 10) return;
         if(isBlack) {
             let black = document.createElement('div');
             black.className = 'key-black';
             container.appendChild(black);
-        } else {
+        } else if(whiteIndex < 10) {
             let white = document.createElement('div');
             white.className = 'key-white';
-            white.dataset.index = wCount;
+            white.dataset.index = whiteIndex;
             white.onclick = function() { check(parseInt(this.dataset.index)); };
             container.appendChild(white);
-            wCount++;
+            whiteIndex++;
         }
     });
 
@@ -82,7 +81,7 @@
         timer = setInterval(() => {
             timeLeft--;
             document.getElementById('timer').innerText = "00:" + (timeLeft < 10 ? "0" : "") + timeLeft;
-            if(timeLeft <= 0) { clearInterval(timer); alert("終了！"); }
+            if(timeLeft <= 0) { clearInterval(timer); alert("終了！正解数：" + correct); }
         }, 1000);
         nextQuestion();
     }
