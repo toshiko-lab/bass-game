@@ -6,17 +6,15 @@
     <style>
         body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
         .container { background: white; width: 450px; margin: 20px auto; padding: 20px; border-radius: 10px; }
-        
         #staff { width: 360px; height: 160px; border: 1px solid #ccc; margin: 10px auto; position: relative; background: white; }
         .line { width: 100%; height: 1px; background: black; position: absolute; }
-        
-        /* 音符を透過に修正 */
-        #note { width: 22px; height: 16px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 170px; background: transparent; transition: top 0.1s; }
+        #note { width: 22px; height: 16px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 170px; background: transparent; z-index: 10; }
         #clef { position: absolute; left: 20px; top: 25px; font-size: 80px; line-height: 1; }
-
+        
+        /* ピアノ：プログラムで生成される鍵盤 */
         .piano { display: flex; justify-content: center; margin-top: 20px; height: 120px; }
-        .white-key { width: 40px; height: 120px; background: white; border: 1px solid #000; margin-left: -1px; cursor: pointer; }
-        .black-key { width: 25px; height: 80px; background: black; margin-left: -12px; margin-right: -13px; z-index: 2; cursor: pointer; }
+        .key-white { width: 40px; height: 120px; background: white; border: 1px solid #000; margin-left: -1px; cursor: pointer; }
+        .key-black { width: 25px; height: 80px; background: black; margin-left: -12px; margin-right: -13px; z-index: 2; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -34,32 +32,34 @@
         <div id="note" style="top:120px;"></div>
     </div>
     
-    <div class="piano" id="piano">
-        <div class="white-key" onclick="check(0)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(1)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(2)"></div>
-        <div class="white-key" onclick="check(3)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(4)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(5)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(6)"></div>
-        <div class="white-key" onclick="check(7)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(8)"></div>
-        <div class="black-key"></div>
-        <div class="white-key" onclick="check(9)"></div>
-    </div>
+    <div class="piano" id="piano-container"></div>
 </div>
 
 <script>
-    // ファ(下第一間)からラ(第5線)までのtop位置を正確に配置
-    // ファ(120), ソ(110), ラ(100), シ(90), ド(80), レ(70), ミ(60), ファ(50), ソ(40), ラ(30)
+    // ファソラシドレミファソラ(10音)
     const notePositions = [120, 110, 100, 90, 80, 70, 60, 50, 40, 30];
-    let correct = 0, wrong = 0, currentTarget = 0, timeLeft = 60;
+    let correct = 0, wrong = 0, currentTarget = 0, timeLeft = 60, timer;
+
+    // ピアノの白鍵・黒鍵配置 (0=白, 1=黒)
+    // ファ(白) ソ(白) ラ(白) シ(白) ド(白) レ(白) ミ(白) ファ(白) ソ(白) ラ(白)
+    // 鍵盤パターン: 白(黒)白(黒)白 白(黒)白(黒)白(黒)白...
+    const layout = [0,1,0,1,0,0,1,0,1,0,1,0,0,1,0,1,0]; // ファからの鍵盤構造
+    
+    const container = document.getElementById('piano-container');
+    let whiteIndex = 0;
+    
+    layout.forEach((isBlack) => {
+        let div = document.createElement('div');
+        if(isBlack) {
+            div.className = 'key-black';
+        } else {
+            div.className = 'key-white';
+            div.dataset.index = whiteIndex++;
+            div.onclick = function() { check(parseInt(this.dataset.index)); };
+        }
+        container.appendChild(div);
+        if(whiteIndex >= 10) return; // 10個で止める
+    });
 
     function check(i) {
         if(i === currentTarget) {
@@ -79,14 +79,13 @@
 
     function start() {
         correct = 0; wrong = 0; timeLeft = 60;
-        document.getElementById('correct').innerText = 0;
-        document.getElementById('wrong').innerText = 0;
-        nextQuestion();
-        let timer = setInterval(() => {
+        clearInterval(timer);
+        timer = setInterval(() => {
             timeLeft--;
             document.getElementById('timer').innerText = "00:" + (timeLeft < 10 ? "0" : "") + timeLeft;
             if(timeLeft <= 0) clearInterval(timer);
         }, 1000);
+        nextQuestion();
     }
 </script>
 </body>
