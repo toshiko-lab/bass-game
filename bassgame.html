@@ -6,19 +6,18 @@
     <title>ヘ音記号ゲーム</title>
     <style>
         body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
-        .container { background: white; width: 400px; margin: 20px auto; padding: 20px; border-radius: 10px; }
-        #staff { width: 360px; height: 160px; border: 1px solid #ccc; margin: 10px auto; position: relative; }
+        .container { background: white; width: 450px; margin: 20px auto; padding: 20px; border-radius: 10px; }
+        #staff { width: 360px; height: 160px; border: 1px solid #ccc; margin: 10px auto; position: relative; background: white; }
         .line { width: 100%; height: 1px; background: black; position: absolute; }
-        .key { width: 35px; height: 100px; background: white; border: 1px solid #000; display: inline-block; vertical-align: top; }
-        #note { width: 20px; height: 15px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 180px; }
         
-        #clef { 
-            position: absolute; 
-            left: 20px; 
-            top: 25px; 
-            font-size: 80px; 
-            line-height: 1; 
-        }
+        /* 音符サイズと位置（微調整済み） */
+        #note { width: 22px; height: 16px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 170px; background: white; }
+        #clef { position: absolute; left: 20px; top: 25px; font-size: 80px; line-height: 1; }
+
+        /* ピアノの鍵盤配置 */
+        .piano { display: flex; justify-content: center; margin-top: 20px; height: 120px; }
+        .key { width: 30px; height: 100px; border: 1px solid #000; background: white; cursor: pointer; }
+        .key.black { width: 20px; height: 60px; background: black; margin-left: -10px; margin-right: -10px; z-index: 1; }
     </style>
 </head>
 <body>
@@ -31,47 +30,40 @@
         <div class="line" style="top:80px;"></div><div class="line" style="top:100px;"></div>
         <div class="line" style="top:120px;"></div>
         <div id="clef">𝄢</div>
-        <div id="note" style="top:90px;"></div>
+        <div id="note"></div>
     </div>
-    <div id="piano"></div>
-    <div id="score" style="margin-top:10px;">せいかい：0回 ｜ まちがい：0回</div>
+    <div class="piano" id="piano"></div>
+    <div id="score" style="margin-top:20px;">せいかい：0回 ｜ まちがい：0回</div>
 </div>
 
 <script>
-    // 鍵盤1〜10に対応する音符の「top」位置
-    const notePositions = [115, 105, 95, 85, 75, 65, 55, 45, 35, 25];
-    let correctCount = 0;
-    let wrongCount = 0;
-    let currentTargetIndex = 0;
+    // 五線譜の各音の位置（上から下へ、第4間は110px）
+    const notePositions = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
+    let currentTarget = 0;
 
     const piano = document.getElementById('piano');
+    // 白鍵と黒鍵の配置（1オクターブ）
+    const keyLayout = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
+    
     for(let i=0; i<10; i++) {
         let div = document.createElement('div');
-        div.className = 'key';
-        div.dataset.index = i; 
+        div.className = 'key' + (keyLayout[i] ? ' black' : '');
+        div.dataset.index = i;
         div.onclick = function() {
-            let clickedIndex = parseInt(this.dataset.index);
-            if(clickedIndex === currentTargetIndex) {
-                correctCount++;
+            if(parseInt(this.dataset.index) === currentTarget) {
                 alert("せいかい！");
-            } else {
-                wrongCount++;
             }
-            document.getElementById('score').innerText = `せいかい：${correctCount}回 ｜ まちがい：${wrongCount}回`;
             nextQuestion();
         };
         piano.appendChild(div);
     }
-    
+
     function nextQuestion() {
-        currentTargetIndex = Math.floor(Math.random() * 10);
-        document.getElementById('note').style.top = notePositions[currentTargetIndex] + "px";
+        currentTarget = Math.floor(Math.random() * 10);
+        document.getElementById('note').style.top = notePositions[currentTarget] + "px";
     }
 
     function start() {
-        correctCount = 0;
-        wrongCount = 0;
-        document.getElementById('score').innerText = `せいかい：0回 ｜ まちがい：0回`;
         nextQuestion();
     }
 </script>
