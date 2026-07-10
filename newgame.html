@@ -2,24 +2,18 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ヘ音記号ゲーム</title>
+    <title>ヘ音記号ゲーム：完全版</title>
     <style>
-        body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
+        body { text-align: center; font-family: sans-serif; background: #ffe4e1; } /* 背景色を変えて「更新されたこと」を視覚的に分かるようにしました */
         .container { background: white; width: 500px; margin: 20px auto; padding: 20px; border-radius: 10px; }
-        
-        /* ピアノの見た目：親の配置に任せる */
         .piano-box { display: flex; justify-content: center; margin-top: 30px; height: 120px; }
-        
-        /* 全ての白鍵を同じ幅に */
         .w-key { width: 40px; height: 120px; background: white; border: 1px solid #000; z-index: 1; }
-        
-        /* 黒鍵は白鍵の間に絶対配置でねじ込む */
         .b-key { width: 25px; height: 80px; background: black; z-index: 2; margin-left: -12.5px; margin-right: -12.5px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>ヘ音記号ゲーム</h1>
+    <h1>成功したら背景がピンク色になります</h1>
     <div class="piano-box">
         <div class="w-key">F</div><div class="b-key"></div>
         <div class="w-key">G</div><div class="b-key"></div>
