@@ -6,69 +6,33 @@
     <style>
         body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
         .container { background: white; width: 450px; margin: 20px auto; padding: 20px; border-radius: 10px; }
-        #staff { width: 360px; height: 160px; border: 1px solid #ccc; margin: 10px auto; position: relative; background: white; }
-        .line { width: 100%; height: 1px; background: black; position: absolute; }
-        #note { width: 22px; height: 16px; border: 2px solid #000; border-radius: 50%; position: absolute; left: 170px; background: transparent; z-index: 10; transition: top 0.1s; }
-        #clef { position: absolute; left: 20px; top: 25px; font-size: 80px; line-height: 1; }
         .piano { display: flex; justify-content: center; margin-top: 20px; height: 120px; }
-        .key-white { width: 40px; height: 120px; background: white; border: 1px solid #000; margin-left: -1px; cursor: pointer; z-index: 1; }
-        .key-black { width: 25px; height: 80px; background: black; margin-left: -12.5px; margin-right: -12.5px; z-index: 2; pointer-events: none; }
+        .white-key { width: 40px; height: 120px; background: white; border: 1px solid #000; margin-left: -1px; cursor: pointer; }
+        .black-key { width: 25px; height: 80px; background: black; margin-left: -12.5px; margin-right: -12.5px; z-index: 2; pointer-events: none; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 id="timer">01:00</h1>
-    <div id="stats">せいかい：<span id="correct">0</span> ｜ まちがい：<span id="wrong">0</span></div>
-    <button onclick="start()">スタート</button>
-    <div id="staff">
-        <div class="line" style="top:40px;"></div><div class="line" style="top:60px;"></div>
-        <div class="line" style="top:80px;"></div><div class="line" style="top:100px;"></div>
-        <div class="line" style="top:120px;"></div>
-        <div id="clef">𝄢</div>
-        <div id="note" style="top:120px;"></div>
+    <h1>確認用：ファ〜ラ鍵盤</h1>
+    <div class="piano">
+        <div class="white-key">F</div>
+        <div class="black-key"></div>
+        <div class="white-key">G</div>
+        <div class="black-key"></div>
+        <div class="white-key">A</div>
+        <div class="white-key">B</div>
+        <div class="black-key"></div>
+        <div class="white-key">C</div>
+        <div class="black-key"></div>
+        <div class="white-key">D</div>
+        <div class="black-key"></div>
+        <div class="white-key">E</div>
+        <div class="white-key">F</div>
+        <div class="black-key"></div>
+        <div class="white-key">G</div>
+        <div class="black-key"></div>
+        <div class="white-key">A</div>
     </div>
-    <div class="piano" id="piano-container"></div>
 </div>
-<script>
-    const notePositions = [120, 110, 100, 90, 80, 70, 60, 50, 40, 30];
-    let correct = 0, wrong = 0, currentTarget = 0, timeLeft = 60, timer;
-    
-    // ファから始まる10音の鍵盤配列
-    // 0:白鍵, 1:黒鍵
-    const keyLayout = [0,1, 0,1, 0, 0,1, 0,1, 0,1, 0, 0,1, 0,1, 0];
-    const container = document.getElementById('piano-container');
-    
-    let wIdx = 0;
-    keyLayout.forEach(type => {
-        let div = document.createElement('div');
-        if(type === 0) {
-            div.className = 'key-white';
-            div.dataset.idx = wIdx++;
-            div.onclick = function() { check(parseInt(this.dataset.idx)); };
-        } else {
-            div.className = 'key-black';
-        }
-        if(wIdx <= 10) container.appendChild(div);
-    });
-
-    function check(i) {
-        if(i === currentTarget) { correct++; document.getElementById('correct').innerText = correct; }
-        else { wrong++; document.getElementById('wrong').innerText = wrong; }
-        nextQuestion();
-    }
-    function nextQuestion() {
-        currentTarget = Math.floor(Math.random() * 10);
-        document.getElementById('note').style.top = notePositions[currentTarget] + "px";
-    }
-    function start() {
-        correct = 0; wrong = 0; timeLeft = 60; clearInterval(timer);
-        timer = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').innerText = "00:" + (timeLeft < 10 ? "0" : "") + timeLeft;
-            if(timeLeft <= 0) { clearInterval(timer); alert("終了！正解数：" + correct); }
-        }, 1000);
-        nextQuestion();
-    }
-</script>
 </body>
 </html>
