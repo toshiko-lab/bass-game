@@ -1,3 +1,17 @@
+// 音符のデータ（ここが config.js の代わりです）
+const config = {
+  timeLimit: 60,
+  noteData: [
+    { name: "G", y: 240 },
+    { name: "A", y: 220 },
+    { name: "B", y: 200 },
+    { name: "C", y: 190 },
+    { name: "D", y: 180 },
+    { name: "E", y: 170 },
+    { name: "F", y: 160 },
+    { name: "G_high", y: 150 }
+  ]
+};
 let gameState = "START";
 let currentNote = "";
 let resultMessage = "";
