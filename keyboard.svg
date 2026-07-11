@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" preserveAspectRatio="none">
+  <rect x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+  <rect x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
+
+  <rect x="50" y="0" width="40" height="120" fill="black"/>
+  <rect x="121" y="0" width="40" height="120" fill="black"/>
+  <rect x="263" y="0" width="40" height="120" fill="black"/>
+  <rect x="334" y="0" width="40" height="120" fill="black"/>
+  <rect x="405" y="0" width="40" height="120" fill="black"/>
+  <rect x="548" y="0" width="40" height="120" fill="black"/>
+  <rect x="619" y="0" width="40" height="120" fill="black"/>
+  <rect x="761" y="0" width="40" height="120" fill="black"/>
+  <rect x="832" y="0" width="40" height="120" fill="black"/>
+  <rect x="903" y="0" width="40" height="120" fill="black"/>
+</svg>
