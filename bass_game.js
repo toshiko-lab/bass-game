@@ -2,14 +2,14 @@
 const config = {
   timeLimit: 60,
   noteData: [
-    { name: "G", y: 240 },
-    { name: "A", y: 220 },
-    { name: "B", y: 200 },
-    { name: "C", y: 190 },
-    { name: "D", y: 180 },
-    { name: "E", y: 170 },
-    { name: "F", y: 160 },
-    { name: "G_high", y: 150 }
+    { name: "G", y: 220 },      // 第1線の下
+    { name: "A", y: 200 },      // 第1線
+    { name: "B", y: 180 },      // 第2線
+    { name: "C", y: 160 },      // 第3線
+    { name: "D", y: 140 },      // 第4線
+    { name: "E", y: 120 },      // 第5線
+    { name: "F", y: 100 },      // 第5線の上
+    { name: "G_high", y: 80 }   // 第5線よりさらに上
   ]
 };
 let gameState = "START";
