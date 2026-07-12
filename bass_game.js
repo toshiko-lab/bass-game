@@ -28,27 +28,15 @@ function draw() {
     textAlign(CENTER, CENTER); textSize(40); fill(0);
     text("クリックしてスタート", width / 2, height / 2);
   } else if (gameState === "PLAYING") {
-    if (second() !== lastSeconds) {
-      if (timer > 0) timer--; else gameState = "END";
-      lastSeconds = second();
-    }
-    // 五線譜・ヘ音記号・音符
+    // 五線譜と音符の表示はそのまま
     stroke(0); strokeWeight(2);
     let baseLineY = 160; 
     for (let i = 0; i < 5; i++) line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
-    textAlign(LEFT, TOP); textSize(85); fill(0); text("𝄢", 110, baseLineY - 30);
+    textSize(85); text("𝄢", 110, baseLineY - 30);
     let noteObj = config.noteData.find(n => n.name === currentNote);
     if (noteObj) { noFill(); stroke(0); strokeWeight(3); ellipse(width / 2, noteObj.y, 28, 18); }
     
-    // 簡易鍵盤描画（画像なしで四角を描く）
-    for(let i=0; i<8; i++){
-      fill(255); stroke(0); rect(100 + i*60, 430, 60, 140);
-    }
-
-    textAlign(LEFT, TOP); textSize(24); fill(0);
-    text("Time: " + timer, 50, 40);
-    text("OK: " + scoreCorrect, 200, 40);
-    text("NO: " + scoreWrong, 350, 40);
+    // 画像はHTML側で表示しているので、ここでは何も描かなくてOKです
   }
 }
 
