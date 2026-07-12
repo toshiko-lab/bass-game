@@ -63,12 +63,12 @@ function draw() {
       line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
     }
     
-    // 2. ヘ音記号の描画
+   // 2. ヘ音記号の描画
     push();
     textAlign(LEFT, TOP);
-    textSize(60); 
+    textSize(85); // 60から85へ大きくしました
     fill(0);
-    text("𝄢", 110, baseLineY - 20);
+    text("𝄢", 110, baseLineY - 30); // 位置も少し微調整
     pop();
 
     // 3. 音符描画
