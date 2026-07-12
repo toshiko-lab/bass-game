@@ -98,7 +98,17 @@ function newQuestion() {
 }
 
 function playTone(noteName) {
-  let frequencies = { "G": 196.00, "A": 220.00, "B": 246.94, "C": 261.63, "D": 293.66, "E": 329.63, "F": 349.23, "G_high": 392.00 };
+  function playTone(noteName) {
+  let frequencies = {
+    "G": 196.00,      // 低いソ
+    "A": 220.00,      // 低いラ
+    "B": 246.94,      // 低いシ
+    "C": 261.63,      // ド
+    "D": 293.66,      // レ
+    "E": 329.63,      // ミ
+    "F": 349.23,      // ファ
+    "G_high": 392.00  // 高いソ
+  };
   synth.freq(frequencies[noteName] || 440);
   synth.amp(0.3, 0.05);
   setTimeout(() => { synth.amp(0, 0.1); }, 200);
