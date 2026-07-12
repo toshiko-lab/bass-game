@@ -61,3 +61,18 @@ function mousePressed() {
   if (getAudioContext().state !== 'running') getAudioContext().resume();
   if (gameState === "START") gameState = "PLAYING";
 }
+// 確実に音を鳴らして、すぐ止めるための修正版関数
+function playTone(noteName) {
+  let frequencies = { 
+    "G": 196.00, "A": 220.00, "B": 246.94, "C": 261.63, 
+    "D": 293.66, "E": 329.63, "F": 349.23, "G_high": 392.00 
+  };
+  
+  synth.freq(frequencies[noteName] || 440);
+  synth.amp(0.3, 0.1); // 音を出す
+  
+  // 0.2秒後に必ず音を止める（これが抜けていたのが原因です）
+  setTimeout(() => {
+    synth.amp(0, 0.1);
+  }, 200);
+}
