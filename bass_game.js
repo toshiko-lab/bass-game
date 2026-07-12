@@ -55,25 +55,38 @@ function draw() {
       if (timer > 0) timer--; else gameState = "END";
       lastSeconds = second();
     }
-    // 五線譜描画
+
+    // 1. 五線譜描画
     stroke(0); strokeWeight(2);
-    for (let i = 0; i < 5; i++) line(100, 200 + i * 20, width - 100, 200 + i * 20);
+    let baseLineY = 160; 
+    for (let i = 0; i < 5; i++) {
+      line(100, baseLineY + i * 20, width - 100, baseLineY + i * 20);
+    }
     
-    // 音符描画
+    // 2. ヘ音記号の描画
+    push();
+    textAlign(LEFT, TOP);
+    textSize(60); 
+    fill(0);
+    text("𝄢", 110, baseLineY - 20);
+    pop();
+
+    // 3. 音符描画
     let noteObj = config.noteData.find(n => n.name === currentNote);
     if (noteObj) {
       noFill(); stroke(0); strokeWeight(3);
       ellipse(width / 2, noteObj.y, 28, 18);
     }
     
-    // 鍵盤画像の描画（ここが新しくなりました！）
+    // 4. 鍵盤画像の描画
     image(keyboardImg, 100, 430, 600, 140);
 
-    // テキスト表示
+    // 5. テキスト表示
     textAlign(LEFT, TOP); textSize(24); fill(0);
     text("Time: " + timer, 50, 40);
     text("正解: " + scoreCorrect, 200, 40);
     text("まちがい: " + scoreWrong, 350, 40);
+
   } else if (gameState === "END") {
     textAlign(CENTER, CENTER); textSize(40); fill(250, 0, 0);
     text("終了！ 正解数: " + scoreCorrect, width / 2, height / 2);
