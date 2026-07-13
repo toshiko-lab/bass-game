@@ -63,12 +63,14 @@ function mousePressed() {
     let keyIndex = floor((mouseX - 50) / 85);
     if (keyIndex >= 0 && keyIndex < 8) {
       playTone(notes[keyIndex].freq);
+      
+      // 正解・不正解に関わらず、即座に次の問題へ進む（テンポを止めない）
       if (keyIndex === currentNoteIndex) {
         scoreYes++;
-        newQuestion();
       } else {
         scoreNo++;
       }
+      newQuestion(); // どちらの結果でも、即座に次の問題へ
     }
   }
 }
