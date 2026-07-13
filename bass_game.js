@@ -26,8 +26,14 @@ function draw() {
   for (let i = 0; i < 5; i++) line(100, 200 + i * 20, 700, 200 + i * 20);
   
   // 2. 音符（現在の問題に基づいて位置を変える）
-  // 今は簡易的に第3線(C)周辺に表示します
-  fill(0); ellipse(400, 240 - currentNoteIndex * 10, 25, 20); 
+  // 音符のY座標を、問題のインデックス（currentNoteIndex）から計算します
+  // インデックス0が「ド(C)」で、そこから上に上がるにつれてY座標を減らします（15ずつ）
+  let startY = 280; // 一番下の線(G)の少し下を基準にします
+  let noteY = startY - (currentNoteIndex * 15); // ここを調整して音符の高さを完璧にします
+  
+  // 音符を描画
+  fill(0); 
+  ellipse(400, noteY, 25, 20);
   
   // 3. 8つの鍵盤を描画
   stroke(0);
