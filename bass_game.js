@@ -1,10 +1,8 @@
-let gameState = "PLAYING";
-// 8つの鍵盤に対応する音名
-let noteNames = ["C", "D", "E", "F", "G", "A", "B", "C_high"];
-let freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
-let currentNoteIndex = 0; // 現在の問題のインデックス
-let scoreCorrect = 0;
-let scoreWrong = 0;
+let scoreYes = 0;
+let scoreNo = 0;
+let timer = 60;
+let lastTime = 0;
+let currentNoteY = 240; // 今の音符の高さ
 let synth;
 
 function setup() {
@@ -12,63 +10,42 @@ function setup() {
   synth = new p5.Oscillator('sine');
   synth.start();
   synth.amp(0);
-  newQuestion(); // 最初の一問を作る
-}
-
-function newQuestion() {
-  currentNoteIndex = floor(random(8)); // 0〜7の間でランダムに
 }
 
 function draw() {
   background(255);
-  // 1. 五線譜
+  // タイマーとスコア
+  if (millis() - lastTime > 1000 && timer > 0) { timer--; lastTime = millis(); }
+  textSize(30); fill(0);
+  text("Time: " + timer, 50, 40);
+  text("Yes: " + scoreYes + "  No: " + scoreNo, 300, 40);
+
+  // 五線譜
   stroke(0); strokeWeight(2);
   for (let i = 0; i < 5; i++) line(100, 200 + i * 20, 700, 200 + i * 20);
   
-  // 2. 音符（現在の問題に基づいて位置を変える）
-  // 音符のY座標を、問題のインデックス（currentNoteIndex）から計算します
-  // インデックス0が「ド(C)」で、そこから上に上がるにつれてY座標を減らします（15ずつ）
-  let startY = 280; // 一番下の線(G)の少し下を基準にします
-  let noteY = startY - (currentNoteIndex * 15); // ここを調整して音符の高さを完璧にします
+  // 全音符（現在の位置）
+  fill(0); ellipse(400, currentNoteY, 25, 20);
   
-  // 音符を描画
-  fill(0); 
-  ellipse(400, noteY, 25, 20);
-  
-  // 3. 8つの鍵盤を描画
-  stroke(0);
-  for (let i = 0; i < 8; i++) {
-    fill(240);
-    rect(100 + i * 75, 400, 75, 150);
-  }
-  
-  // 4. UI
-  textSize(24); fill(0);
-  text("正解: " + scoreCorrect + "  間違い: " + scoreWrong, 100, 50);
-  text("問題: " + noteNames[currentNoteIndex] + " を押してね", 100, 100);
-}
-
-function playTone(freq) {
-  synth.freq(freq);
-  synth.amp(0.3, 0.02);
-  setTimeout(() => { synth.amp(0, 0.05); }, 200);
+  // 鍵盤エリア（2オクターブ分の枠を配置）
+  stroke(0); fill(240);
+  for (let i = 0; i < 14; i++) rect(50 + i * 50, 400, 50, 150);
 }
 
 function mousePressed() {
   if (getAudioContext().state !== 'running') getAudioContext().resume();
   
-  if (mouseY > 400 && mouseY < 550) {
-    let keyIndex = floor((mouseX - 100) / 75);
-    if (keyIndex >= 0 && keyIndex < 8) {
-      playTone(freqs[keyIndex]);
-      
-      // 正誤判定
-      if (keyIndex === currentNoteIndex) {
-        scoreCorrect++;
-        newQuestion(); // 正解したら次の問題へ
-      } else {
-        scoreWrong++;
-      }
-    }
+  // 鍵盤エリアのクリック判定
+  if (mouseY > 400) {
+    // どの鍵盤を押したか計算（仮）
+    let key = floor((mouseX - 50) / 50);
+    
+    // ここで音を鳴らす
+    synth.amp(0.3, 0.02);
+    setTimeout(() => { synth.amp(0, 0.05); }, 200);
+    
+    // 正誤判定のロジック（ここを先生の指定する音高に合わせます）
+    // 一旦、正解したことにしてスコアを増やすテスト
+    scoreYes++;
   }
 }
