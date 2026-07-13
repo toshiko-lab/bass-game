@@ -28,6 +28,7 @@ function newQuestion() {
   currentNoteIndex = floor(random(notes.length));
 }
 
+/ 鍵盤描画部分（これをdraw()関数の最後に入れ替えてください）
 function draw() {
   background(255);
   // タイマーとスコア
@@ -37,27 +38,25 @@ function draw() {
 
   // 五線譜
   stroke(0); strokeWeight(2);
-  for (let i = 0; i < 5; i++) line(100, 160 + i * 20, 700, 160 + i * 20);
-  
-  // ヘ音記号
-  textSize(60); noStroke(); fill(0);
-  text("𝄢", 30, 190);
+  for (let i = 0; i < 5; i++) line(100, 200 + i * 20, 700, 200 + i * 20);
+  text("𝄢", 30, 230); // ヘ音記号
 
-  // 全音符（透過）
+  // 全音符
   stroke(0); strokeWeight(2); noFill();
   ellipse(400, notes[currentNoteIndex].y, 25, 20);
   
-  // 鍵盤（白鍵と黒鍵）
+  // 鍵盤（ピアノの配置）
   for (let i = 0; i < 8; i++) {
     stroke(0); fill(255);
     rect(50 + i * 85, 400, 85, 150); // 白鍵
   }
-  // 黒鍵
+  // 黒鍵（ピアノの2つ・3つの並びに修正）
   fill(0);
-  rect(105, 400, 50, 90); rect(190, 400, 50, 90);
-  rect(360, 400, 50, 90); rect(445, 400, 50, 90); rect(530, 400, 50, 90);
+  // 1つ目のグループ(2つ)
+  rect(50 + 85 - 20, 400, 40, 90); rect(50 + 2*85 - 20, 400, 40, 90);
+  // 2つ目のグループ(3つ)
+  rect(50 + 4*85 - 20, 400, 40, 90); rect(50 + 5*85 - 20, 400, 40, 90); rect(50 + 6*85 - 20, 400, 40, 90);
 }
-
 function playTone(freq) {
   synth.freq(freq); synth.amp(0.3, 0.02);
   setTimeout(() => { synth.amp(0, 0.05); }, 200);
