@@ -49,7 +49,8 @@ function draw() {
 
   // 全音符
   stroke(0); strokeWeight(2); noFill();
-  ellipse(400, noteSettings[currentNoteIndex].y, 25, 20);
+  // 一旦、数字を直接入れて音符がどこに出るか確認します
+  ellipse(400, 220, 25, 20);
   
   // 鍵盤（白鍵と黒鍵）
   let w = 70;
