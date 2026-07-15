@@ -1,8 +1,9 @@
 let scoreYes = 0;
 let scoreNo = 0;
 let currentNoteIndex = 0;
+let synth;
 
-// 【先生の主軸】正しい音域の定義（F2〜A3）
+// 先生の音域：ファ〜ラ（10音）の設定
 const notes = [
   { note: "F2", y: 220, freq: 174.61 }, { note: "G2", y: 200, freq: 196.00 },
   { note: "A2", y: 180, freq: 220.00 }, { note: "B2", y: 160, freq: 246.94 },
@@ -13,30 +14,56 @@ const notes = [
 
 function setup() {
   createCanvas(800, 600);
+  synth = new p5.Oscillator('sine');
+  synth.start();
+  synth.amp(0);
+  newQuestion();
+}
+
+function newQuestion() {
+  currentNoteIndex = floor(random(notes.length));
 }
 
 function draw() {
   background(255);
   
+  // スコア表示
+  textSize(20); fill(0);
+  text("Yes: " + scoreYes + "  No: " + scoreNo, 650, 30);
+
   // 五線譜
   stroke(0); strokeWeight(2);
   for (let i = 0; i < 5; i++) line(100, 200 + i * 20, 700, 200 + i * 20);
   
   // ヘ音記号
   textSize(80); noStroke(); fill(0);
-  text("𝄢", 25, 220);
+  text("𝄢", 25, 230);
 
-  // 全音符
+  // 全音符（五線譜内）
   stroke(0); strokeWeight(2); noFill();
   ellipse(400, notes[currentNoteIndex].y, 25, 20);
-
-  // 【鍵盤：先生の設計を固定】
-  // 白鍵 14個の固定位置
-  stroke(0); fill(255);
-  for(let i=0; i<14; i++) rect(50 + i * 50, 400, 50, 150);
   
-  // 黒鍵の固定位置（2つ・3つグループ）
+  // 【主軸】2オクターブ鍵盤（白鍵14・黒鍵配置）
+  for (let i = 0; i < 14; i++) {
+    stroke(0); fill(255);
+    rect(50 + i * 50, 400, 50, 150);
+  }
   fill(0);
-  let blacks = [1, 3, 6, 8, 10];
+  let blacks = [1, 3, 6, 8, 10, 13];
   for(let b of blacks) rect(50 + b * 50 - 15, 400, 30, 90);
+}
+
+function mousePressed() {
+  if (getAudioContext().state !== 'running') getAudioContext().resume();
+  if (mouseY > 400) {
+    let i = floor((mouseX - 50) / 50);
+    if (i >= 0 && i < 10) { // 10音に対応したクリック判定
+      synth.freq(notes[i].freq);
+      synth.amp(0.3, 0.05);
+      setTimeout(() => { synth.amp(0, 0.05); }, 200);
+      
+      if (i === currentNoteIndex) scoreYes++; else scoreNo++;
+      newQuestion();
+    }
+  }
 }
