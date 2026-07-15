@@ -4,10 +4,20 @@ let timer = 60;
 let lastTime = 0;
 let synth;
 
-// 鍵盤と対応する音（ファソラシドレミファソラ）
-let noteFreqs = [174.61, 196.00, 220.00, 246.94, 261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
-// 五線譜上の音符の高さ（第1線のソ〜第4間のソ）
-let noteYs = [240, 220, 200, 180, 160, 140, 120, 100, 80, 60]; 
+// 10音（ファ・ソ・ラ・シ・ド・レ・ミ・ファ・ソ・ラ）
+// y座標: 第1線(G2)から第4間(G3)まで20ずつ刻んでいます
+let noteSettings = [
+  { note: "F2", y: 260, freq: 174.61, type: "white" },
+  { note: "G2", y: 240, freq: 196.00, type: "white" },
+  { note: "A2", y: 220, freq: 220.00, type: "white" },
+  { note: "B2", y: 200, freq: 246.94, type: "white" },
+  { note: "C3", y: 180, freq: 261.63, type: "white" },
+  { note: "D3", y: 160, freq: 293.66, type: "white" },
+  { note: "E3", y: 140, freq: 329.63, type: "white" },
+  { note: "F3", y: 120, freq: 349.23, type: "white" },
+  { note: "G3", y: 100, freq: 392.00, type: "white" },
+  { note: "A3", y: 80,  freq: 440.00, type: "white" }
+];
 let currentNoteIndex = 0;
 
 function setup() {
@@ -19,7 +29,7 @@ function setup() {
 }
 
 function newQuestion() {
-  currentNoteIndex = floor(random(10)); // 0~9のどれか
+  currentNoteIndex = floor(random(noteSettings.length));
 }
 
 function draw() {
@@ -31,21 +41,26 @@ function draw() {
 
   // 五線譜
   stroke(0); strokeWeight(2);
-  for (let i = 0; i < 5; i++) line(100, 200 + i * 20, 700, 200 + i * 20);
+  for (let i = 0; i < 5; i++) line(100, 160 + i * 20, 700, 160 + i * 20);
   
-  // ヘ音記号
-  textSize(100); noStroke(); fill(0);
-  text("𝄢", 25, 250);
+  // ヘ音記号（第4線を挟む位置）
+  textSize(80); noStroke(); fill(0);
+  text("𝄢", 25, 225);
 
-  // 全音符を表示
+  // 全音符
   stroke(0); strokeWeight(2); noFill();
-  ellipse(400, noteYs[currentNoteIndex], 25, 20);
+  ellipse(400, noteSettings[currentNoteIndex].y, 25, 20);
   
-  // 鍵盤
+  // 鍵盤（白鍵と黒鍵）
+  let w = 70;
   for (let i = 0; i < 10; i++) {
     stroke(0); fill(255);
-    rect(50 + i * 70, 400, 70, 150);
+    rect(50 + i * w, 400, w, 150);
   }
+  // 黒鍵
+  fill(0);
+  rect(50 + w - 20, 400, 40, 90); rect(50 + 2 * w - 20, 400, 40, 90);
+  rect(50 + 4 * w - 20, 400, 40, 90); rect(50 + 5 * w - 20, 400, 40, 90); rect(50 + 6 * w - 20, 400, 40, 90);
 }
 
 function mousePressed() {
@@ -53,11 +68,9 @@ function mousePressed() {
   if (mouseY > 400) {
     let index = floor((mouseX - 50) / 70);
     if (index >= 0 && index < 10) {
-      synth.freq(noteFreqs[index]);
+      synth.freq(noteSettings[index].freq);
       synth.amp(0.3, 0.05);
       setTimeout(() => { synth.amp(0, 0.05); }, 200);
-      
-      // 正誤判定
       if (index === currentNoteIndex) scoreYes++; else scoreNo++;
       newQuestion();
     }
