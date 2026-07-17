@@ -42,15 +42,41 @@
     <script>
         let osc;
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
+        
         function startAudio() {
             userStartAudio();
             document.getElementById('game').style.display = 'none';
             document.getElementById('piano').style.display = 'block';
         }
-        function handlePianoClick(event) {
-            console.log("鍵盤が押されました");
-            // 今夜、ここに具体的な音の割り当てを一つずつ書き込んでいきましょう
+
+        // --- ここから下に今回作成した機能を追加（プラス）します ---
+
+        function playNote(freq) {
+            osc.freq(freq); osc.amp(0.3, 0.02);
+            setTimeout(() => osc.amp(0, 0.1), 100);
         }
+
+        function handlePianoClick(event) {
+            // SVG内のどの要素が押されたかを取得
+            const allRects = document.querySelectorAll('rect');
+            let index = -1;
+            for(let i=0; i<allRects.length; i++) {
+                if(allRects[i] === event.target) { index = i; break; }
+            }
+
+            // 音階リスト（白鍵14個分の周波数）
+            // 左端の白鍵を index 0 としています
+            const frequencies = [
+                196.0, 220.0, 246.9, 261.6, 293.7, 329.6, 349.2, // ソ, ラ, シ, ド, レ, ミ, ファ
+                392.0, 440.0, 493.9, 523.3, 587.3, 659.3, 698.5  // ソ, ラ, シ, ド, レ, ミ, ファ
+            ];
+
+            // 白鍵（index 0〜13）なら音を鳴らす
+            if (index >= 0 && index < 14) {
+                playNote(frequencies[index]);
+            }
+        }
+        // --- ここまで追加 ---
     </script>
 </body>
 </html>
