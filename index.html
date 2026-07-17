@@ -2,26 +2,28 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>ヘ音記号ゲーム</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        .piano { display: flex; margin-top: 50px; position: relative; }
+        .white { width: 50px; height: 150px; border: 1px solid #000; background: white; }
+        .black { width: 30px; height: 100px; background: black; position: absolute; top: 0; }
+    </style>
 </head>
 <body>
+    <div id="game">クリックしてスタート</div>
+    <div class="piano" id="piano" style="display:none;">
+        <div class="white"></div><div class="black" style="left:35px;"></div>
+        <div class="white"></div><div class="black" style="left:85px;"></div>
+        <div class="white"></div>
+        <div class="white"></div><div class="black" style="left:185px;"></div>
+        <div class="white"></div><div class="black" style="left:235px;"></div>
+        <div class="white"></div><div class="black" style="left:285px;"></div>
+        <div class="white"></div>
+    </div>
     <script>
-        let gameState = "START";
-        const whiteKeysData = [{n:"G",x:100},{n:"A",x:160},{n:"B",x:220},{n:"C",x:280},{n:"D",x:340},{n:"E",x:400},{n:"F",x:460},{n:"G_high",x:520}];
-        const blackKeysData = [{n:"G#",x:142},{n:"A#",x:202},{n:"C#",x:322},{n:"D#",x:382},{n:"F#",x:502},{n:"G#2",x:562}];
-
-        function setup() { createCanvas(800, 600); }
-        function draw() {
-            background(220);
-            if(gameState === "PLAYING") {
-                for(let k of whiteKeysData) { stroke(0); fill(255); rect(k.x, 430, 60, 140); }
-                for(let b of blackKeysData) { fill(0); rect(b.x, 430, 36, 85); }
-            } else {
-                textAlign(CENTER, CENTER); text("クリックしてスタート", width/2, height/2);
-            }
-        }
-        function mousePressed() { if(gameState === "START") gameState = "PLAYING"; }
+        document.getElementById("game").onclick = function() {
+            this.style.display = "none";
+            document.getElementById("piano").style.display = "flex";
+        };
     </script>
 </body>
 </html>
