@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        .piano { display: flex; position: relative; margin-top: 50px; }
-        .white { width: 50px; height: 150px; border: 1px solid #000; background: white; cursor: pointer; }
-        .black { width: 30px; height: 100px; background: black; cursor: pointer; margin-left: -15px; margin-right: -15px; z-index: 2; }
+        .piano { display: inline-flex; position: relative; margin-top: 50px; border: 1px solid #000; }
+        /* 白鍵は白鍵、黒鍵は黒鍵として独立して定義 */
+        .white { width: 50px; height: 150px; border-right: 1px solid #000; background: white; cursor: pointer; }
+        .black { width: 30px; height: 100px; background: black; cursor: pointer; margin-left: -15px; margin-right: -15px; z-index: 10; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
@@ -14,20 +15,20 @@
     <div id="game" style="font-size:30px; cursor:pointer;" onclick="startAudio();">クリックしてスタート</div>
     
     <div class="piano" id="piano" style="display:none;">
-        <!-- ピアノの鍵盤順（白・黒の正しい順番） -->
-        <div class="white" onclick="playNote(196.0)"></div>
-        <div class="black" onclick="playNote(207.7)"></div>
-        <div class="white" onclick="playNote(220.0)"></div>
-        <div class="black" onclick="playNote(233.1)"></div>
-        <div class="white" onclick="playNote(246.9)"></div>
-        <div class="white" onclick="playNote(261.6)"></div>
-        <div class="black" onclick="playNote(277.2)"></div>
-        <div class="white" onclick="playNote(293.7)"></div>
-        <div class="black" onclick="playNote(311.1)"></div>
-        <div class="white" onclick="playNote(329.6)"></div>
-        <div class="white" onclick="playNote(349.2)"></div>
-        <div class="black" onclick="playNote(370.0)"></div>
-        <div class="white" onclick="playNote(392.0)"></div>
+        <!-- ソ～ソの配置を確定 -->
+        <div class="white" onclick="playNote(196.0)"></div> <!-- G -->
+        <div class="black" onclick="playNote(207.7)"></div> <!-- G# -->
+        <div class="white" onclick="playNote(220.0)"></div> <!-- A -->
+        <div class="black" onclick="playNote(233.1)"></div> <!-- A# -->
+        <div class="white" onclick="playNote(246.9)"></div> <!-- B -->
+        <div class="white" onclick="playNote(261.6)"></div> <!-- C -->
+        <div class="black" onclick="playNote(277.2)"></div> <!-- C# -->
+        <div class="white" onclick="playNote(293.7)"></div> <!-- D -->
+        <div class="black" onclick="playNote(311.1)"></div> <!-- D# -->
+        <div class="white" onclick="playNote(329.6)"></div> <!-- E -->
+        <div class="white" onclick="playNote(349.2)"></div> <!-- F -->
+        <div class="black" onclick="playNote(370.0)"></div> <!-- F# -->
+        <div class="white" onclick="playNote(392.0)"></div> <!-- G -->
     </div>
 
     <script>
@@ -36,7 +37,7 @@
         function startAudio() {
             userStartAudio();
             document.getElementById('game').style.display = 'none';
-            document.getElementById('piano').style.display = 'flex';
+            document.getElementById('piano').style.display = 'inline-flex';
         }
         function playNote(freq) {
             osc.freq(freq); osc.amp(0.3, 0.02);
