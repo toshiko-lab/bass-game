@@ -7,14 +7,26 @@
         .white { width: 50px; height: 150px; border: 1px solid #000; background: white; z-index: 1; }
         .black { width: 30px; height: 100px; background: black; z-index: 2; margin-left: -15px; margin-right: -15px; }
     </style>
+    <!-- 音を鳴らすためのライブラリを読み込みます -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
 <body>
     <div id="game" style="font-size:30px; cursor:pointer;" onclick="this.style.display='none'; document.getElementById('piano').style.display='flex';">クリックしてスタート</div>
     <div class="piano" id="piano" style="display:none;">
+        <!-- 鍵盤のHTMLはそのままです -->
         <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
         <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
         <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
         <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
     </div>
+
+    <script>
+        // ここにこれから「どの鍵盤がどの音か」を書き込んでいきます
+        let osc;
+        function setup() {
+            osc = new p5.Oscillator('triangle');
+        }
+    </script>
 </body>
 </html>
