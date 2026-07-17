@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        .piano { display: flex; margin-top: 50px; position: relative; }
+        .piano { display: flex; position: relative; margin-top: 50px; }
         .white { width: 50px; height: 150px; border: 1px solid #000; background: white; }
         .black { width: 30px; height: 100px; background: black; position: absolute; top: 0; }
     </style>
@@ -11,13 +11,23 @@
 <body>
     <div id="game">クリックしてスタート</div>
     <div class="piano" id="piano" style="display:none;">
-        <div class="white"></div><div class="black" style="left:35px;"></div>
-        <div class="white"></div><div class="black" style="left:85px;"></div>
-        <div class="white"></div>
-        <div class="white"></div><div class="black" style="left:185px;"></div>
-        <div class="white"></div><div class="black" style="left:235px;"></div>
-        <div class="white"></div><div class="black" style="left:285px;"></div>
-        <div class="white"></div>
+        <!-- 2オクターブ分：白鍵15枚 -->
+        <div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div>
+        <div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div>
+        <div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div>
+        
+        <!-- 黒鍵10枚：正しい間隔で2オクターブ分配置 -->
+        <div class="black" style="left:35px;"></div>   <!-- 1オクターブ目 -->
+        <div class="black" style="left:85px;"></div>
+        <div class="black" style="left:185px;"></div>
+        <div class="black" style="left:235px;"></div>
+        <div class="black" style="left:285px;"></div>
+        
+        <div class="black" style="left:385px;"></div>  <!-- 2オクターブ目 -->
+        <div class="black" style="left:435px;"></div>
+        <div class="black" style="left:535px;"></div>
+        <div class="black" style="left:585px;"></div>
+        <div class="black" style="left:635px;"></div>
     </div>
     <script>
         document.getElementById("game").onclick = function() {
