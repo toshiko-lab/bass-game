@@ -5,7 +5,7 @@
     <style>
         .piano { display: flex; position: relative; margin-top: 50px; }
         .white { width: 50px; height: 150px; border: 1px solid #000; background: white; }
-        .black { width: 30px; height: 100px; background: black; position: absolute; top: 0; }
+        .black { width: 35px; height: 100px; background: black; position: absolute; top: 0; }
     </style>
 </head>
 <body>
@@ -16,14 +16,13 @@
         <div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div>
         <div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div><div class="white"></div>
         
-        <!-- 黒鍵10枚：ピアノの配置（2本・3本）に合わせて配置 -->
+        <!-- 黒鍵10枚：白鍵の境目に正確に配置 -->
         <!-- 1オクターブ目 -->
-        <div class="black" style="left:35px;"></div>  <div class="black" style="left:85px;"></div>
-        <div class="black" style="left:185px;"></div> <div class="black" style="left:235px;"></div> <div class="black" style="left:285px;"></div>
-        
+        <div class="black" style="left:33px;"></div>  <div class="black" style="left:83px;"></div>
+        <div class="black" style="left:183px;"></div> <div class="black" style="left:233px;"></div> <div class="black" style="left:283px;"></div>
         <!-- 2オクターブ目 -->
-        <div class="black" style="left:385px;"></div> <div class="black" style="left:435px;"></div>
-        <div class="black" style="left:535px;"></div> <div class="black" style="left:585px;"></div> <div class="black" style="left:635px;"></div>
+        <div class="black" style="left:383px;"></div> <div class="black" style="left:433px;"></div>
+        <div class="black" style="left:533px;"></div> <div class="black" style="left:583px;"></div> <div class="black" style="left:633px;"></div>
     </div>
     <script>
         document.getElementById("game").onclick = function() {
