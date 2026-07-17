@@ -3,23 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        .piano { display: flex; position: relative; margin-top: 50px; border-left: 1px solid #000; }
-        .white { width: 50px; height: 150px; border-right: 1px solid #000; background: white; }
-        .black { width: 30px; height: 100px; background: black; position: absolute; top: 0; }
+        .piano { display: flex; position: relative; margin-top: 50px; }
+        .white { width: 50px; height: 150px; border: 1px solid #000; background: white; z-index: 1; }
+        .black { width: 30px; height: 100px; background: black; z-index: 2; margin-left: -15px; margin-right: -15px; }
     </style>
 </head>
 <body>
     <div id="game" style="font-size:30px; cursor:pointer;" onclick="this.style.display='none'; document.getElementById('piano').style.display='flex';">クリックしてスタート</div>
     <div class="piano" id="piano" style="display:none;">
-        <!-- 白鍵15枚 -->
-        <script>
-            for(let i=0; i<15; i++) document.write('<div class="white"></div>');
-        </script>
-        <!-- 黒鍵10枚を正確に配置 -->
-        <div class="black" style="left:35px;"></div><div class="black" style="left:85px;"></div>
-        <div class="black" style="left:185px;"></div><div class="black" style="left:235px;"></div><div class="black" style="left:285px;"></div>
-        <div class="black" style="left:385px;"></div><div class="black" style="left:435px;"></div>
-        <div class="black" style="left:535px;"></div><div class="black" style="left:585px;"></div><div class="black" style="left:635px;"></div>
+        <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
+        <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
+        <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
+        <div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div><div class="black"></div><div class="white"></div>
     </div>
 </body>
 </html>
