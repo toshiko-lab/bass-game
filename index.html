@@ -5,45 +5,38 @@
     <style>
         .piano { display: flex; position: relative; margin-top: 50px; }
         .white { width: 50px; height: 150px; border: 1px solid #000; background: white; cursor: pointer; }
-        .black { width: 30px; height: 100px; background: black; cursor: pointer; margin-left: -15px; margin-right: -15px; }
+        .black { width: 30px; height: 100px; background: black; cursor: pointer; margin-left: -15px; margin-right: -15px; z-index: 2; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
 <body>
-    <!-- ここでスタートボタンを押した瞬間に「音の準備」をさせます -->
     <div id="game" style="font-size:30px; cursor:pointer;" onclick="startAudio();">クリックしてスタート</div>
     
     <div class="piano" id="piano" style="display:none;">
-        <div class="white" id="G"></div><div class="black" id="G#"></div><div class="white" id="A"></div><div class="black" id="A#"></div><div class="white" id="B"></div>
-        <div class="white" id="C"></div><div class="black" id="C#"></div><div class="white" id="D"></div><div class="black" id="D#"></div><div class="white" id="E"></div><div class="black" id="E#"></div><div class="white" id="F"></div>
-        <div class="white" id="G2"></div><div class="black" id="G2#"></div><div class="white" id="A2"></div><div class="black" id="A2#"></div><div class="white" id="B2"></div>
+        <!-- ソ(G)からソ(G2)までの鍵盤配置 -->
+        <div class="white" onclick="playNote(196.0)"></div><div class="black" onclick="playNote(207.7)"></div>
+        <div class="white" onclick="playNote(220.0)"></div><div class="black" onclick="playNote(233.1)"></div>
+        <div class="white" onclick="playNote(246.9)"></div>
+        <div class="white" onclick="playNote(261.6)"></div><div class="black" onclick="playNote(277.2)"></div>
+        <div class="white" onclick="playNote(293.7)"></div><div class="black" onclick="playNote(311.1)"></div>
+        <div class="white" onclick="playNote(329.6)"></div>
+        <div class="white" onclick="playNote(349.2)"></div><div class="black" onclick="playNote(370.0)"></div>
+        <div class="white" onclick="playNote(392.0)"></div>
     </div>
 
     <script>
         let osc;
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
-
-        // スタートボタンを押した時の処理
         function startAudio() {
-            userStartAudio(); // 音声コンテキストを開始
+            userStartAudio();
             document.getElementById('game').style.display = 'none';
             document.getElementById('piano').style.display = 'flex';
         }
-
         function playNote(freq) {
-            osc.freq(freq);
-            osc.amp(0.3, 0.02);
+            osc.freq(freq); osc.amp(0.3, 0.02);
             setTimeout(() => osc.amp(0, 0.1), 100);
         }
-
-        const notes = { "C": 261.6, "D": 293.7, "E": 329.6, "F": 349.2, "G": 392.0 };
-
-        document.querySelectorAll('.white, .black').forEach(key => {
-            key.onclick = function() {
-                if(notes[this.id]) playNote(notes[this.id]);
-            };
-        });
     </script>
 </body>
 </html>
