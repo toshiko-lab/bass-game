@@ -55,25 +55,28 @@
         }
 
         // 五線譜を描く関数
-        function setupStaff() {
+       function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 五線の描画 (5線・間隔40px・上に移動)
             ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
+            
+            // 五線の開始位置を下げます（yの起点を 160px に変更）
+            const startY = 160;
             for (let i = 0; i < 5; i++) {
-                let y = 40 + i * 40; 
+                let y = startY + i * 40; 
                 ctx.beginPath();
                 ctx.moveTo(100, y);
                 ctx.lineTo(700, y);
                 ctx.stroke();
             }
             
-            // ヘ音記号を描画 (第4線を挟む位置)
-            ctx.font = "200px Arial";
-            ctx.fillText("𝄢", 20, 160); 
+            // ヘ音記号のサイズを縮小（200px → 140px）し、位置を調整
+            ctx.font = "140px Arial";
+            ctx.fillText("𝄢", 20, 220); 
+        }
         }
 
         // ページ読み込み時に実行
