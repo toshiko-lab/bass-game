@@ -39,9 +39,13 @@
       <rect x="903" y="0" width="40" height="120" fill="black"/>
     </svg>
 
-    <script>
+   <script>
         let osc;
-        function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
+        function setup() { 
+            osc = new p5.Oscillator('triangle'); 
+            osc.start(); 
+            osc.amp(0); 
+        }
         
         function startAudio() {
             userStartAudio();
@@ -49,46 +53,35 @@
             document.getElementById('piano').style.display = 'block';
         }
 
-        // --- ここから下に今回作成した機能を追加（プラス）します ---
-
         function playNote(freq) {
-            osc.freq(freq); osc.amp(0.3, 0.02);
+            osc.freq(freq); 
+            osc.amp(0.3, 0.02);
             setTimeout(() => osc.amp(0, 0.1), 100);
         }
 
+        // 鍵盤をクリックした時の処理（IDで判定する正確な書き方です）
         function handlePianoClick(event) {
-            // SVG内のどの要素が押されたかを取得
-            const allRects = document.querySelectorAll('rect');
-            let index = -1;
-            for(let i=0; i<allRects.length; i++) {
-                if(allRects[i] === event.target) { index = i; break; }
+            const id = event.target.id;
+            
+            // 各IDに対して、正しい周波数を直接指定します
+            const noteMap = {
+                "key0": 98.00,  // ソ (G2)
+                "key2": 110.00, // ラ (A2)
+                "key4": 123.47, // シ (B2)
+                "key5": 130.81, // ド (C3)
+                "key7": 146.83, // レ (D3)
+                "key9": 164.81, // ミ (E3)
+                "key10": 174.61,// ファ (F3)
+                "key12": 196.00 // ソ (G3)
+            };
+
+            // 音を鳴らす実行処理
+            if (noteMap[id]) {
+                playNote(noteMap[id]);
+            } else {
+                console.log("この鍵盤は音を割り当てていません: " + id);
             }
-
-            // 鍵盤をクリックした時の処理
-function handlePianoClick(event) {
-    const id = event.target.id;
-    
-    // 各IDに対して、正しい周波数を直接指定します
-    const noteMap = {
-        "key0": 98.00,  // ソ (G2)
-        "key2": 110.00, // ラ (A2)
-        "key4": 123.47, // シ (B2)
-        "key5": 130.81, // ド (C3)
-        "key7": 146.83, // レ (D3)
-        "key9": 164.81, // ミ (E3)
-        "key10": 174.61,// ファ (F3)
-        "key12": 196.00 // ソ (G3)
-    };
-
-    // 音を鳴らす実行処理
-    if (noteMap[id]) {
-        playNote(noteMap[id]);
-    } else {
-        console.log("この鍵盤は問題用ではないため鳴らしません: " + id);
-    }
-}
         }
-        // --- ここまで追加 ---
     </script>
 </body>
 </html>
