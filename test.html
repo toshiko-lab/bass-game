@@ -41,16 +41,22 @@
 
    <script>
         let osc;
-        function setup() { 
-            osc = new p5.Oscillator('triangle'); 
-            osc.start(); 
-            osc.amp(0); 
-        }
         
+        // ページが読み込まれた時に音の準備をします
+        function setup() {
+            osc = new p5.Oscillator('triangle');
+            osc.start();
+            osc.amp(0);
+        }
+
+        // スタートボタンを押した時の処理
         function startAudio() {
-            userStartAudio();
-            document.getElementById('game').style.display = 'none';
-            document.getElementById('piano').style.display = 'block';
+            // ブラウザに「今から音を鳴らす」と明確に伝えます
+            getAudioContext().resume().then(() => {
+                console.log("音声コンテキスト開始");
+                document.getElementById('game').style.display = 'none';
+                document.getElementById('piano').style.display = 'block';
+            });
         }
 
         function playNote(freq) {
@@ -59,27 +65,15 @@
             setTimeout(() => osc.amp(0, 0.1), 100);
         }
 
-        // 鍵盤をクリックした時の処理（IDで判定する正確な書き方です）
         function handlePianoClick(event) {
             const id = event.target.id;
-            
-            // 各IDに対して、正しい周波数を直接指定します
             const noteMap = {
-                "key0": 98.00,  // ソ (G2)
-                "key2": 110.00, // ラ (A2)
-                "key4": 123.47, // シ (B2)
-                "key5": 130.81, // ド (C3)
-                "key7": 146.83, // レ (D3)
-                "key9": 164.81, // ミ (E3)
-                "key10": 174.61,// ファ (F3)
-                "key12": 196.00 // ソ (G3)
+                "key0": 98.00, "key2": 110.00, "key4": 123.47, "key5": 130.81, 
+                "key7": 146.83, "key9": 164.81, "key10": 174.61, "key12": 196.00
             };
 
-            // 音を鳴らす実行処理
             if (noteMap[id]) {
                 playNote(noteMap[id]);
-            } else {
-                console.log("この鍵盤は音を割り当てていません: " + id);
             }
         }
     </script>
