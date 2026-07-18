@@ -5,85 +5,74 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
-<body>
-    <div id="game" style="font-size:30px; cursor:pointer; margin-top:50px;" onclick="startAudio();">クリックしてスタート</div>
-    
-    <div id="staff-container" style="text-align: center; margin-top: 20px;">
-        <canvas id="staffCanvas" width="800" height="300"></canvas>
+<body style="text-align: center; font-family: sans-serif;">
+
+    <!-- 1. 最上段：UIエリア -->
+    <div id="ui-container" style="padding: 20px;">
+        <button onclick="startGame()" style="font-size: 20px;">START</button>
+        <span style="font-size: 20px; margin: 0 20px;">Time: 00</span>
+        <button style="font-size: 20px;">YES</button>
+        <button style="font-size: 20px;">NO</button>
     </div>
 
-    <!-- 黒鍵を削除した鍵盤のみのSVG -->
-    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="display:none; cursor:pointer;">
-      <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key3" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key4" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key5" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key6" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key7" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key8" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key9" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key10" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key11" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key12" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect id="key13" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <!-- 2. 中段：五線譜（canvasの高さを上げて五線を下へ配置） -->
+    <div id="staff-container">
+        <canvas id="staffCanvas" width="800" height="400"></canvas>
+    </div>
+
+    <!-- 3. 下段：鍵盤 -->
+    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 150px; cursor:pointer;">
+        <!-- 白鍵のみ -->
+        <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key3" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key4" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key5" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key6" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key7" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key8" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key9" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key10" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key11" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key12" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key13" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
     </svg>
 
     <script>
         let osc;
-
-        // p5.jsの初期化（音の準備）
         function setup() {
             osc = new p5.Oscillator('triangle');
             osc.start();
             osc.amp(0);
         }
 
-        // スタートボタン用
-        function startAudio() {
-            userStartAudio();
-            document.getElementById('game').style.display = 'none';
-            document.getElementById('piano').style.display = 'block';
-        }
-
-        // 音を鳴らす関数
-        function playNote(freq) {
-            osc.freq(freq); 
-            osc.amp(0.3, 0.02);
-            setTimeout(() => osc.amp(0, 0.1), 100);
-        }
-
-        // 五線譜を描く関数
-      function setupStaff() {
+        // 描画関数
+        function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
             
-            // 5線の配置を少し下げ、鍵盤との間に十分な余白を確保
-            const startY = 160;
+            // 五線を下に配置（startYを調整）
+            const startY = 160; 
             for (let i = 0; i < 5; i++) {
-                let y = startY + i * 40; 
+                let y = startY + i * 40;
                 ctx.beginPath();
                 ctx.moveTo(100, y);
                 ctx.lineTo(700, y);
                 ctx.stroke();
             }
             
-            // ヘ音記号の点を第4線（startY + 40）を挟む位置に調整
-            // 文字の基準点を調整して配置しています
+            // ヘ音記号の調整：第4線を挟む位置へ
             ctx.font = "140px Arial";
-            ctx.fillText("𝄢", 20, 195); // 縦位置を微調整
+            ctx.fillText("𝄢", 20, 240); 
         }
 
-        // ページ読み込み時に実行
         window.onload = setupStaff;
 
-        // 鍵盤をクリックした時
         function handlePianoClick(event) {
+            userStartAudio(); // クリックで音を許可
             const id = event.target.id;
             const noteMap = {
                 "key0": 32.70, "key1": 36.71, "key2": 41.20, "key3": 43.65, 
@@ -91,7 +80,11 @@
                 "key8": 73.42, "key9": 82.41, "key10": 87.31, "key11": 98.00, 
                 "key12": 110.00, "key13": 123.47
             };
-            if (noteMap[id]) playNote(noteMap[id]);
+            if (noteMap[id]) {
+                osc.freq(noteMap[id]);
+                osc.amp(0.3, 0.02);
+                setTimeout(() => osc.amp(0, 0.1), 100);
+            }
         }
     </script>
 </body>
