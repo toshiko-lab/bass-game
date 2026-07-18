@@ -32,48 +32,54 @@
 
     <script>
         let osc;
+
+        // p5.jsの初期化（音の準備）
         function setup() {
             osc = new p5.Oscillator('triangle');
             osc.start();
             osc.amp(0);
         }
 
+        // スタートボタン用
         function startAudio() {
             userStartAudio();
             document.getElementById('game').style.display = 'none';
             document.getElementById('piano').style.display = 'block';
         }
 
+        // 音を鳴らす関数
         function playNote(freq) {
             osc.freq(freq); 
             osc.amp(0.3, 0.02);
             setTimeout(() => osc.amp(0, 0.1), 100);
         }
 
-       function setupStaff() {
+        // 五線譜を描く関数
+        function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 五線の描画 (5線・間隔40px・上に移動)
             ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
-            
-            // 五線の描画 (間隔 40px)
             for (let i = 0; i < 5; i++) {
-                let y = 80 + i * 40; 
+                let y = 40 + i * 40; 
                 ctx.beginPath();
                 ctx.moveTo(100, y);
                 ctx.lineTo(700, y);
                 ctx.stroke();
             }
             
-            // ヘ音記号の描画位置調整
-            // 第4線は上から2番目の線(80 + 40 = 120)です
-            // 第4線を挟むように配置します
-            ctx.font = "120px Arial";
-            ctx.fillText("𝄢", 20, 160); // 縦位置を調整しました
+            // ヘ音記号を描画 (第4線を挟む位置)
+            ctx.font = "200px Arial";
+            ctx.fillText("𝄢", 20, 160); 
         }
 
+        // ページ読み込み時に実行
         window.onload = setupStaff;
 
+        // 鍵盤をクリックした時
         function handlePianoClick(event) {
             const id = event.target.id;
             const noteMap = {
