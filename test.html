@@ -7,22 +7,22 @@
 </head>
 <body style="text-align: center; font-family: sans-serif;">
 
-    <!-- 1. 最上段：UIエリア -->
-    <div id="ui-container" style="padding: 20px;">
-        <button onclick="startGame()" style="font-size: 20px;">START</button>
-        <span style="font-size: 20px; margin: 0 20px;">Time: 00</span>
-        <button style="font-size: 20px;">YES</button>
-        <button style="font-size: 20px;">NO</button>
+    <!-- 1. 最上段：UIエリア（フォントサイズ拡大） -->
+    <div id="ui-container" style="padding: 20px; font-size: 32px;">
+        <button style="font-size: 32px; padding: 5px 20px;">START</button>
+        <span style="margin: 0 40px;">Time: 00</span>
+        <button style="font-size: 32px; padding: 5px 20px;">YES</button>
+        <button style="font-size: 32px; padding: 5px 20px;">NO</button>
     </div>
 
-    <!-- 2. 中段：五線譜（canvasの高さを上げて五線を下へ配置） -->
+    <!-- 2. 中段：五線譜 -->
     <div id="staff-container">
-        <canvas id="staffCanvas" width="800" height="400"></canvas>
+        <canvas id="staffCanvas" width="800" height="350"></canvas>
     </div>
 
-    <!-- 3. 下段：鍵盤 -->
-    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 150px; cursor:pointer;">
-        <!-- 白鍵のみ -->
+    <!-- 3. 下段：鍵盤（間隔を3間分＝120pxに設定） -->
+    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 120px; cursor:pointer;">
+        <!-- (鍵盤のrect要素は変更なし) -->
         <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
         <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
         <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
@@ -41,38 +41,29 @@
 
     <script>
         let osc;
-        function setup() {
-            osc = new p5.Oscillator('triangle');
-            osc.start();
-            osc.amp(0);
-        }
+        function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
 
-        // 描画関数
         function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
-            ctx.strokeStyle = "black";
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = "black"; ctx.lineWidth = 2;
             
-            // 五線を下に配置（startYを調整）
-            const startY = 160; 
+            // 5線
+            const startY = 120; // 5線全体を少し下げて配置
             for (let i = 0; i < 5; i++) {
                 let y = startY + i * 40;
-                ctx.beginPath();
-                ctx.moveTo(100, y);
-                ctx.lineTo(700, y);
-                ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(100, y); ctx.lineTo(700, y); ctx.stroke();
             }
             
-            // ヘ音記号の調整：第4線を挟む位置へ
-            ctx.font = "140px Arial";
-            ctx.fillText("𝄢", 20, 240); 
+            // ヘ音記号：2点が第4線を正確に挟む位置へ
+            ctx.font = "160px Arial";
+            ctx.fillText("𝄢", 20, 205); 
         }
 
         window.onload = setupStaff;
 
         function handlePianoClick(event) {
-            userStartAudio(); // クリックで音を許可
+            userStartAudio();
             const id = event.target.id;
             const noteMap = {
                 "key0": 32.70, "key1": 36.71, "key2": 41.20, "key3": 43.65, 
@@ -81,8 +72,7 @@
                 "key12": 110.00, "key13": 123.47
             };
             if (noteMap[id]) {
-                osc.freq(noteMap[id]);
-                osc.amp(0.3, 0.02);
+                osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
                 setTimeout(() => osc.amp(0, 0.1), 100);
             }
         }
