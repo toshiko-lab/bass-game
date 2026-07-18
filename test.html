@@ -8,55 +8,48 @@
 <body>
     <div id="game" style="font-size:30px; cursor:pointer; margin-top:50px;" onclick="startAudio();">クリックしてスタート</div>
 
-    <!-- 先生のSVGにwidthとheightを明示的に指定して表示を固定します -->
     <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="display:none; cursor:pointer;">
-      <!-- 白鍵 -->
-      <rect x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-      <rect x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <!-- 白鍵にID（key0〜key13）を付与しました -->
+      <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key3" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key4" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key5" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key6" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key7" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key8" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key9" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key10" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key11" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key12" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+      <rect id="key13" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
 
-      <!-- 黒鍵 -->
-      <rect x="50" y="0" width="40" height="120" fill="black"/>
-      <rect x="121" y="0" width="40" height="120" fill="black"/>
-      <rect x="263" y="0" width="40" height="120" fill="black"/>
-      <rect x="334" y="0" width="40" height="120" fill="black"/>
-      <rect x="405" y="0" width="40" height="120" fill="black"/>
-      <rect x="548" y="0" width="40" height="120" fill="black"/>
-      <rect x="619" y="0" width="40" height="120" fill="black"/>
-      <rect x="761" y="0" width="40" height="120" fill="black"/>
-      <rect x="832" y="0" width="40" height="120" fill="black"/>
-      <rect x="903" y="0" width="40" height="120" fill="black"/>
+      <!-- 黒鍵にも念のためIDを付与しました -->
+      <rect id="black0" x="50" y="0" width="40" height="120" fill="black"/>
+      <rect id="black1" x="121" y="0" width="40" height="120" fill="black"/>
+      <rect id="black2" x="263" y="0" width="40" height="120" fill="black"/>
+      <rect id="black3" x="334" y="0" width="40" height="120" fill="black"/>
+      <rect id="black4" x="405" y="0" width="40" height="120" fill="black"/>
+      <rect id="black5" x="548" y="0" width="40" height="120" fill="black"/>
+      <rect id="black6" x="619" y="0" width="40" height="120" fill="black"/>
+      <rect id="black7" x="761" y="0" width="40" height="120" fill="black"/>
+      <rect id="black8" x="832" y="0" width="40" height="120" fill="black"/>
+      <rect id="black9" x="903" y="0" width="40" height="120" fill="black"/>
     </svg>
 
    <script>
         let osc;
-        
-        // ページが読み込まれた時に音の準備をします
         function setup() {
             osc = new p5.Oscillator('triangle');
             osc.start();
             osc.amp(0);
         }
 
-        // スタートボタンを押した時の処理
         function startAudio() {
-            // ブラウザに「今から音を鳴らす」と明確に伝えます
-            getAudioContext().resume().then(() => {
-                console.log("音声コンテキスト開始");
-                document.getElementById('game').style.display = 'none';
-                document.getElementById('piano').style.display = 'block';
-            });
+            userStartAudio(); // p5.jsの標準的な起動方法
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('piano').style.display = 'block';
         }
 
         function playNote(freq) {
@@ -67,8 +60,9 @@
 
         function handlePianoClick(event) {
             const id = event.target.id;
+            console.log("押された鍵盤のID:", id); // 動作確認用
             const noteMap = {
-                "key0": 98.00, "key2": 110.00, "key4": 123.47, "key5": 130.81, 
+                "key0": 98.00,  "key2": 110.00, "key4": 123.47, "key5": 130.81, 
                 "key7": 146.83, "key9": 164.81, "key10": 174.61, "key12": 196.00
             };
 
