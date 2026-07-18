@@ -46,20 +46,22 @@
         function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
             ctx.strokeStyle = "black"; ctx.lineWidth = 2;
             
-            // 5線
-            const startY = 120; // 5線全体を少し下げて配置
+            // 五線の配置 (startY=160 とします)
+            const startY = 160; 
             for (let i = 0; i < 5; i++) {
                 let y = startY + i * 40;
                 ctx.beginPath(); ctx.moveTo(100, y); ctx.lineTo(700, y); ctx.stroke();
             }
             
-            // ヘ音記号：2点が第4線を正確に挟む位置へ
-            ctx.font = "160px Arial";
-            ctx.fillText("𝄢", 20, 205); 
+            // ヘ音記号の描画
+            // y座標を 235 から 255 に増やして、記号全体を「下へ」移動させます
+            ctx.font = "140px Arial";
+            ctx.fillText("𝄢", 20, 255); 
         }
-
         window.onload = setupStaff;
 
         function handlePianoClick(event) {
