@@ -55,7 +55,7 @@
         }
 
         // 五線譜を描く関数
-       function setupStaff() {
+      function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -63,7 +63,7 @@
             ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
             
-            // 五線の開始位置を下げます（yの起点を 160px に変更）
+            // 5線の配置を少し下げ、鍵盤との間に十分な余白を確保
             const startY = 160;
             for (let i = 0; i < 5; i++) {
                 let y = startY + i * 40; 
@@ -73,9 +73,10 @@
                 ctx.stroke();
             }
             
-            // ヘ音記号のサイズを縮小（200px → 140px）し、位置を調整
+            // ヘ音記号の点を第4線（startY + 40）を挟む位置に調整
+            // 文字の基準点を調整して配置しています
             ctx.font = "140px Arial";
-            ctx.fillText("𝄢", 20, 220); 
+            ctx.fillText("𝄢", 20, 195); // 縦位置を微調整
         }
 
         // ページ読み込み時に実行
