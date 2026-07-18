@@ -9,11 +9,11 @@
     <div id="game" style="font-size:30px; cursor:pointer; margin-top:50px;" onclick="startAudio();">クリックしてスタート</div>
     
     <div id="staff-container" style="text-align: center; margin-top: 20px;">
-        <canvas id="staffCanvas" width="800" height="200"></canvas>
+        <canvas id="staffCanvas" width="800" height="300"></canvas>
     </div>
 
+    <!-- 黒鍵を削除した鍵盤のみのSVG -->
     <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="display:none; cursor:pointer;">
-      <!-- (SVG部分は変更ありませんのでそのままです) -->
       <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
       <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
       <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
@@ -38,7 +38,6 @@
             osc.amp(0);
         }
 
-        // スタート処理を復活させました
         function startAudio() {
             userStartAudio();
             document.getElementById('game').style.display = 'none';
@@ -51,21 +50,22 @@
             setTimeout(() => osc.amp(0, 0.1), 100);
         }
 
-        // ページ読み込み時に五線譜を描画する
         function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
             ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
+            // 五線の間隔を40pxに拡大
             for (let i = 0; i < 5; i++) {
-                let y = 80 + i * 20;
+                let y = 80 + i * 40; 
                 ctx.beginPath();
                 ctx.moveTo(100, y);
                 ctx.lineTo(700, y);
                 ctx.stroke();
             }
-            ctx.font = "60px Arial";
-            ctx.fillText("𝄢", 40, 135);
+            // ヘ音記号を拡大（120px）
+            ctx.font = "120px Arial";
+            ctx.fillText("𝄢", 20, 195); 
         }
 
         window.onload = setupStaff;
@@ -78,10 +78,7 @@
                 "key8": 73.42, "key9": 82.41, "key10": 87.31, "key11": 98.00, 
                 "key12": 110.00, "key13": 123.47
             };
-
-            if (noteMap[id]) {
-                playNote(noteMap[id]);
-            }
+            if (noteMap[id]) playNote(noteMap[id]);
         }
     </script>
 </body>
