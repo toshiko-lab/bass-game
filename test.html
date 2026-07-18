@@ -7,7 +7,9 @@
 </head>
 <body>
     <div id="game" style="font-size:30px; cursor:pointer; margin-top:50px;" onclick="startAudio();">クリックしてスタート</div>
-
+　　<div id="staff-container" style="text-align: center; margin-top: 20px;">
+    <canvas id="staffCanvas" width="800" height="200"></canvas>
+    </div>
     <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="display:none; cursor:pointer;">
       <!-- 白鍵にID（key0〜key13）を付与しました -->
       <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
@@ -46,17 +48,29 @@
             osc.amp(0);
         }
 
-        function startAudio() {
-            userStartAudio(); // p5.jsの標準的な起動方法
-            document.getElementById('game').style.display = 'none';
-            document.getElementById('piano').style.display = 'block';
-        }
+       / ページ読み込み時に五線譜を描画する
+function setupStaff() {
+    let canvas = document.getElementById('staffCanvas');
+    let ctx = canvas.getContext('2d');
+    
+    // 五線の描画 (5本線)
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 5; i++) {
+        let y = 80 + i * 20; // 線の間隔を20ピクセルに設定
+        ctx.beginPath();
+        ctx.moveTo(100, y);
+        ctx.lineTo(700, y);
+        ctx.stroke();
+    }
 
-        function playNote(freq) {
-            osc.freq(freq); 
-            osc.amp(0.3, 0.02);
-            setTimeout(() => osc.amp(0, 0.1), 100);
-        }
+    // ヘ音記号の描画 (簡略化した形ですが、位置は正確に指定します)
+    ctx.font = "60px Arial";
+    ctx.fillText("𝄢", 40, 135); // ヘ音記号を表示
+}
+
+// ページ読み込み時に実行
+window.onload = setupStaff;
 
         function handlePianoClick(event) {
             const id = event.target.id;
