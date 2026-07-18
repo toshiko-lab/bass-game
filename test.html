@@ -50,12 +50,13 @@
             setTimeout(() => osc.amp(0, 0.1), 100);
         }
 
-        function setupStaff() {
+       function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
             ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
-            // 五線の間隔を40pxに拡大
+            
+            // 五線の描画 (間隔 40px)
             for (let i = 0; i < 5; i++) {
                 let y = 80 + i * 40; 
                 ctx.beginPath();
@@ -63,9 +64,12 @@
                 ctx.lineTo(700, y);
                 ctx.stroke();
             }
-            // ヘ音記号を拡大（120px）
+            
+            // ヘ音記号の描画位置調整
+            // 第4線は上から2番目の線(80 + 40 = 120)です
+            // 第4線を挟むように配置します
             ctx.font = "120px Arial";
-            ctx.fillText("𝄢", 20, 195); 
+            ctx.fillText("𝄢", 20, 160); // 縦位置を調整しました
         }
 
         window.onload = setupStaff;
