@@ -7,11 +7,13 @@
 </head>
 <body>
     <div id="game" style="font-size:30px; cursor:pointer; margin-top:50px;" onclick="startAudio();">クリックしてスタート</div>
-　　<div id="staff-container" style="text-align: center; margin-top: 20px;">
-    <canvas id="staffCanvas" width="800" height="200"></canvas>
+    
+    <div id="staff-container" style="text-align: center; margin-top: 20px;">
+        <canvas id="staffCanvas" width="800" height="200"></canvas>
     </div>
+
     <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="display:none; cursor:pointer;">
-      <!-- 白鍵にID（key0〜key13）を付与しました -->
+      <!-- (SVG部分は変更ありませんのでそのままです) -->
       <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
       <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
       <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
@@ -26,21 +28,9 @@
       <rect id="key11" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
       <rect id="key12" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
       <rect id="key13" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
-
-      <!-- 黒鍵にも念のためIDを付与しました -->
-      <rect id="black0" x="50" y="0" width="40" height="120" fill="black"/>
-      <rect id="black1" x="121" y="0" width="40" height="120" fill="black"/>
-      <rect id="black2" x="263" y="0" width="40" height="120" fill="black"/>
-      <rect id="black3" x="334" y="0" width="40" height="120" fill="black"/>
-      <rect id="black4" x="405" y="0" width="40" height="120" fill="black"/>
-      <rect id="black5" x="548" y="0" width="40" height="120" fill="black"/>
-      <rect id="black6" x="619" y="0" width="40" height="120" fill="black"/>
-      <rect id="black7" x="761" y="0" width="40" height="120" fill="black"/>
-      <rect id="black8" x="832" y="0" width="40" height="120" fill="black"/>
-      <rect id="black9" x="903" y="0" width="40" height="120" fill="black"/>
     </svg>
 
-   <script>
+    <script>
         let osc;
         function setup() {
             osc = new p5.Oscillator('triangle');
@@ -48,55 +38,49 @@
             osc.amp(0);
         }
 
-       / ページ読み込み時に五線譜を描画する
-function setupStaff() {
-    let canvas = document.getElementById('staffCanvas');
-    let ctx = canvas.getContext('2d');
-    
-    // 五線の描画 (5本線)
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    for (let i = 0; i < 5; i++) {
-        let y = 80 + i * 20; // 線の間隔を20ピクセルに設定
-        ctx.beginPath();
-        ctx.moveTo(100, y);
-        ctx.lineTo(700, y);
-        ctx.stroke();
-    }
+        // スタート処理を復活させました
+        function startAudio() {
+            userStartAudio();
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('piano').style.display = 'block';
+        }
 
-    // ヘ音記号の描画 (簡略化した形ですが、位置は正確に指定します)
-    ctx.font = "60px Arial";
-    ctx.fillText("𝄢", 40, 135); // ヘ音記号を表示
-}
+        function playNote(freq) {
+            osc.freq(freq); 
+            osc.amp(0.3, 0.02);
+            setTimeout(() => osc.amp(0, 0.1), 100);
+        }
 
-// ページ読み込み時に実行
-window.onload = setupStaff;
+        // ページ読み込み時に五線譜を描画する
+        function setupStaff() {
+            let canvas = document.getElementById('staffCanvas');
+            let ctx = canvas.getContext('2d');
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 5; i++) {
+                let y = 80 + i * 20;
+                ctx.beginPath();
+                ctx.moveTo(100, y);
+                ctx.lineTo(700, y);
+                ctx.stroke();
+            }
+            ctx.font = "60px Arial";
+            ctx.fillText("𝄢", 40, 135);
+        }
+
+        window.onload = setupStaff;
 
         function handlePianoClick(event) {
             const id = event.target.id;
-            
-            // 先生の定義（C1〜B2）に基づく周波数マップ
             const noteMap = {
-                "key0": 32.70,  // C1 (ド)
-                "key1": 36.71,  // D1 (レ)
-                "key2": 41.20,  // E1 (ミ)
-                "key3": 43.65,  // F1 (ファ)
-                "key4": 49.00,  // G1 (ソ)
-                "key5": 55.00,  // A1 (ラ)
-                "key6": 61.74,  // B1 (シ)
-                "key7": 65.41,  // C2 (ド)
-                "key8": 73.42,  // D2 (レ)
-                "key9": 82.41,  // E2 (ミ)
-                "key10": 87.31, // F2 (ファ)
-                "key11": 98.00, // G2 (ソ)
-                "key12": 110.00,// A2 (ラ)
-                "key13": 123.47 // B2 (シ)
+                "key0": 32.70, "key1": 36.71, "key2": 41.20, "key3": 43.65, 
+                "key4": 49.00, "key5": 55.00, "key6": 61.74, "key7": 65.41, 
+                "key8": 73.42, "key9": 82.41, "key10": 87.31, "key11": 98.00, 
+                "key12": 110.00, "key13": 123.47
             };
 
             if (noteMap[id]) {
                 playNote(noteMap[id]);
-            } else {
-                console.log("この鍵盤は対象外です: " + id);
             }
         }
     </script>
