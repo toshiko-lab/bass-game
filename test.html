@@ -64,30 +64,29 @@
                 if(allRects[i] === event.target) { index = i; break; }
             }
 
-            // 音階リスト（白鍵14個分の周波数）
-            // 左端の白鍵を index 0 としています
-            // ソ(G3) ラ(A3) シ(B3) ド(C4) レ(D4) ミ(E4) ファ(F4) ソ(G4) ... という並びです
-            const frequencies = [
-                196.0, // G (ソ)
-                220.0, // A (ラ)
-                246.9, // B (シ)
-                261.6, // C (ド)
-                293.7, // D (レ)
-                329.6, // E (ミ)
-                349.2, // F (ファ)
-                392.0, // G (ソ)
-                440.0, // A (ラ)
-                493.9, // B (シ)
-                523.3, // C (ド)
-                587.3, // D (レ)
-                659.3, // E (ミ)
-                698.5  // F (ファ)
-            ];
+            // 鍵盤をクリックした時の処理
+function handlePianoClick(event) {
+    const id = event.target.id;
+    
+    // 各IDに対して、正しい周波数を直接指定します
+    const noteMap = {
+        "key0": 98.00,  // ソ (G2)
+        "key2": 110.00, // ラ (A2)
+        "key4": 123.47, // シ (B2)
+        "key5": 130.81, // ド (C3)
+        "key7": 146.83, // レ (D3)
+        "key9": 164.81, // ミ (E3)
+        "key10": 174.61,// ファ (F3)
+        "key12": 196.00 // ソ (G3)
+    };
 
-            // 白鍵（index 0〜13）なら音を鳴らす
-            if (index >= 0 && index < 14) {
-                playNote(frequencies[index]);
-            }
+    // 音を鳴らす実行処理
+    if (noteMap[id]) {
+        playNote(noteMap[id]);
+    } else {
+        console.log("この鍵盤は問題用ではないため鳴らしません: " + id);
+    }
+}
         }
         // --- ここまで追加 ---
     </script>
