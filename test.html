@@ -21,24 +21,35 @@
     </div>
 
     <!-- 3. 下段：鍵盤 -->
-   <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 100px; cursor:pointer;">
-        <!-- 白鍵 -->
-        <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key12" x="500" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        
-        <!-- 黒鍵 -->
-        <rect id="key1" x="47.6" width="47.6" height="120" fill="black" />
-        <rect id="key3" x="119" width="47.6" height="120" fill="black" />
-        <rect id="key6" x="261.8" width="47.6" height="120" fill="black" />
-        <rect id="key8" x="333.2" width="47.6" height="120" fill="black" />
-        <rect id="key10" x="404.6" width="47.6" height="120" fill="black" />
-    </svg>
+  <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 100px; cursor:pointer;">
+    <!-- 白鍵（2オクターブ分） -->
+    <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key12" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key14" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key16" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key17" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key19" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key21" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
+    <rect id="key23" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
+    
+    <!-- 黒鍵（2オクターブ分） -->
+    <rect id="key1" x="47.6" width="47.6" height="120" fill="black"/>
+    <rect id="key3" x="119" width="47.6" height="120" fill="black"/>
+    <rect id="key6" x="261.8" width="47.6" height="120" fill="black"/>
+    <rect id="key8" x="333.2" width="47.6" height="120" fill="black"/>
+    <rect id="key10" x="404.6" width="47.6" height="120" fill="black"/>
+    <rect id="key13" x="547.4" width="47.6" height="120" fill="black"/>
+    <rect id="key15" x="618.8" width="47.6" height="120" fill="black"/>
+    <rect id="key18" x="761.6" width="47.6" height="120" fill="black"/>
+    <rect id="key20" x="833" width="47.6" height="120" fill="black"/>
+    <rect id="key22" x="904.4" width="47.6" height="120" fill="black"/>
+</svg>
     <script>
         // タイマー用の変数
         let timerInterval;
