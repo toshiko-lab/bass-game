@@ -29,7 +29,11 @@
         let osc, timerInterval, currentTargetKeyId = "", yesCount = 0, noCount = 0;
         // y座標を40ずつ離して間隔を戻しました。全音符サイズを80pxに。
         const notes = [
-            { id: "key0", y: 240 }, { id: "key2", y: 200 }, { id: "key4", y: 160 }, { id: "key5", y: 140 }, { id: "key7", y: 120 }
+            { id: "key0", y: 220 }, // ド(C1)：下第1間
+            { id: "key2", y: 200 }, // レ：下第1線
+            { id: "key4", y: 180 }, // ミ：第1間
+            { id: "key5", y: 160 }, // ファ：第1線
+            { id: "key7", y: 140 }  // ソ：第2間
         ];
 
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
@@ -65,7 +69,16 @@
             userStartAudio();
             let id = event.target.id;
             // 2オクターブ対応の周波数リスト
-            let noteMap = { "key0": 130.81, "key1": 138.59, "key2": 146.83, "key3": 155.56, "key4": 164.81, "key5": 174.61, "key6": 185.00, "key7": 196.00 };
+            let noteMap = {
+                "key0": 65.41,  // C1
+                "key1": 69.30, 
+                "key2": 73.42,  // D1
+                "key3": 77.78,
+                "key4": 82.41,  // E1
+                "key5": 87.31,  // F1
+                "key6": 92.50,
+                "key7": 98.00   // G1
+            };
             
             if (noteMap[id]) {
                 osc.freq(noteMap[id]); osc.amp(0.3, 0.05);
