@@ -42,9 +42,13 @@
     </svg>
     <script>
         let osc, timerInterval, timeLeft = 60, yesCount = 0, noCount = 0, currentTargetKeyId = "";
-        const notePositions = [
-            { id: "key0", y: 240 }, { id: "key2", y: 220 }, { id: "key4", y: 200 }, 
-            { id: "key5", y: 180 }, { id: "key7", y: 160 }
+       const notePositions = [
+            { id: "key0", y: 240 }, // ド
+            { id: "key2", y: 220 }, // レ
+            { id: "key4", y: 200 }, // ミ
+            { id: "key5", y: 180 }, // ファ
+            { id: "key7", y: 160 }, // ソ（低い）
+            { id: "key19", y: 80 }  // ソ（高い・第4間）
         ];
 
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
@@ -83,27 +87,26 @@
         }
 
         function handlePianoClick(event) {
-            userStartAudio();
-            let id = event.target.id;
-            let freqs = {
-                "key0": 130.81, "key1": 138.59, "key2": 146.83, "key3": 155.56, 
-                "key4": 164.81, "key5": 174.61, "key6": 185.00, "key7": 196.00, 
-                "key8": 207.65, "key9": 220.00, "key10": 233.08, "key11": 246.94, 
-                "key12": 261.63, "key13": 277.18, "key14": 293.66, "key15": 311.13, 
-                "key16": 329.63, "key17": 349.23, "key18": 369.99, "key19": 392.00, 
-                "key20": 415.30, "key21": 440.00, "key22": 466.16, "key23": 493.88
-            };
-            if (freqs[id]) {
-                osc.freq(freqs[id]); osc.amp(0.3, 0.02);
-                setTimeout(() => osc.amp(0, 0.1), 100);
-                if (id === currentTargetKeyId) {
-                    yesCount++; document.getElementById('yesScore').innerText = "YES: " + yesCount;
-                    showNextNote();
-                } else {
-                    noCount++; document.getElementById('noScore').innerText = "NO: " + noCount;
-                }
+        userStartAudio();
+        const id = event.target.id;
+        // noteMapは昨日の24鍵分をそのまま使用してください
+
+        if (noteMap[id]) {
+            osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
+            setTimeout(() => osc.amp(0, 0.1), 100);
+
+            // 正確に「現在表示されている音符のID」と「押した鍵盤のID」を比較
+            if (id === currentTargetKeyId) {
+                yesCount++;
+                document.getElementById('yesScore').innerText = "YES: " + yesCount;
+                showNextNote(); // 正解したら次へ
+            } else {
+                noCount++;
+                document.getElementById('noScore').innerText = "NO: " + noCount;
+                // 不正解のときは何もしない（YESもNOも進まない、音だけ鳴る）
             }
         }
+    }
     </script>
 </body>
 </html>
