@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-<script>
-    let osc;
-    let timerInterval;
-    let timeLeft = 60;
-    let yesCount = 0;
-    let noCount = 0;
-    let currentTargetKeyId = "";
-
-    // 1. 音符の高さと鍵盤IDのリスト
-    const notePositions = [
-        { id: "key0", y: 240 }, { id: "key2", y: 220 },
-        { id: "key4", y: 200 }, { id: "key5", y: 180 }, { id: "key7", y: 160 }
-    ];
 <html>
 <head>
     <meta charset="UTF-8">
@@ -19,155 +6,96 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
 <body style="text-align: center; font-family: sans-serif;">
-function startGame() {
-        clearInterval(timerInterval);
-        timeLeft = 60;
-        document.getElementById('timeDisplay').innerText = "Time: 60";
-        yesCount = 0; noCount = 0;
-        document.getElementById('yesScore').innerText = "YES: 0";
-        document.getElementById('noScore').innerText = "NO: 0";
 
-        showNextNote(); // 追加
-
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft <= 0) { clearInterval(timerInterval); timeLeft = 0; alert("終了です！"); }
-            document.getElementById('timeDisplay').innerText = "Time: " + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
-        }, 1000);
-    }
-    <!-- 1. 最上段UI -->
     <div id="ui-container" style="padding: 20px; font-size: 32px; display: flex; justify-content: center; gap: 40px; align-items: center;">
         <button id="startBtn" onclick="startGame()" style="font-size: 28px; padding: 5px 20px;">START</button>
-        <span id="timeDisplay">Time: 00</span>
+        <span id="timeDisplay">Time: 60</span>
         <div id="yesScore">YES: 0</div>
         <div id="noScore">NO: 0</div>
     </div>
 
-    <!-- 2. 中段：五線譜 -->
     <div id="staff-container">
         <canvas id="staffCanvas" width="800" height="350"></canvas>
     </div>
 
-    <!-- 3. 下段：鍵盤 -->
-  <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 100px; cursor:pointer;">
-    <!-- 白鍵（2オクターブ分） -->
-    <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key12" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key14" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key16" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key17" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key19" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key21" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-    <rect id="key23" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
-    
-    <!-- 黒鍵（2オクターブ分） -->
-    <rect id="key1" x="47.6" width="47.6" height="120" fill="black"/>
-    <rect id="key3" x="119" width="47.6" height="120" fill="black"/>
-    <rect id="key6" x="261.8" width="47.6" height="120" fill="black"/>
-    <rect id="key8" x="333.2" width="47.6" height="120" fill="black"/>
-    <rect id="key10" x="404.6" width="47.6" height="120" fill="black"/>
-    <rect id="key13" x="547.4" width="47.6" height="120" fill="black"/>
-    <rect id="key15" x="618.8" width="47.6" height="120" fill="black"/>
-    <rect id="key18" x="761.6" width="47.6" height="120" fill="black"/>
-    <rect id="key20" x="833" width="47.6" height="120" fill="black"/>
-    <rect id="key22" x="904.4" width="47.6" height="120" fill="black"/>
-</svg>
+    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 50px; cursor:pointer;">
+        <!-- 鍵盤の定義は省略しますが、昨日までのSVGをここに入れてください -->
+    </svg>
+
     <script>
-        // タイマー用の変数
+        let osc;
         let timerInterval;
-        let timeLeft = 60; // 60秒からスタート
+        let timeLeft = 60;
+        let yesCount = 0;
+        let noCount = 0;
+        let currentTargetKeyId = "";
+        const notePositions = [
+            { id: "key0", y: 240 }, { id: "key2", y: 220 },
+            { id: "key4", y: 200 }, { id: "key5", y: 180 }, { id: "key7", y: 160 }
+        ];
 
-        // STARTボタンが押された時の処理
-        function startGame() {
-        // 1. タイマーのリセット
-        clearInterval(timerInterval);
-        timeLeft = 60;
-        document.getElementById('timeDisplay').innerText = "Time: 60";
-        
-        // 2. スコアのリセット
-        yesCount = 0;
-        noCount = 0;
-        document.getElementById('yesScore').innerText = "YES: 0";
-        document.getElementById('noScore').innerText = "NO: 0";
-
-        // 3. 次の問題（音符）を表示する処理（ここも後で呼び出します）
-        // showNextNote(); 
-
-        // 4. タイマー開始
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                timeLeft = 0;
-                alert("終了です！");
-            }
-            document.getElementById('timeDisplay').innerText = "Time: " + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
-        }, 1000);
-    }
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
 
         function setupStaff() {
             let canvas = document.getElementById('staffCanvas');
             let ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.strokeStyle = "black"; ctx.lineWidth = 2;
-            
             const startY = 160; 
             for (let i = 0; i < 5; i++) {
                 let y = startY + i * 40;
                 ctx.beginPath(); ctx.moveTo(100, y); ctx.lineTo(700, y); ctx.stroke();
             }
-            
-            // ヘ音記号：調整した286を適用
             ctx.font = "193px Arial";
             ctx.fillText("𝄢", 20, 286); 
         }
 
-        window.onload = setupStaff;
+        function startGame() {
+            clearInterval(timerInterval);
+            timeLeft = 60;
+            yesCount = 0; noCount = 0;
+            document.getElementById('timeDisplay').innerText = "Time: 60";
+            document.getElementById('yesScore').innerText = "YES: 0";
+            document.getElementById('noScore').innerText = "NO: 0";
+            showNextNote();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) { clearInterval(timerInterval); alert("終了です！"); }
+                document.getElementById('timeDisplay').innerText = "Time: " + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
+            }, 1000);
+        }
 
-        // 今の問題の正解音（現在は「ド」に設定）
-    let currentTargetKeyId = "key0"; 
-    let yesCount = 0;
-    let noCount = 0;
+        function showNextNote() {
+            setupStaff();
+            let canvas = document.getElementById('staffCanvas');
+            let ctx = canvas.getContext('2d');
+            let note = notePositions[Math.floor(Math.random() * notePositions.length)];
+            ctx.font = "40px Arial";
+            ctx.fillText("○", 300, note.y); 
+            currentTargetKeyId = note.id;
+        }
 
-    // 3-A. 音符を表示する関数
-    function showNextNote() {
-        let canvas = document.getElementById('staffCanvas');
-        let ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        setupStaff(); 
-
-        let note = notePositions[Math.floor(Math.random() * notePositions.length)];
-        ctx.font = "40px Arial";
-        ctx.fillText("○", 300, note.y); 
-        currentTargetKeyId = note.id;
-    }
-
-    // 3-B. クリック判定（正解したら次へ進む）
-    function handlePianoClick(event) {
-        userStartAudio();
-        const id = event.target.id;
-        const noteMap = { /* (昨日の24鍵分のnoteMapをここに記述) */ };
-        
-        if (noteMap[id]) {
-            osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
-            setTimeout(() => osc.amp(0, 0.1), 100);
-
-            if (id === currentTargetKeyId) {
-                yesCount++;
-                document.getElementById('yesScore').innerText = "YES: " + yesCount;
-                showNextNote(); // 正解したら次の問題へ
-            } else {
-                noCount++;
-                document.getElementById('noScore').innerText = "NO: " + noCount;
+        function handlePianoClick(event) {
+            userStartAudio();
+            const id = event.target.id;
+            const noteMap = {
+                "key0": 130.81, "key2": 146.83, "key4": 164.81, "key5": 174.61, "key7": 196.00
+                // 他の音も必要ならここに追加
+            };
+            if (noteMap[id]) {
+                osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
+                setTimeout(() => osc.amp(0, 0.1), 100);
+                if (id === currentTargetKeyId) {
+                    yesCount++;
+                    document.getElementById('yesScore').innerText = "YES: " + yesCount;
+                    showNextNote();
+                } else {
+                    noCount++;
+                    document.getElementById('noScore').innerText = "NO: " + noCount;
+                }
             }
         }
-    }
+        window.onload = setupStaff;
     </script>
 </body>
 </html>
