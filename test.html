@@ -2,23 +2,23 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ヘ音記号 音読みトレーニング</title>
+    <title>ヘ音記号 トレーニング</title>
     <style>
-        body { text-align: center; font-family: sans-serif; background: #fff; padding: 20px; }
-        .score { font-size: 24px; margin-bottom: 10px; }
-        /* 譜面エリアと鍵盤を物理的に離す */
-        #gameArea { position: relative; display: inline-block; margin-bottom: 50px; }
-        #bassClef { position: absolute; left: 10px; top: 110px; width: 80px; pointer-events: none; }
-        canvas { background: white; display: block; border-bottom: 2px solid #ccc; }
-        #pianoContainer { margin-top: 30px; }
+        body { text-align: center; font-family: sans-serif; background: white; padding: 20px; }
+        .score { font-size: 24px; margin-bottom: 20px; }
+        /* ゲームエリア：譜面下に十分な加線スペースと鍵盤の距離を確保 */
+        #gameArea { position: relative; display: inline-block; margin-bottom: 100px; }
+        /* ヘ音記号位置の微調整 */
+        #bassClef { position: absolute; left: 10px; top: 185px; width: 80px; pointer-events: none; }
+        canvas { background: white; display: block; }
     </style>
 </head>
 <body>
 
 <div class="score">
     <button onclick="startGame()" style="font-size: 20px;">START</button>
-    <span id="yesScore" style="color:green; margin-left:20px;">YES: 0</span>
-    <span id="noScore" style="color:red; margin-left:20px;">NO: 0</span>
+    <span id="yesScore" style="color:green; margin: 0 20px;">YES: 0</span>
+    <span id="noScore" style="color:red;">NO: 0</span>
 </div>
 
 <div id="gameArea">
@@ -28,22 +28,18 @@
 <div id="pianoContainer"></div>
 
 <script>
-    let yesCount=0, noCount=0, currentTargetId;
-    const noteMap = {
-        "key0": 65.41, "key1": 69.30, "key2": 73.42, "key3": 77.78, "key4": 82.41, 
-        "key5": 87.31, "key6": 92.50, "key7": 98.00, "key8": 103.83, "key9": 110.00
-    };
-    // 座標: 下第2線(ド)=280, 下第1線(ミ)=240, 第1線(ソ)=200, 第2線(シ)=160
+    let audioCtx, yesCount=0, noCount=0, currentTargetId;
+    // 座標: 下第2線(ド)=320, 下第1間(レ)=300, 下第1線(ミ)=280, 第1間(ファ)=260, 第1線(ソ)=240
     const notes = [
-        { id: "key0", y: 280 }, { id: "key2", y: 260 }, { id: "key4", y: 240 }, 
-        { id: "key5", y: 220 }, { id: "key7", y: 200 }
+        { id: "key0", y: 320 }, { id: "key2", y: 300 }, { id: "key4", y: 280 }, 
+        { id: "key5", y: 260 }, { id: "key7", y: 240 }
     ];
 
     function createPiano() {
         let s = '<svg onclick="check(event)" width="600" height="150" viewBox="0 0 600 150">';
-        for(let i=0; i<8; i++) s += `<rect id="key${i*2}" x="${i*70}" width="65" height="150" fill="white" stroke="black"/>`;
-        let black = [1, 3, 6, 8];
-        black.forEach(i => s += `<rect id="key${i}" x="${(i/2)*70 + 20}" width="40" height="90" fill="black"/>`);
+        for(let i=0; i<12; i++) s += `<rect id="key${i*2}" x="${i*50}" width="48" height="150" fill="white" stroke="black"/>`;
+        let blackKeys = [1, 3, 6, 8, 10];
+        blackKeys.forEach(i => s += `<rect id="key${i}" x="${(i/2*50) + 35}" width="30" height="90" fill="black"/>`);
         s += '</svg>';
         document.getElementById('pianoContainer').innerHTML = s;
     }
@@ -52,15 +48,16 @@
         let ctx = document.getElementById('staffCanvas').getContext('2d');
         ctx.clearRect(0,0,800,400);
         ctx.lineWidth = 2;
+        // 五線を下方に配置
         for(let i=0; i<5; i++) {
-            ctx.beginPath(); ctx.moveTo(50, 160 + i*40); ctx.lineTo(750, 160 + i*40); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(50, 180 + i*40); ctx.lineTo(750, 180 + i*40); ctx.stroke();
         }
     }
 
     function drawNote(y) {
         let ctx = document.getElementById('staffCanvas').getContext('2d');
         ctx.beginPath(); ctx.ellipse(400, y, 25, 18, 0, 0, 7); ctx.stroke();
-        // 加線
+        // 加線の描画
         if(y >= 280) { ctx.beginPath(); ctx.moveTo(350, 280); ctx.lineTo(450, 280); ctx.stroke(); }
         if(y >= 320) { ctx.beginPath(); ctx.moveTo(350, 320); ctx.lineTo(450, 320); ctx.stroke(); }
     }
