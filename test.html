@@ -1,4 +1,17 @@
 <!DOCTYPE html>
+<script>
+    let osc;
+    let timerInterval;
+    let timeLeft = 60;
+    let yesCount = 0;
+    let noCount = 0;
+    let currentTargetKeyId = "";
+
+    // 1. 音符の高さと鍵盤IDのリスト
+    const notePositions = [
+        { id: "key0", y: 240 }, { id: "key2", y: 220 },
+        { id: "key4", y: 200 }, { id: "key5", y: 180 }, { id: "key7", y: 160 }
+    ];
 <html>
 <head>
     <meta charset="UTF-8">
@@ -6,7 +19,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
 <body style="text-align: center; font-family: sans-serif;">
+function startGame() {
+        clearInterval(timerInterval);
+        timeLeft = 60;
+        document.getElementById('timeDisplay').innerText = "Time: 60";
+        yesCount = 0; noCount = 0;
+        document.getElementById('yesScore').innerText = "YES: 0";
+        document.getElementById('noScore').innerText = "NO: 0";
 
+        showNextNote(); // 追加
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) { clearInterval(timerInterval); timeLeft = 0; alert("終了です！"); }
+            document.getElementById('timeDisplay').innerText = "Time: " + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
+        }, 1000);
+    }
     <!-- 1. 最上段UI -->
     <div id="ui-container" style="padding: 20px; font-size: 32px; display: flex; justify-content: center; gap: 40px; align-items: center;">
         <button id="startBtn" onclick="startGame()" style="font-size: 28px; padding: 5px 20px;">START</button>
@@ -107,29 +135,33 @@
     let yesCount = 0;
     let noCount = 0;
 
-    // クリック判定（アラートなし・カウントアップのみ）
+    // 3-A. 音符を表示する関数
+    function showNextNote() {
+        let canvas = document.getElementById('staffCanvas');
+        let ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        setupStaff(); 
+
+        let note = notePositions[Math.floor(Math.random() * notePositions.length)];
+        ctx.font = "40px Arial";
+        ctx.fillText("○", 300, note.y); 
+        currentTargetKeyId = note.id;
+    }
+
+    // 3-B. クリック判定（正解したら次へ進む）
     function handlePianoClick(event) {
         userStartAudio();
         const id = event.target.id;
-        
-        const noteMap = {
-            "key0": 130.81, "key1": 138.59, "key2": 146.83, "key3": 155.56, 
-            "key4": 164.81, "key5": 174.61, "key6": 185.00, "key7": 196.00, 
-            "key8": 207.65, "key9": 220.00, "key10": 233.08, "key11": 246.94, 
-            "key12": 261.63, "key13": 277.18, "key14": 293.66, "key15": 311.13, 
-            "key16": 329.63, "key17": 349.23, "key18": 369.99, "key19": 392.00, 
-            "key20": 415.30, "key21": 440.00, "key22": 466.16, "key23": 493.88
-        };
+        const noteMap = { /* (昨日の24鍵分のnoteMapをここに記述) */ };
         
         if (noteMap[id]) {
-            osc.freq(noteMap[id]);
-            osc.amp(0.3, 0.02);
+            osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
             setTimeout(() => osc.amp(0, 0.1), 100);
 
-            // 判定処理
             if (id === currentTargetKeyId) {
                 yesCount++;
                 document.getElementById('yesScore').innerText = "YES: " + yesCount;
+                showNextNote(); // 正解したら次の問題へ
             } else {
                 noCount++;
                 document.getElementById('noScore').innerText = "NO: " + noCount;
