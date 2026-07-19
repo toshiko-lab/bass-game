@@ -7,22 +7,22 @@
 </head>
 <body style="text-align: center; font-family: sans-serif;">
 
-   <!-- 1. 最上段UI：YES/NOの後に数字枠（初期値0）を配置 -->
-<div id="ui-container" style="padding: 20px; font-size: 32px; display: flex; justify-content: center; gap: 40px; align-items: center;">
-    <button id="startBtn" onclick="startGame()" style="font-size: 28px; padding: 5px 20px;">START</button>
-    <span id="timeDisplay">Time: 00</span>
-    <div id="yesScore">YES: 0</div>
-    <div id="noScore">NO: 0</div>
-</div>
+    <!-- 1. 最上段UI -->
+    <div id="ui-container" style="padding: 20px; font-size: 32px; display: flex; justify-content: center; gap: 40px; align-items: center;">
+        <button id="startBtn" onclick="startGame()" style="font-size: 28px; padding: 5px 20px;">START</button>
+        <span id="timeDisplay">Time: 00</span>
+        <div id="yesScore">YES: 0</div>
+        <div id="noScore">NO: 0</div>
+    </div>
 
     <!-- 2. 中段：五線譜 -->
     <div id="staff-container">
         <canvas id="staffCanvas" width="800" height="350"></canvas>
     </div>
 
-    <!-- 3. 下段：鍵盤（間隔を3間分＝120pxに設定） -->
-    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 120px; cursor:pointer;">
-        <!-- (鍵盤のrect要素は変更なし) -->
+    <!-- 3. 下段：鍵盤 -->
+    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 100px; cursor:pointer;">
+        <!-- 白鍵 -->
         <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
         <rect id="key1" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
         <rect id="key2" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
@@ -43,25 +43,22 @@
         let osc;
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
 
-       function setupStaff() {
-        let canvas = document.getElementById('staffCanvas');
-        let ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.strokeStyle = "black"; ctx.lineWidth = 2;
-        
-        // 五線の配置 (startY = 160)
-        const startY = 160; 
-        for (let i = 0; i < 5; i++) {
-            let y = startY + i * 40;
-            ctx.beginPath(); ctx.moveTo(100, y); ctx.lineTo(700, y); ctx.stroke();
+        function setupStaff() {
+            let canvas = document.getElementById('staffCanvas');
+            let ctx = canvas.getContext('2d');
+            ctx.strokeStyle = "black"; ctx.lineWidth = 2;
+            
+            const startY = 160; 
+            for (let i = 0; i < 5; i++) {
+                let y = startY + i * 40;
+                ctx.beginPath(); ctx.moveTo(100, y); ctx.lineTo(700, y); ctx.stroke();
+            }
+            
+            // ヘ音記号：調整した286を適用
+            ctx.font = "193px Arial";
+            ctx.fillText("𝄢", 20, 286); 
         }
-        
-        // ヘ音記号の描画：サイズ1.38倍 (140px * 1.38 ≒ 193px)
-        // トップが第5線に接触し、点が第4線を挟む位置へ調整
-       ctx.font = "193px Arial";
-       ctx.fillText("𝄢", 20, 286);
-    }
+
         window.onload = setupStaff;
 
         function handlePianoClick(event) {
