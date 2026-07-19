@@ -2,291 +2,85 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ヘ音記号 音読みトレーニング</title>
+    <title>ヘ音記号 トレーニング</title>
     <style>
-        body {
-            text-align: center;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .score-board {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            align-items: center;
-        }
-        button {
-            font-size: 20px;
-            padding: 10px 25px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        button:hover {
-            background-color: #357abd;
-        }
-        canvas {
-            background: #fff;
-            display: block;
-            margin: 0 auto;
-            border-radius: 8px;
-        }
-        .piano-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        svg {
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            border-radius: 4px;
-        }
+        body { text-align: center; font-family: sans-serif; padding: 20px; }
+        .score { font-size: 24px; margin-bottom: 20px; }
+        canvas { background: white; margin-top: 10px; }
+        svg { display: block; margin: 20px auto; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- UI部分 -->
-    <div class="score-board">
-        <button onclick="startGame()">START</button>
-        <span id="timeDisplay" style="min-width: 120px; text-align: left;">Time: 60</span>
-        <span id="yesScore" style="color: #2ecc71;">YES: 0</span>
-        <span id="noScore" style="color: #e74c3c;">NO: 0</span>
-    </div>
-
-    <!-- 五線譜エリア -->
-    <canvas id="staffCanvas" width="760" height="380"></canvas>
-    
-    <!-- 鍵盤エリア（2オクターブ、黒鍵付き） -->
-    <div class="piano-wrapper">
-        <svg id="piano" onclick="handlePianoClick(event)" width="560" height="180" viewBox="0 0 560 180">
-            <!-- 白鍵 (14枚、幅40px) -->
-            <rect id="key0" x="0" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key2" x="40" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key4" x="80" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key5" x="120" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key7" x="160" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key9" x="200" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key11" x="240" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key12" x="280" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key14" x="320" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key16" x="360" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key17" x="400" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key19" x="440" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key21" x="480" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <rect id="key23" x="520" y="0" width="40" height="180" fill="white" stroke="black"/>
-            <!-- 黒鍵 (白鍵の隙間に配置、幅24px、高さ110px) -->
-            <rect id="key1" x="28" y="0" width="24" height="110" fill="black"/>
-            <rect id="key3" x="68" y="0" width="24" height="110" fill="black"/>
-            <rect id="key6" x="148" y="0" width="24" height="110" fill="black"/>
-            <rect id="key8" x="188" y="0" width="24" height="110" fill="black"/>
-            <rect id="key10" x="228" y="0" width="24" height="110" fill="black"/>
-            <rect id="key13" x="308" y="0" width="24" height="110" fill="black"/>
-            <rect id="key15" x="348" y="0" width="24" height="110" fill="black"/>
-            <rect id="key18" x="428" y="0" width="24" height="110" fill="black"/>
-            <rect id="key20" x="468" y="0" width="24" height="110" fill="black"/>
-            <rect id="key22" x="508" y="0" width="24" height="110" fill="black"/>
-        </svg>
-    </div>
+<div class="score">
+    <button onclick="startGame()" style="font-size: 20px;">START</button>
+    <span id="timeDisplay">Time: 60</span>
+    <span id="yesScore" style="color:green;">YES: 0</span>
+    <span id="noScore" style="color:red;">NO: 0</span>
 </div>
 
-<script>
-    let audioCtx = null;
-    let timerInterval = null;
-    let timeLeft = 60;
-    let yesCount = 0;
-    let noCount = 0;
-    let currentTargetKeyId = "";
+<canvas id="staffCanvas" width="800" height="300"></canvas>
+<div id="pianoContainer"></div>
 
-    // 音楽理論に基づいたヘ音記号の厳密なy座標定義 (第1線=240, 行間=40)
+<script>
+    let timerInterval, yesCount, noCount, currentTargetId;
     const notes = [
-        { id: "key0", y: 320 },  // 下第2線 ド (C1)
-        { id: "key2", y: 300 },  // 下第2間 レ
-        { id: "key4", y: 280 },  // 下第1線 ミ
-        { id: "key5", y: 260 },  // 下第1間 ファ
-        { id: "key7", y: 240 },  // 第1線 ソ
-        { id: "key9", y: 220 },  // 第1間 ラ
-        { id: "key11", y: 200 }, // 第2線 シ
-        { id: "key12", y: 180 }, // 第2間 ド
-        { id: "key14", y: 160 }, // 第3線 レ
-        { id: "key16", y: 140 }, // 第3間 ミ
-        { id: "key17", y: 120 }, // 第4線 ファ
-        { id: "key19", y: 100 }, // 第4間 ソ
-        { id: "key21", y: 80 }   // 第5線 ラ
+        { id: "key0", y: 220 }, { id: "key2", y: 200 }, { id: "key4", y: 180 }, 
+        { id: "key5", y: 160 }, { id: "key7", y: 140 }
     ];
 
-    // 音を鳴らす関数 (外部ライブラリ不要のWeb Audio APIを使用)
-    function playTone(freq) {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-        let osc = audioCtx.createOscillator();
-        let gainNode = audioCtx.createGain();
-        osc.type = 'triangle'; // 柔らかな音色
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.4);
+    // 鍵盤の幅を「太く」固定しました
+    function createPiano() {
+        let s = '<svg onclick="check(event)" width="800" height="180" viewBox="0 0 800 180">';
+        for(let i=0; i<8; i++) s += `<rect id="key${i*2}" x="${i*80}" width="75" height="180" fill="white" stroke="black"/>`;
+        s += '</svg>';
+        document.getElementById('pianoContainer').innerHTML = s;
     }
 
-    // 五線譜とヘ音記号の描画
-    function drawStaff() {
-        let canvas = document.getElementById('staffCanvas');
-        let ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // 5つの線を描画 (第5線=80, 第4線=120, 第3線=160, 第2線=200, 第1線=240)
-        ctx.strokeStyle = "black";
+    function draw() {
+        let ctx = document.getElementById('staffCanvas').getContext('2d');
+        ctx.clearRect(0,0,800,300);
         ctx.lineWidth = 2;
-        for (let i = 0; i < 5; i++) {
-            let y = 80 + i * 40;
-            ctx.beginPath();
-            ctx.moveTo(40, y);
-            ctx.lineTo(720, y);
-            ctx.stroke();
+        for(let i=0; i<5; i++) {
+            ctx.beginPath(); ctx.moveTo(100, 100 + i*40); ctx.lineTo(700, 100 + i*40); ctx.stroke();
         }
-
-        // --- 厳密なヘ音記号の自前パス描画 ---
-        ctx.fillStyle = "black";
-        // 1. 第4線(y=120)の上の起点黒丸
-        ctx.beginPath();
-        ctx.arc(70, 120, 5.5, 0, Math.PI * 2);
-        ctx.fill();
-        // 2. 本体曲線 (第4線から始まり、第5線に接触し、第2線に尻尾がつく)
-        ctx.beginPath();
-        ctx.moveTo(70, 120);
-        ctx.bezierCurveTo(70, 62, 115, 62, 115, 115); // 第5線(80)を超えて接触・右へ
-        ctx.bezierCurveTo(115, 165, 92, 212, 75, 200);  // 第2線(200)に尻尾
-        ctx.bezierCurveTo(83, 203, 90, 180, 90, 170);
-        ctx.lineWidth = 4;
-        ctx.lineCap = "round";
-        ctx.stroke();
-        // 3. 第4線を挟む2つの点 (第4間y=100 と 第3間y=140)
-        ctx.beginPath();
-        ctx.arc(128, 100, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(128, 140, 4.5, 0, Math.PI * 2);
-        ctx.fill();
+        // ヘ音記号は画像が用意できるまで、テキストで代用せず一旦空欄にします。
+        // もし特定の画像URLがあれば、そこに差し替えます。
     }
 
-    // ゲーム開始
     function startGame() {
-        clearInterval(timerInterval);
-        timeLeft = 60; yesCount = 0; noCount = 0;
-        document.getElementById('timeDisplay').innerText = "Time: 60";
+        yesCount=0; noCount=0;
         document.getElementById('yesScore').innerText = "YES: 0";
         document.getElementById('noScore').innerText = "NO: 0";
-        
-        showNextNote();
-        
+        let t = 60;
+        clearInterval(timerInterval);
         timerInterval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                currentTargetKeyId = "";
-                alert("タイムアップ！\n終了です。");
-            }
-            document.getElementById('timeDisplay').innerText = "Time: " + timeLeft;
+            t--;
+            document.getElementById('timeDisplay').innerText = "Time: " + t;
+            if(t <= 0) clearInterval(timerInterval);
         }, 1000);
+        showNote();
     }
 
-    // 音符の表示と加線処理
-    function showNextNote() {
-        drawStaff();
-        let canvas = document.getElementById('staffCanvas');
-        let ctx = canvas.getContext('2d');
-        
-        // ランダムに音符を選択
-        let n = notes[Math.floor(Math.random() * notes.length)];
-        let noteX = 380; // 音符の表示X位置
-
-        // 加線（補助線）が必要な場合の厳密な描画
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        if (n.y === 280) { // 下第1線 (ミ)
-            ctx.beginPath(); ctx.moveTo(noteX - 35, 280); ctx.lineTo(noteX + 35, 280); ctx.stroke();
-        } else if (n.y === 300) { // 下第2間 (レ) のときも上の下第1線が必要
-            ctx.beginPath(); ctx.moveTo(noteX - 35, 280); ctx.lineTo(noteX + 35, 280); ctx.stroke();
-        } else if (n.y === 320) { // 下第2線 (ド)
-            ctx.beginPath(); ctx.moveTo(noteX - 35, 280); ctx.lineTo(noteX + 35, 280); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(noteX - 35, 320); ctx.lineTo(noteX + 35, 320); ctx.stroke();
-        }
-
-        // --- 全音符の厳密なサイズ・接触描画 ---
-        // 行間40pxに対して縦半径20pxにすることで、間に100%きっちり接触、線なら上下均等になります
-        ctx.fillStyle = "white";
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 3.5;
-        ctx.beginPath();
-        ctx.ellipse(noteX, n.y, 27, 20, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        currentTargetKeyId = n.id;
+    function showNote() {
+        draw();
+        let ctx = document.getElementById('staffCanvas').getContext('2d');
+        let n = notes[Math.floor(Math.random()*notes.length)];
+        ctx.beginPath(); ctx.ellipse(400, n.y, 25, 18, 0, 0, 7); ctx.stroke(); ctx.fill();
+        currentTargetId = n.id;
     }
 
-    // 鍵盤クリック時の処理
-    function handlePianoClick(event) {
-        let id = event.target.id;
-        
-        // 低いド(C1)から始まる2オクターブ分の正確な周波数データ
-        const noteMap = {
-            "key0": 65.41,  "key1": 69.30,  "key2": 73.42,  "key3": 77.78,  "key4": 82.41, 
-            "key5": 87.31,  "key6": 92.50,  "key7": 98.00,  "key8": 103.83, "key9": 110.00, 
-            "key10": 116.54,"key11": 123.47, "key12": 130.81, "key13": 138.59, "key14": 146.83, 
-            "key15": 155.56,"key16": 164.81, "key17": 174.61, "key18": 185.00, "key19": 196.00, 
-            "key20": 207.65,"key21": 220.00, "key22": 233.08, "key23": 246.94
-        };
-        
-        if (!id || !noteMap[id]) return; // 鍵盤以外のクリックは無視
-        
-        // 音を鳴らす
-        playTone(noteMap[id]);
-        
-        if (currentTargetKeyId === "") return; // ゲームが始まっていない場合は判定スキップ
-
-        // 正誤判定
-        if (id === currentTargetKeyId) {
-            yesCount++;
-            document.getElementById('yesScore').innerText = "YES: " + yesCount;
+    function check(e) {
+        if(!currentTargetId) return;
+        if(e.target.id === currentTargetId) {
+            yesCount++; document.getElementById('yesScore').innerText = "YES: " + yesCount;
         } else {
-            noCount++;
-            document.getElementById('noScore').innerText = "NO: " + noCount;
+            noCount++; document.getElementById('noScore').innerText = "NO: " + noCount;
         }
-
-        // 正解・不正解にかかわらず、1回叩いたら必ず次の問題へ切り替える
-        showNextNote();
+        showNote();
     }
 
-    // 初期起動時に五線譜とヘ音記号を描画しておく
-    window.onload = drawStaff;
+    window.onload = () => { draw(); createPiano(); };
 </script>
-
 </body>
 </html>
