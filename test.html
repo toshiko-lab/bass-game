@@ -2,97 +2,84 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ヘ音記号 トレーニング</title>
+    <title>ヘ音記号 音読みトレーニング</title>
     <style>
-        body { text-align: center; font-family: sans-serif; padding: 20px; }
-        .score { font-size: 24px; margin-bottom: 20px; }
-        #gameArea { position: relative; display: inline-block; }
-        /* ヘ音記号を第4線に接触させる位置に調整 */
-        #bassClef { position: absolute; left: 10px; top: 75px; width: 80px; }
-        canvas { background: white; border: 1px solid #ccc; display: block; }
+        body { text-align: center; font-family: sans-serif; background: #fff; padding: 20px; }
+        .score { font-size: 24px; margin-bottom: 10px; }
+        /* 譜面エリアと鍵盤を物理的に離す */
+        #gameArea { position: relative; display: inline-block; margin-bottom: 50px; }
+        #bassClef { position: absolute; left: 10px; top: 110px; width: 80px; pointer-events: none; }
+        canvas { background: white; display: block; border-bottom: 2px solid #ccc; }
+        #pianoContainer { margin-top: 30px; }
     </style>
 </head>
 <body>
 
 <div class="score">
-    <button onclick="startGame()" style="font-size: 20px; padding: 10px 20px;">START</button>
-    <span id="timeDisplay" style="margin: 0 20px;">Time: 60</span>
-    <span id="yesScore" style="color:green;">YES: 0</span>
-    <span id="noScore" style="color:red;">NO: 0</span>
+    <button onclick="startGame()" style="font-size: 20px;">START</button>
+    <span id="yesScore" style="color:green; margin-left:20px;">YES: 0</span>
+    <span id="noScore" style="color:red; margin-left:20px;">NO: 0</span>
 </div>
 
 <div id="gameArea">
     <img id="bassClef" src="bass.png" alt="ヘ音記号">
-    <canvas id="staffCanvas" width="800" height="300"></canvas>
+    <canvas id="staffCanvas" width="800" height="400"></canvas>
 </div>
-
 <div id="pianoContainer"></div>
 
 <script>
-    let timerInterval, yesCount, noCount, currentTargetId;
+    let yesCount=0, noCount=0, currentTargetId;
+    const noteMap = {
+        "key0": 65.41, "key1": 69.30, "key2": 73.42, "key3": 77.78, "key4": 82.41, 
+        "key5": 87.31, "key6": 92.50, "key7": 98.00, "key8": 103.83, "key9": 110.00
+    };
+    // 座標: 下第2線(ド)=280, 下第1線(ミ)=240, 第1線(ソ)=200, 第2線(シ)=160
     const notes = [
-        { id: "key0", y: 220 }, { id: "key2", y: 200 }, { id: "key4", y: 180 }, 
-        { id: "key5", y: 160 }, { id: "key7", y: 140 }
+        { id: "key0", y: 280 }, { id: "key2", y: 260 }, { id: "key4", y: 240 }, 
+        { id: "key5", y: 220 }, { id: "key7", y: 200 }
     ];
 
-    // 鍵盤：白鍵と黒鍵を音楽的に正しい配置で生成
     function createPiano() {
-        let s = '<svg onclick="check(event)" width="800" height="150" viewBox="0 0 800 150">';
-        // 白鍵を並べる
-        for(let i=0; i<14; i++) s += `<rect id="key${i*2}" x="${i*55}" width="50" height="150" fill="white" stroke="black"/>`;
-        // 黒鍵を配置
-        let blackPattern = [true, true, false, true, true, true, false]; // ドレミファソラシの黒鍵有無
-        for(let i=0; i<13; i++) {
-            if(i%7 !== 2 && i%7 !== 6) {
-                s += `<rect id="key${i*2+1}" x="${(i+1)*55 - 15}" width="30" height="90" fill="black"/>`;
-            }
-        }
+        let s = '<svg onclick="check(event)" width="600" height="150" viewBox="0 0 600 150">';
+        for(let i=0; i<8; i++) s += `<rect id="key${i*2}" x="${i*70}" width="65" height="150" fill="white" stroke="black"/>`;
+        let black = [1, 3, 6, 8];
+        black.forEach(i => s += `<rect id="key${i}" x="${(i/2)*70 + 20}" width="40" height="90" fill="black"/>`);
         s += '</svg>';
         document.getElementById('pianoContainer').innerHTML = s;
     }
 
     function drawStaff() {
         let ctx = document.getElementById('staffCanvas').getContext('2d');
-        ctx.clearRect(0,0,800,300);
+        ctx.clearRect(0,0,800,400);
         ctx.lineWidth = 2;
         for(let i=0; i<5; i++) {
-            ctx.beginPath(); ctx.moveTo(50, 100 + i*40); ctx.lineTo(750, 100 + i*40); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(50, 160 + i*40); ctx.lineTo(750, 160 + i*40); ctx.stroke();
         }
     }
 
+    function drawNote(y) {
+        let ctx = document.getElementById('staffCanvas').getContext('2d');
+        ctx.beginPath(); ctx.ellipse(400, y, 25, 18, 0, 0, 7); ctx.stroke();
+        // 加線
+        if(y >= 280) { ctx.beginPath(); ctx.moveTo(350, 280); ctx.lineTo(450, 280); ctx.stroke(); }
+        if(y >= 320) { ctx.beginPath(); ctx.moveTo(350, 320); ctx.lineTo(450, 320); ctx.stroke(); }
+    }
+
+    function startGame() { yesCount=0; noCount=0; showNote(); }
     function showNote() {
         drawStaff();
-        let ctx = document.getElementById('staffCanvas').getContext('2d');
         let n = notes[Math.floor(Math.random()*notes.length)];
-        // 塗りつぶさず（fillせず）、枠線のみ描画して全音符にする
-        ctx.beginPath(); ctx.ellipse(400, n.y, 25, 18, 0, 0, 7); 
-        ctx.lineWidth = 3; ctx.stroke(); 
+        drawNote(n.y);
         currentTargetId = n.id;
     }
 
-    function startGame() {
-        yesCount=0; noCount=0;
-        document.getElementById('yesScore').innerText = "YES: 0";
-        document.getElementById('noScore').innerText = "NO: 0";
-        let t = 60;
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            t--; document.getElementById('timeDisplay').innerText = "Time: " + t;
-            if(t <= 0) clearInterval(timerInterval);
-        }, 1000);
-        showNote();
-    }
-
     function check(e) {
-        if(!currentTargetId || e.target.id.indexOf('key') === -1) return;
-        if(e.target.id === currentTargetId) {
-            yesCount++; document.getElementById('yesScore').innerText = "YES: " + yesCount;
-        } else {
-            noCount++; document.getElementById('noScore').innerText = "NO: " + noCount;
-        }
+        if(!currentTargetId) return;
+        if(e.target.id === currentTargetId) yesCount++; else noCount++;
+        document.getElementById('yesScore').innerText = "YES: " + yesCount;
+        document.getElementById('noScore').innerText = "NO: " + noCount;
         showNote();
     }
-
     window.onload = () => { drawStaff(); createPiano(); };
 </script>
 </body>
