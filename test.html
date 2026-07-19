@@ -5,57 +5,39 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
-<body style="text-align: center;">
+<body style="text-align: center; font-family: sans-serif;">
 
+    <!-- UI部分 -->
     <div style="padding: 20px; font-size: 32px;">
-        <button onclick="startGame()" style="font-size: 28px;">START</button>
+        <button id="startBtn" onclick="startGame()" style="font-size: 28px;">START</button>
         <span id="timeDisplay">Time: 60</span>
         <span id="yesScore">YES: 0</span>
         <span id="noScore">NO: 0</span>
     </div>
 
+    <!-- 五線譜エリア -->
     <canvas id="staffCanvas" width="800" height="350"></canvas>
     
     <!-- 鍵盤エリア -->
-   <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="cursor:pointer; margin-top:20px;">
+    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="cursor:pointer; margin-top:20px;">
         <!-- 白鍵 -->
-        <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key12" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key14" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key16" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key17" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key19" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key21" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key23" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
+        <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key12" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key14" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key16" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key17" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key19" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key21" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/><rect id="key23" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
         <!-- 黒鍵 -->
-        <rect id="key1" x="47.6" width="47.6" height="120" fill="black"/><rect id="key3" x="119" width="47.6" height="120" fill="black"/>
-        <rect id="key6" x="261.8" width="47.6" height="120" fill="black"/><rect id="key8" x="333.2" width="47.6" height="120" fill="black"/>
-        <rect id="key10" x="404.6" width="47.6" height="120" fill="black"/><rect id="key13" x="547.4" width="47.6" height="120" fill="black"/>
-        <rect id="key15" x="618.8" width="47.6" height="120" fill="black"/><rect id="key18" x="761.6" width="47.6" height="120" fill="black"/>
-        <rect id="key20" x="833" width="47.6" height="120" fill="black"/><rect id="key22" x="904.4" width="47.6" height="120" fill="black"/>
+        <rect id="key1" x="47.6" width="47.6" height="120" fill="black"/><rect id="key3" x="119" width="47.6" height="120" fill="black"/><rect id="key6" x="261.8" width="47.6" height="120" fill="black"/><rect id="key8" x="333.2" width="47.6" height="120" fill="black"/><rect id="key10" x="404.6" width="47.6" height="120" fill="black"/><rect id="key13" x="547.4" width="47.6" height="120" fill="black"/><rect id="key15" x="618.8" width="47.6" height="120" fill="black"/><rect id="key18" x="761.6" width="47.6" height="120" fill="black"/><rect id="key20" x="833" width="47.6" height="120" fill="black"/><rect id="key22" x="904.4" width="47.6" height="120" fill="black"/>
     </svg>
+
     <script>
         let osc, timerInterval, timeLeft = 60, yesCount = 0, noCount = 0, currentTargetKeyId = "";
-       const notePositions = [
-            { id: "key0", y: 240 }, // ド
-            { id: "key2", y: 220 }, // レ
-            { id: "key4", y: 200 }, // ミ
-            { id: "key5", y: 180 }, // ファ
-            { id: "key7", y: 160 }, // ソ（低い）
-            { id: "key19", y: 80 }  // ソ（高い・第4間）
+        const notePositions = [
+            { id: "key7", y: 160 }, { id: "key19", y: 80 } // 第1線のソと第4間のソ
         ];
 
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
 
         function setupStaff() {
-            let ctx = document.getElementById('staffCanvas').getContext('2d');
-            ctx.clearRect(0, 0, 800, 350);
+            let canvas = document.getElementById('staffCanvas');
+            let ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.strokeStyle = "black"; ctx.lineWidth = 2;
             for (let i = 0; i < 5; i++) {
                 ctx.beginPath(); ctx.moveTo(100, 160 + i * 40); ctx.lineTo(700, 160 + i * 40); ctx.stroke();
@@ -72,7 +54,7 @@
             showNextNote();
             timerInterval = setInterval(() => {
                 timeLeft--;
-                if (timeLeft <= 0) { clearInterval(timerInterval); alert("終了"); }
+                if (timeLeft <= 0) { clearInterval(timerInterval); alert("終了！"); }
                 document.getElementById('timeDisplay').innerText = "Time: " + timeLeft;
             }, 1000);
         }
@@ -82,33 +64,32 @@
             let ctx = document.getElementById('staffCanvas').getContext('2d');
             let note = notePositions[Math.floor(Math.random() * notePositions.length)];
             ctx.font = "80px Arial";
-            ctx.fillText("○", 300, note.y + 20);
+            ctx.fillText("○", 300, note.y + 30);
             currentTargetKeyId = note.id;
         }
 
         function handlePianoClick(event) {
-        userStartAudio();
-        const id = event.target.id;
-        // noteMapは昨日の24鍵分をそのまま使用してください
-
-        if (noteMap[id]) {
-            osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
-            setTimeout(() => osc.amp(0, 0.1), 100);
-
-            // 正解判定
-            if (id === currentTargetKeyId) {
-                yesCount++;
-                document.getElementById('yesScore').innerText = "YES: " + yesCount;
-            } else {
-                noCount++;
-                document.getElementById('noScore').innerText = "NO: " + noCount;
-            }
-
-            // 【重要】判定の後に、どちらであっても必ず次の問題へ進む
-            showNextNote();
+            userStartAudio();
+            let id = event.target.id;
+            let noteMap = {
+                "key0": 130.81, "key1": 138.59, "key2": 146.83, "key3": 155.56, "key4": 164.81, 
+                "key5": 174.61, "key6": 185.00, "key7": 196.00, "key8": 207.65, "key9": 220.00, 
+                "key10": 233.08, "key11": 246.94, "key12": 261.63, "key13": 277.18, "key14": 293.66, 
+                "key15": 311.13, "key16": 329.63, "key17": 349.23, "key18": 369.99, "key19": 392.00, 
+                "key20": 415.30, "key21": 440.00, "key22": 466.16, "key23": 493.88
+            };
+            if (noteMap[id]) {
+                osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
+                setTimeout(() => osc.amp(0, 0.1), 100);
+                if (id === currentTargetKeyId) {
+                    yesCount++; document.getElementById('yesScore').innerText = "YES: " + yesCount;
+                } else {
+                    noCount++; document.getElementById('noScore').innerText = "NO: " + noCount;
+                }
+                showNextNote(); // どちらでも次へ進む
             }
         }
-    }
+        window.onload = setupStaff;
     </script>
 </body>
 </html>
