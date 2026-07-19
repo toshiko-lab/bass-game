@@ -95,15 +95,17 @@
             osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
             setTimeout(() => osc.amp(0, 0.1), 100);
 
-            // 正確に「現在表示されている音符のID」と「押した鍵盤のID」を比較
+            // 正解判定
             if (id === currentTargetKeyId) {
                 yesCount++;
                 document.getElementById('yesScore').innerText = "YES: " + yesCount;
-                showNextNote(); // 正解したら次へ
             } else {
                 noCount++;
                 document.getElementById('noScore').innerText = "NO: " + noCount;
-                // 不正解のときは何もしない（YESもNOも進まない、音だけ鳴る）
+            }
+
+            // 【重要】判定の後に、どちらであっても必ず次の問題へ進む
+            showNextNote();
             }
         }
     }
