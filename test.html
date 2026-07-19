@@ -6,42 +6,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
 <body style="text-align: center; font-family: sans-serif;">
-
     <div style="padding: 20px; font-size: 32px;">
-        <button onclick="startGame()" style="font-size: 28px;">START</button>
+        <button id="startBtn" onclick="startGame()" style="font-size: 28px;">START</button>
         <span id="timeDisplay">Time: 60</span>
         <span id="yesScore">YES: 0</span>
         <span id="noScore">NO: 0</span>
     </div>
 
-    <!-- 五線譜：幅と高さを以前のものに戻しました -->
     <canvas id="staffCanvas" width="800" height="350"></canvas>
     
-    <!-- 鍵盤：2オクターブ（黒鍵あり） -->
-    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="cursor:pointer; margin-top: 50px;">
-        <!-- 白鍵 -->
-        <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black"/><rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black"/><rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black"/><rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black"/><rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black"/><rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black"/><rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black"/><rect id="key12" x="499.8" width="71.4" height="200" fill="white" stroke="black"/><rect id="key14" x="571.2" width="71.4" height="200" fill="white" stroke="black"/><rect id="key16" x="642.6" width="71.4" height="200" fill="white" stroke="black"/><rect id="key17" x="714" width="71.4" height="200" fill="white" stroke="black"/><rect id="key19" x="785.4" width="71.4" height="200" fill="white" stroke="black"/><rect id="key21" x="856.8" width="71.4" height="200" fill="white" stroke="black"/><rect id="key23" x="928.2" width="71.8" height="200" fill="white" stroke="black"/>
-        <!-- 黒鍵 -->
-        <rect id="key1" x="47.6" width="47.6" height="120" fill="black"/><rect id="key3" x="119" width="47.6" height="120" fill="black"/><rect id="key6" x="261.8" width="47.6" height="120" fill="black"/><rect id="key8" x="333.2" width="47.6" height="120" fill="black"/><rect id="key10" x="404.6" width="47.6" height="120" fill="black"/><rect id="key13" x="547.4" width="47.6" height="120" fill="black"/><rect id="key15" x="618.8" width="47.6" height="120" fill="black"/><rect id="key18" x="761.6" width="47.6" height="120" fill="black"/><rect id="key20" x="833" width="47.6" height="120" fill="black"/><rect id="key22" x="904.4" width="47.6" height="120" fill="black"/>
+    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="cursor:pointer;">
+        <!-- 鍵盤のSVGパーツはここに以前のものを入れてください -->
     </svg>
 
     <script>
         let osc, timerInterval, currentTargetKeyId = "", yesCount = 0, noCount = 0;
-        // y座標を40ずつ離して間隔を戻しました。全音符サイズを80pxに。
+        
+        // ヘ音記号の正しい位置（線と線の間、または線の上）に微調整しました
         const notes = [
             { id: "key0", y: 220 }, // ド(C1)：下第1間
-            { id: "key2", y: 200 }, // レ：下第1線
+            { id: "key2", y: 200 }, // レ：第1線
             { id: "key4", y: 180 }, // ミ：第1間
-            { id: "key5", y: 160 }, // ファ：第1線
+            { id: "key5", y: 160 }, // ファ：第2線
             { id: "key7", y: 140 }  // ソ：第2間
         ];
 
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
 
         function drawStaff() {
-            let canvas = document.getElementById('staffCanvas');
-            let ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let ctx = document.getElementById('staffCanvas').getContext('2d');
+            ctx.clearRect(0, 0, 800, 350);
             ctx.strokeStyle = "black"; ctx.lineWidth = 2;
             for (let i = 0; i < 5; i++) {
                 ctx.beginPath(); ctx.moveTo(100, 120 + i * 40); ctx.lineTo(700, 120 + i * 40); ctx.stroke();
@@ -49,35 +43,23 @@
             ctx.font = "193px Arial"; ctx.fillText("𝄢", 20, 246);
         }
 
-        function startGame() {
-            yesCount = 0; noCount = 0;
-            document.getElementById('yesScore').innerText = "YES: 0";
-            document.getElementById('noScore').innerText = "NO: 0";
-            showNextNote();
-        }
-
         function showNextNote() {
             drawStaff();
             let ctx = document.getElementById('staffCanvas').getContext('2d');
             let n = notes[Math.floor(Math.random() * notes.length)];
-            ctx.font = "80px Arial"; // 全音符を大きくしました
-            ctx.fillText("○", 350, n.y + 10);
+            ctx.font = "50px Arial";
+            ctx.fillText("○", 350, n.y + 15); // 微調整
             currentTargetKeyId = n.id;
         }
 
         function handlePianoClick(event) {
             userStartAudio();
             let id = event.target.id;
-            // 2オクターブ対応の周波数リスト
+            // 24鍵盤分すべての周波数を入れると、全鍵盤で音が鳴ります
             let noteMap = {
-                "key0": 65.41,  // C1
-                "key1": 69.30, 
-                "key2": 73.42,  // D1
-                "key3": 77.78,
-                "key4": 82.41,  // E1
-                "key5": 87.31,  // F1
-                "key6": 92.50,
-                "key7": 98.00   // G1
+                "key0": 65.41, "key1": 69.30, "key2": 73.42, "key3": 77.78, "key4": 82.41, "key5": 87.31, "key6": 92.50, "key7": 98.00,
+                "key8": 103.83, "key9": 110.00, "key10": 116.54, "key11": 123.47, "key12": 130.81, "key13": 138.59, "key14": 146.83, "key15": 155.56,
+                "key16": 164.81, "key17": 174.61, "key18": 185.00, "key19": 196.00, "key20": 207.65, "key21": 220.00, "key22": 233.08, "key23": 246.94
             };
             
             if (noteMap[id]) {
