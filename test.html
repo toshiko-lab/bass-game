@@ -57,27 +57,31 @@
 
         // STARTボタンが押された時の処理
         function startGame() {
-            // すでに動いているタイマーがあれば止める
-            clearInterval(timerInterval);
-            timeLeft = 60; // 60にリセット
-            document.getElementById('timeDisplay').innerText = "Time: 60";
-            
-            // 1秒ごとに時間を減らしていく
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                
-                // 0秒になったら停止
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timeLeft = 0;
-                    alert("終了です！");
-                }
-                
-                // 2桁表示にして更新
-                let displaySec = timeLeft < 10 ? "0" + timeLeft : timeLeft;
-                document.getElementById('timeDisplay').innerText = "Time: " + displaySec;
-            }, 1000);
-        }
+        // 1. タイマーのリセット
+        clearInterval(timerInterval);
+        timeLeft = 60;
+        document.getElementById('timeDisplay').innerText = "Time: 60";
+        
+        // 2. スコアのリセット
+        yesCount = 0;
+        noCount = 0;
+        document.getElementById('yesScore').innerText = "YES: 0";
+        document.getElementById('noScore').innerText = "NO: 0";
+
+        // 3. 次の問題（音符）を表示する処理（ここも後で呼び出します）
+        // showNextNote(); 
+
+        // 4. タイマー開始
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timeLeft = 0;
+                alert("終了です！");
+            }
+            document.getElementById('timeDisplay').innerText = "Time: " + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
+        }, 1000);
+    }
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
 
         function setupStaff() {
