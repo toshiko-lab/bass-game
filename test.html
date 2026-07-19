@@ -98,26 +98,40 @@
 
         window.onload = setupStaff;
 
-        function handlePianoClick(event) {
-            userStartAudio(); // クリックで音を許可
-            const id = event.target.id;
-            
-            // 2オクターブ分（白14+黒10）の周波数マップ
-            const noteMap = {
-                "key0": 130.81, "key1": 138.59, "key2": 146.83, "key3": 155.56, 
-                "key4": 164.81, "key5": 174.61, "key6": 185.00, "key7": 196.00, 
-                "key8": 207.65, "key9": 220.00, "key10": 233.08, "key11": 246.94, 
-                "key12": 261.63, "key13": 277.18, "key14": 293.66, "key15": 311.13, 
-                "key16": 329.63, "key17": 349.23, "key18": 369.99, "key19": 392.00, 
-                "key20": 415.30, "key21": 440.00, "key22": 466.16, "key23": 493.88
-            };
-            
-            if (noteMap[id]) {
-                osc.freq(noteMap[id]);
-                osc.amp(0.3, 0.02);
-                setTimeout(() => osc.amp(0, 0.1), 100);
+        // 今の問題の正解音（現在は「ド」に設定）
+    let currentTargetKeyId = "key0"; 
+    let yesCount = 0;
+    let noCount = 0;
+
+    // クリック判定（アラートなし・カウントアップのみ）
+    function handlePianoClick(event) {
+        userStartAudio();
+        const id = event.target.id;
+        
+        const noteMap = {
+            "key0": 130.81, "key1": 138.59, "key2": 146.83, "key3": 155.56, 
+            "key4": 164.81, "key5": 174.61, "key6": 185.00, "key7": 196.00, 
+            "key8": 207.65, "key9": 220.00, "key10": 233.08, "key11": 246.94, 
+            "key12": 261.63, "key13": 277.18, "key14": 293.66, "key15": 311.13, 
+            "key16": 329.63, "key17": 349.23, "key18": 369.99, "key19": 392.00, 
+            "key20": 415.30, "key21": 440.00, "key22": 466.16, "key23": 493.88
+        };
+        
+        if (noteMap[id]) {
+            osc.freq(noteMap[id]);
+            osc.amp(0.3, 0.02);
+            setTimeout(() => osc.amp(0, 0.1), 100);
+
+            // 判定処理
+            if (id === currentTargetKeyId) {
+                yesCount++;
+                document.getElementById('yesScore').innerText = "YES: " + yesCount;
+            } else {
+                noCount++;
+                document.getElementById('noScore').innerText = "NO: " + noCount;
             }
         }
+    }
     </script>
 </body>
 </html>
