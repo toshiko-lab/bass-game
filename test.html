@@ -5,111 +5,84 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
 </head>
-<body style="text-align: center; font-family: sans-serif;">
+<body style="text-align: center;">
 
-    <div id="ui-container" style="padding: 20px; font-size: 32px; display: flex; justify-content: center; gap: 40px; align-items: center;">
-        <button id="startBtn" onclick="startGame()" style="font-size: 28px; padding: 5px 20px;">START</button>
+    <div style="padding: 20px; font-size: 32px;">
+        <button onclick="startGame()" style="font-size: 28px;">START</button>
         <span id="timeDisplay">Time: 60</span>
-        <div id="yesScore">YES: 0</div>
-        <div id="noScore">NO: 0</div>
+        <span id="yesScore">YES: 0</span>
+        <span id="noScore">NO: 0</span>
     </div>
 
-    <div id="staff-container">
-        <canvas id="staffCanvas" width="800" height="350"></canvas>
-    </div>
-
-    <!-- 鍵盤を復活させました -->
-    <svg id="piano" onclick="handlePianoClick(event)" width="1000" height="200" viewBox="0 0 1000 200" style="margin-top: 50px; cursor:pointer;">
-        <!-- 白鍵 24枚 -->
-        <rect id="key0" x="0" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key2" x="71.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key4" x="142.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key5" x="214.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key7" x="285.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key9" x="357" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key11" x="428.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key12" x="499.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key14" x="571.2" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key16" x="642.6" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key17" x="714" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key19" x="785.4" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key21" x="856.8" width="71.4" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <rect id="key23" x="928.2" width="71.8" height="200" fill="white" stroke="black" stroke-width="2"/>
-        <!-- 黒鍵 -->
-        <rect id="key1" x="47.6" width="47.6" height="120" fill="black"/><rect id="key3" x="119" width="47.6" height="120" fill="black"/>
-        <rect id="key6" x="261.8" width="47.6" height="120" fill="black"/><rect id="key8" x="333.2" width="47.6" height="120" fill="black"/>
-        <rect id="key10" x="404.6" width="47.6" height="120" fill="black"/><rect id="key13" x="547.4" width="47.6" height="120" fill="black"/>
-        <rect id="key15" x="618.8" width="47.6" height="120" fill="black"/><rect id="key18" x="761.6" width="47.6" height="120" fill="black"/>
-        <rect id="key20" x="833" width="47.6" height="120" fill="black"/><rect id="key22" x="904.4" width="47.6" height="120" fill="black"/>
+    <canvas id="staffCanvas" width="800" height="350"></canvas>
+    
+    <!-- 鍵盤エリア -->
+    <svg id="piano" onclick="handlePianoClick(event)" width="800" height="150" viewBox="0 0 1000 200" style="cursor:pointer;">
+        <!-- シンプルにkey0～key7だけ先に配置し、動作を確認します -->
+        <rect id="key0" x="0" width="100" height="200" fill="white" stroke="black"/>
+        <rect id="key2" x="100" width="100" height="200" fill="white" stroke="black"/>
+        <rect id="key4" x="200" width="100" height="200" fill="white" stroke="black"/>
+        <rect id="key5" x="300" width="100" height="200" fill="white" stroke="black"/>
+        <rect id="key7" x="400" width="100" height="200" fill="white" stroke="black"/>
     </svg>
 
     <script>
         let osc, timerInterval, timeLeft = 60, yesCount = 0, noCount = 0, currentTargetKeyId = "";
-       const notePositions = [
-        { id: "key0", y: 240, label: "ド" },
-        { id: "key2", y: 220, label: "レ" },
-        { id: "key4", y: 200, label: "ミ" },
-        { id: "key5", y: 180, label: "ファ" },
-        { id: "key7", y: 160, label: "ソ" }
-    ];
+        const notePositions = [
+            { id: "key0", y: 240 }, { id: "key2", y: 220 }, { id: "key4", y: 200 }, 
+            { id: "key5", y: 180 }, { id: "key7", y: 160 }
+        ];
 
         function setup() { osc = new p5.Oscillator('triangle'); osc.start(); osc.amp(0); }
+
         function setupStaff() {
-            let canvas = document.getElementById('staffCanvas');
-            let ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let ctx = document.getElementById('staffCanvas').getContext('2d');
+            ctx.clearRect(0, 0, 800, 350);
             ctx.strokeStyle = "black"; ctx.lineWidth = 2;
-            for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.moveTo(100, 160 + i * 40); ctx.lineTo(700, 160 + i * 40); ctx.stroke(); }
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath(); ctx.moveTo(100, 160 + i * 40); ctx.lineTo(700, 160 + i * 40); ctx.stroke();
+            }
             ctx.font = "193px Arial"; ctx.fillText("𝄢", 20, 286); 
         }
 
         function startGame() {
-            clearInterval(timerInterval); timeLeft = 60; yesCount = 0; noCount = 0;
+            clearInterval(timerInterval);
+            timeLeft = 60; yesCount = 0; noCount = 0;
             document.getElementById('timeDisplay').innerText = "Time: 60";
             document.getElementById('yesScore').innerText = "YES: 0";
             document.getElementById('noScore').innerText = "NO: 0";
             showNextNote();
             timerInterval = setInterval(() => {
                 timeLeft--;
-                if (timeLeft <= 0) { clearInterval(timerInterval); alert("終了です！"); }
-                document.getElementById('timeDisplay').innerText = "Time: " + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
+                if (timeLeft <= 0) { clearInterval(timerInterval); alert("終了"); }
+                document.getElementById('timeDisplay').innerText = "Time: " + timeLeft;
             }, 1000);
         }
 
         function showNextNote() {
             setupStaff();
-            let canvas = document.getElementById('staffCanvas');
-            let ctx = canvas.getContext('2d');
+            let ctx = document.getElementById('staffCanvas').getContext('2d');
             let note = notePositions[Math.floor(Math.random() * notePositions.length)];
-            ctx.font = "80px Arial"; // サイズを倍にしました
-            ctx.fillText("○", 300, note.y + 20); // 位置を微調整
+            ctx.font = "80px Arial";
+            ctx.fillText("○", 300, note.y + 20);
             currentTargetKeyId = note.id;
         }
 
         function handlePianoClick(event) {
             userStartAudio();
-            const id = event.target.id;
-            const noteMap = { /* 24鍵分の全データを入れてください */ };
-            
-            if (noteMap[id]) {
-                osc.freq(noteMap[id]); osc.amp(0.3, 0.02);
+            let id = event.target.id;
+            let freqs = { "key0": 130.8, "key2": 146.8, "key4": 164.8, "key5": 174.6, "key7": 196.0 };
+            if (freqs[id]) {
+                osc.freq(freqs[id]); osc.amp(0.3, 0.02);
                 setTimeout(() => osc.amp(0, 0.1), 100);
-
-                // --- ここが正解判定の核心です ---
                 if (id === currentTargetKeyId) {
-                    // 正解の場合
-                    yesCount++;
-                    document.getElementById('yesScore').innerText = "YES: " + yesCount;
-                    showNextNote(); // 次の問題へ進む
+                    yesCount++; document.getElementById('yesScore').innerText = "YES: " + yesCount;
+                    showNextNote();
                 } else {
-                    // 間違いの場合
-                    noCount++;
-                    document.getElementById('noScore').innerText = "NO: " + noCount;
-                    // ※showNextNote() を呼ばないので、問題は切り替わりません
+                    noCount++; document.getElementById('noScore').innerText = "NO: " + noCount;
                 }
             }
         }
-        window.onload = setupStaff;
     </script>
 </body>
 </html>
