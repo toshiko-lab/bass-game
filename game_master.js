@@ -15,7 +15,7 @@ let score = 0;
 
 // 画像の読み込み（config_bass.jsで定義されている前提、なければここで代入）
 const clefImage = new Image();
-clefImage.src = "bass_clef.png"; // ヘ音記号の画像パス
+clefImage.src = config.clefImage;
 
 // ページ読み込み時に初期化
 window.onload = function() {
