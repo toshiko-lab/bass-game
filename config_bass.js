@@ -2,7 +2,9 @@
 
 const config = {
   title: "ヘ音記号音読みゲーム（低いファ〜高いラ）",
+  titleShort: "F3-A4",
 
+  clef: "bass",
   clefImage: "bass.png",
 
   timeLimit: 60,
