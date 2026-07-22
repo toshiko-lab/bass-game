@@ -74,6 +74,15 @@ function draw() {
     drawClef();
     drawNote(currentNote);
     drawPiano();
+
+    if (resultTimer > 0) {
+        ctx.font = "40px Arial";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText(resultText, canvas.width / 2, 80);
+
+        resultTimer--;
+    }
 }
 
 // --- 5. 五線譜の描画 ---
