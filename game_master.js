@@ -13,6 +13,9 @@ const NOTE_POSITIONS = (typeof config !== "undefined" && config.NOTE_POSITIONS) 
 let currentNote = "";
 let score = 0;
 
+let resultText = "";
+let resultTimer = 0;
+
 // 画像の読み込み（config_bass.jsで定義されている前提、なければここで代入）
 const clefImage = new Image();
 clefImage.src = config.clefImage;
