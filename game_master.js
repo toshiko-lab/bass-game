@@ -46,14 +46,19 @@ function checkAnswer(inputNote) {
     // ここでは単純に、入力された音名（"C"など）と currentNote の頭文字を比較
     const currentLetter = currentNote.charAt(0);
     
-    if (inputNote.toUpperCase() === currentLetter) {
-        score += 10;
-        alert("正解！");
-        generateNewNote();
-        draw();
-    } else {
-        alert("ざんねん！ちがうよ。");
-    }
+if (inputNote.toUpperCase() === currentLetter) {
+    score += 10;
+
+    resultText = "YES";
+    resultTimer = 60;
+
+    generateNewNote();
+    draw();
+} else {
+
+    resultText = "NO";
+    resultTimer = 60;
+}
     
     const scoreDisplay = document.getElementById("scoreDisplay");
     if (scoreDisplay) scoreDisplay.innerText = "スコア: " + score;
