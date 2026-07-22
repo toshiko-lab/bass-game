@@ -106,15 +106,11 @@ function drawStaff() {
 // --- 6. ヘ音記号の描画（位置とサイズの修正） ---
 function drawClef() {
     // ヘ音記号を第2線〜第5線の幅（間隔3つ分 = lineDistance * 3）に収める
-    const clefHeight = lineDistance * 3; 
-    const clefWidth = clefHeight * 0.85; // 一般的なヘ音記号の縦横比（約1:0.85）
-    
-    const x = 60; // 描画するX位置
-    
-    // 【重要】ヘ音記号の「書き始めの大きなドット」は第4線上にきます。
-    // 画像自体のデザインにもよりますが、上端を「第5線」に合わせると綺麗に収まります。
-    // 第5線のY座標は staffTop です。
-    const y = staffTop; 
+const clefHeight = lineDistance * 4.6;
+const clefWidth = clefHeight * 0.9;
+
+const x = 45;
+const y = staffTop - 15;
 
     if (clefImage.complete) {
         ctx.drawImage(clefImage, x, y, clefWidth, clefHeight);
