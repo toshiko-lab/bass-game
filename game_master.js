@@ -26,9 +26,49 @@ const PIANO = {
 
 };
 // configがあればそこから読み込み、なければデフォルト値を使う（今後の拡張に対応！）
-const WHITE_KEYS = (typeof config !== "undefined" && config.WHITE_KEYS) ? config.WHITE_KEYS : ["F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4"];
-const NOTE_POSITIONS = (typeof config !== "undefined" && config.NOTE_POSITIONS) ? config.NOTE_POSITIONS : {
-    "F3": 0, "G3": 1, "A3": 2, "B3": 3, "C4": 4, "D4": 5, "E4": 6, "F4": 7, "G4": 8, "A4": 9
+const WHITE_KEYS =
+(typeof config !== "undefined" && config.WHITE_KEYS)
+? config.WHITE_KEYS
+: PIANO.whiteKeys;
+const NOTE_POSITIONS =
+(typeof config !== "undefined" && config.NOTE_POSITIONS)
+? config.NOTE_POSITIONS
+: {
+    "C3": 0,
+    "D3": 1,
+    "E3": 2,
+    "F3": 3,
+    "G3": 4,
+    "A3": 5,
+    "B3": 6,
+    "C4": 7,
+    "D4": 8,
+    "E4": 9,
+    "F4": 10,
+    "G4": 11,
+    "A4": 12,
+    "B4": 13,
+    "C5": 14
+};
+const NOTE_POSITIONS =
+(typeof config !== "undefined" && config.NOTE_POSITIONS)
+? config.NOTE_POSITIONS
+: {
+    "C3": 0,
+    "D3": 1,
+    "E3": 2,
+    "F3": 3,
+    "G3": 4,
+    "A3": 5,
+    "B3": 6,
+    "C4": 7,
+    "D4": 8,
+    "E4": 9,
+    "F4": 10,
+    "G4": 11,
+    "A4": 12,
+    "B4": 13,
+    "C5": 14
 };
 
 let currentNote = "";
