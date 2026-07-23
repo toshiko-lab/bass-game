@@ -3,7 +3,28 @@
 // --- 1. グローバル変数・設定の定義 ---
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+// =========================
+// 共通ピアノデータ
+// =========================
+const PIANO = {
 
+    // 白鍵（2オクターブ）
+    whiteKeys: [
+        "C3","D3","E3","F3","G3","A3","B3",
+        "C4","D4","E4","F4","G4","A4","B4",
+        "C5"
+    ],
+
+    // 黒鍵が入る位置
+    // 「何番目の白鍵の右側に黒鍵があるか」
+    blackAfter: [
+        0,1,
+        3,4,5,
+        7,8,
+        10,11,12
+    ]
+
+};
 // configがあればそこから読み込み、なければデフォルト値を使う（今後の拡張に対応！）
 const WHITE_KEYS = (typeof config !== "undefined" && config.WHITE_KEYS) ? config.WHITE_KEYS : ["F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4"];
 const NOTE_POSITIONS = (typeof config !== "undefined" && config.NOTE_POSITIONS) ? config.NOTE_POSITIONS : {
