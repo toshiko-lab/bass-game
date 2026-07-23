@@ -158,12 +158,13 @@ function drawPiano() {
     const pianoTop = 260;       // 鍵盤の上端Y座標
     const whiteKeyWidth = 50;   // 白鍵1本の幅
     const whiteKeyHeight = 150; // 白鍵の長さ
-    const startX = (canvas.width - (whiteKeyWidth * 10)) / 2; // 中央寄せ
+    const whiteKeyCount = 15;
+　　const startX = (canvas.width - (whiteKeyWidth * whiteKeyCount)) / 2;
 
     // 白鍵の描画（10本）
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = 2;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < whiteKeyCount; i++) {
         let x = startX + i * whiteKeyWidth;
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(x, pianoTop, whiteKeyWidth, whiteKeyHeight);
