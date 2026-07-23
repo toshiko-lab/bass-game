@@ -50,27 +50,6 @@ const NOTE_POSITIONS =
     "B4": 13,
     "C5": 14
 };
-const NOTE_POSITIONS =
-(typeof config !== "undefined" && config.NOTE_POSITIONS)
-? config.NOTE_POSITIONS
-: {
-    "C3": 0,
-    "D3": 1,
-    "E3": 2,
-    "F3": 3,
-    "G3": 4,
-    "A3": 5,
-    "B3": 6,
-    "C4": 7,
-    "D4": 8,
-    "E4": 9,
-    "F4": 10,
-    "G4": 11,
-    "A4": 12,
-    "B4": 13,
-    "C5": 14
-};
-
 let currentNote = "";
 let score = 0;
 
@@ -258,22 +237,4 @@ for (const index of PIANO.blackAfter) {
         blackKeyHeight
     );
 }
-    // 黒鍵の描画
-    ctx.fillStyle = "#000000";
-    for (let i = 0; i < blackKeyPattern.length; i++) {
-        if (!blackKeyPattern[i]) continue;
 
-        // 白鍵と白鍵の境目をまたぐようにX座標を計算
-        let x = startX + (i + 1) * whiteKeyWidth - (blackKeyWidth / 2);
-
-        if (blackKeyPattern[i] === true) {
-            // 通常の黒鍵
-            ctx.fillRect(x, pianoTop, blackKeyWidth, blackKeyHeight);
-        } else if (blackKeyPattern[i] === "half") {
-            // 右端の半分だけ描画する黒鍵（白鍵の右端を超えないように幅を半分に制限）
-            const halfWidth = blackKeyWidth / 2;
-            ctx.fillRect(x, pianoTop, halfWidth, blackKeyHeight);
-        }
-    }
-}
-alert("game_master.js は最後まで読み込まれました");
