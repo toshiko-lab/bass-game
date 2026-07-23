@@ -276,3 +276,4 @@ for (const index of PIANO.blackAfter) {
         }
     }
 }
+alert("game_master.js は最後まで読み込まれました");
