@@ -182,7 +182,7 @@ function drawPiano() {
     const whiteKeyCount = 15;
 　　const startX = (canvas.width - (whiteKeyWidth * whiteKeyCount)) / 2;
 
-    // 白鍵の描画（10本）
+    // 白鍵の描画（15本）
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = 2;
     for (let i = 0; i < whiteKeyCount; i++) {
@@ -200,19 +200,24 @@ function drawPiano() {
     // インデックス i の白鍵と i+1 の白鍵の間に黒鍵があるかを true/false で指定
     // F-G(テ), G-A(テ), A-B(テ), B-C(×), C-D(テ), D-E(テ), E-F(×), F-G(テ), G-A(テ), A-B(半分)
     // ※ 右端（9番目）は、A4の右側（A4と次のB4の間）に半分の黒鍵を描画するためのフラグ
-    const blackKeyPattern = [
-        true,  // F-G 間 （3本組の1本目）
-        true,  // G-A 間 （3本組の2本目）
-        true,  // A-B 間 （3本組の3本目）
-        false, // B-C 間 （隙間）
-        true,  // C-D 間 （2本組の1本目）
-        true,  // D-E 間 （2本組の2本目）
-        false, // E-F 間 （隙間）
-        true,  // F-G 間 （3本組の1本目）
-        true,  // G-A 間 （3本組の2本目）
-        "half" // A-B 間 （右端：次のシとの間を半分だけ描画）
-    ];
+    // 黒鍵の設定
+const blackKeyWidth = whiteKeyWidth * 0.6;
+const blackKeyHeight = whiteKeyHeight * 0.6;
 
+// 黒鍵の描画
+ctx.fillStyle = "#000000";
+
+for (const index of PIANO.blackAfter) {
+
+    let x = startX + (index + 1) * whiteKeyWidth - blackKeyWidth / 2;
+
+    ctx.fillRect(
+        x,
+        pianoTop,
+        blackKeyWidth,
+        blackKeyHeight
+    );
+}
     // 黒鍵の描画
     ctx.fillStyle = "#000000";
     for (let i = 0; i < blackKeyPattern.length; i++) {
