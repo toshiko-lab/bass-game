@@ -237,4 +237,7 @@ for (const index of PIANO.blackAfter) {
         blackKeyHeight
     );
 }
+
+}   // ←これを追加
+
 alert("game_master.js は最後まで読み込まれました");
