@@ -213,14 +213,12 @@ function drawPiano() {
 
     // 黒鍵の設定
     const blackKeyWidth = whiteKeyWidth * 0.6; // 白鍵の60%の幅
-    const blackKeyHeight = whiteKeyHeight * 0.6; // 白鍵の60%の長さ
 
     // 白鍵10本（F, G, A, B, C, D, E, F, G, A）の「間」に黒鍵を置くかどうかのパターン
     // インデックス i の白鍵と i+1 の白鍵の間に黒鍵があるかを true/false で指定
     // F-G(テ), G-A(テ), A-B(テ), B-C(×), C-D(テ), D-E(テ), E-F(×), F-G(テ), G-A(テ), A-B(半分)
     // ※ 右端（9番目）は、A4の右側（A4と次のB4の間）に半分の黒鍵を描画するためのフラグ
     // 黒鍵の設定
-const blackKeyWidth = whiteKeyWidth * 0.6;
 const blackKeyHeight = whiteKeyHeight * 0.6;
 
 // 黒鍵の描画
