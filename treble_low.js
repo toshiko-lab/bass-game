@@ -38,15 +38,26 @@ function draw() {
   textSize(30);
   fill(0);
 
+  if (!gameStarted) {
+    text("クリックでスタート", width / 2, height / 2);
+    return;
+  }
+
   text("ト音記号 ト～1点ト", width / 2, 55);
 
   // ト音記号
-　image(clefImg, -10, 210, 110, 160);
+  image(clefImg, -10, 210, 110, 160);
+
   drawStaff();
   drawNote();
   drawKeyboard();
 }
-
+function mousePressed() {
+  if (!gameStarted) {
+    gameStarted = true;
+    newQuestion();
+  }
+}
 function drawStaff() {
   stroke(0);
 
