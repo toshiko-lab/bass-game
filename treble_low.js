@@ -3,6 +3,11 @@ let gap = 20;
 
 let clefImg;
 
+let gameStarted = false;
+let gameOver = false;
+let score = 0;
+let mistakes = 0;
+
 let currentNote;
 let noteY;
 
