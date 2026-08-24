@@ -85,16 +85,7 @@ function checkAnswer(answer) {
 
   newQuestion();
 }
- drawStaff();
-  drawNote();
-  drawKeyboard();
 
-  if (result !== "") {
-    textSize(32);
-    fill(255, 0, 0);
-    text(result, width / 2, 100);
-  }
-}
 function drawNote() {
 noFill();
 stroke(0);
