@@ -102,38 +102,55 @@ ellipse(200, noteY, 24, 18);
 
 function drawKeyboard() {
 
+  // 2オクターブ：白鍵14個
+  const whiteKeyWidth = 40;
+  const whiteKeyHeight = 120;
+  const startX = 20;
+  const pianoY = 520;
+
   // 白鍵
   fill(255);
   stroke(0);
+  strokeWeight(2);
 
-  rect(40, 520, 50, 120);   // ファ
-  rect(90, 520, 50, 120);   // ソ
-  rect(140, 520, 50, 120);  // ラ
-  rect(190, 520, 50, 120);  // シ
-
-  rect(240, 520, 50, 120);  // ド
-  rect(290, 520, 50, 120);  // レ
-  rect(340, 520, 50, 120);  // ミ
-
-  rect(390, 520, 50, 120);  // ファ
-  rect(440, 520, 50, 120);  // ソ
-  rect(490, 520, 50, 120);  // ラ
+  for (let i = 0; i < 14; i++) {
+    rect(
+      startX + i * whiteKeyWidth,
+      pianoY,
+      whiteKeyWidth,
+      whiteKeyHeight
+    );
+  }
 
   // 黒鍵
   fill(0);
 
-  rect(75, 520, 30, 80);    // ファ♯
-  rect(125, 520, 30, 80);   // ソ♯
-  rect(175, 520, 30, 80);   // ラ♯
+  const blackKeyWidth = 24;
+  const blackKeyHeight = 80;
 
-  rect(275, 520, 30, 80);   // ド♯
-  rect(325, 520, 30, 80);   // レ♯
+  // C-D、D-E、F-G、G-A、A-B
+  // を各オクターブ分
+  const blackAfter = [
+    0, 1,
+    3, 4, 5,
+    7, 8,
+    10, 11, 12
+  ];
 
-  rect(425, 520, 30, 80);   // ファ♯
-  rect(475, 520, 30, 80);   // ソ♯
-  rect(525, 520, 30, 80);   // ラ♯
+  for (let i of blackAfter) {
+    const x =
+      startX +
+      (i + 1) * whiteKeyWidth -
+      blackKeyWidth / 2;
+
+    rect(
+      x,
+      pianoY,
+      blackKeyWidth,
+      blackKeyHeight
+    );
+  }
 }
-
 function newQuestion() {
   let current = random(noteData);
   currentNote = current.name;
