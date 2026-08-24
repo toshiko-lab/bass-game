@@ -86,7 +86,13 @@ function checkAnswer(answer) {
 
   newQuestion();
 }
+function drawStaff() {
+  stroke(0);
 
+  for (let i = 0; i < 5; i++) {
+    line(50, startY + i * gap, 550, startY + i * gap);
+  }
+}
 function drawNote() {
 noFill();
 stroke(0);
