@@ -52,7 +52,14 @@ function draw() {
   drawStaff();
   drawNote();
   drawKeyboard();
+
+  if (result !== "") {
+    textSize(32);
+    fill(255, 0, 0);
+    text(result, width / 2, 100);
+  }
 }
+
 function mousePressed() {
   if (!gameStarted) {
     gameStarted = true;
@@ -66,6 +73,7 @@ function mousePressed() {
     checkAnswer("F");
   }
 }
+
 function checkAnswer(answer) {
   if (answer === currentNote) {
     result = "せいかい！";
