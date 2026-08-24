@@ -49,6 +49,16 @@ function draw() {
   // ト音記号
   image(clefImg, -10, 210, 110, 160);
 
+  drawStaff();
+  drawNote();
+  drawKeyboard();
+
+  if (result !== "") {
+    textSize(32);
+    fill(255, 0, 0);
+    text(result, width / 2, 100);
+  }
+}
  
 
 function mousePressed() {
