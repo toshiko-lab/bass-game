@@ -77,14 +77,16 @@ function checkAnswer(answer) {
 
   newQuestion();
 }
-function drawStaff() {
-  stroke(0);
+ drawStaff();
+  drawNote();
+  drawKeyboard();
 
-  for (let i = 0; i < 5; i++) {
-    line(50, startY + i * gap, 550, startY + i * gap);
+  if (result !== "") {
+    textSize(32);
+    fill(255, 0, 0);
+    text(result, width / 2, 100);
   }
 }
-
 function drawNote() {
 noFill();
 stroke(0);
