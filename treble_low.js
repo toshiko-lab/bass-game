@@ -7,6 +7,7 @@ let gameStarted = false;
 let gameOver = false;
 let score = 0;
 let mistakes = 0;
+let result = "";
 
 let currentNote;
 let noteY;
