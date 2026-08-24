@@ -57,6 +57,13 @@ function mousePressed() {
   if (!gameStarted) {
     gameStarted = true;
     newQuestion();
+    return;
+  }
+
+  // ファの鍵盤
+  if (mouseX >= 40 && mouseX < 90 &&
+      mouseY >= 520 && mouseY < 640) {
+    checkAnswer("F");
   }
 }
 function checkAnswer(answer) {
