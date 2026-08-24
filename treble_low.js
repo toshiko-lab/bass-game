@@ -59,6 +59,17 @@ function mousePressed() {
     newQuestion();
   }
 }
+function checkAnswer(answer) {
+  if (answer === currentNote) {
+    result = "せいかい！";
+    score++;
+  } else {
+    result = "ちがう！";
+    mistakes++;
+  }
+
+  newQuestion();
+}
 function drawStaff() {
   stroke(0);
 
