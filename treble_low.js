@@ -31,6 +31,7 @@ function preload() {
 function setup() {
   createCanvas(600, 760);
   synth = new p5.MonoSynth();
+  synth.setVolume(0.5);
   newQuestion();
 }
 
