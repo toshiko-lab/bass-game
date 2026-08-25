@@ -8,6 +8,7 @@ let gameOver = false;
 let score = 0;
 let mistakes = 0;
 let result = "";
+let synth;
 
 let currentNote;
 let noteY;
@@ -29,6 +30,7 @@ function preload() {
 
 function setup() {
   createCanvas(600, 760);
+  synth = new p5.MonoSynth();
   newQuestion();
 }
 
