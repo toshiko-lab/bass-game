@@ -67,10 +67,14 @@ function mousePressed() {
 
   // スタート
   if (!gameStarted) {
+    userStartAudio();
+    getAudioContext().resume();
+
     gameStarted = true;
     newQuestion();
     return;
   }
+
 
   // 黒鍵はスルー
   const whiteKeyWidth = 36;
