@@ -102,10 +102,11 @@ ellipse(200, noteY, 24, 18);
 
 function drawKeyboard() {
 
-  // 2オクターブ：白鍵14個
-  const whiteKeyWidth = 40;
+  // 2オクターブ：白鍵15個（C3～C5）
+  const whiteKeyWidth = 36;
   const whiteKeyHeight = 120;
-  const startX = 20;
+  const whiteKeyCount = 15;
+  const startX = (width - whiteKeyWidth * whiteKeyCount) / 2;
   const pianoY = 520;
 
   // 白鍵
@@ -113,7 +114,7 @@ function drawKeyboard() {
   stroke(0);
   strokeWeight(2);
 
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < whiteKeyCount; i++) {
     rect(
       startX + i * whiteKeyWidth,
       pianoY,
@@ -125,11 +126,11 @@ function drawKeyboard() {
   // 黒鍵
   fill(0);
 
-  const blackKeyWidth = 24;
+  const blackKeyWidth = 22;
   const blackKeyHeight = 80;
 
   // C-D、D-E、F-G、G-A、A-B
-  // を各オクターブ分
+  // 2オクターブ分
   const blackAfter = [
     0, 1,
     3, 4, 5,
