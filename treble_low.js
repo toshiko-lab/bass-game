@@ -138,12 +138,26 @@ function mousePressed() {
 }
 
 function checkAnswer(answer) {
+  const noteFreq = {
+    C: 523,
+    D: 587,
+    E: 659,
+    F: 698,
+    G: 784,
+    A: 880,
+    B: 988
+  };
+
   if (answer === currentNote) {
     result = "せいかい！";
     score++;
   } else {
     result = "ちがう！";
     mistakes++;
+  }
+
+  if (synth && noteFreq[answer]) {
+    synth.play(noteFreq[answer], 0.5, 0, 0.3);
   }
 
   newQuestion();
