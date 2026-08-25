@@ -62,16 +62,72 @@ function draw() {
  
 
 function mousePressed() {
+
+  // スタート
   if (!gameStarted) {
     gameStarted = true;
     newQuestion();
     return;
   }
 
-  // ファの鍵盤
-  if (mouseX >= 40 && mouseX < 90 &&
-      mouseY >= 520 && mouseY < 640) {
-    checkAnswer("F");
+  // 黒鍵はスルー
+  const whiteKeyWidth = 36;
+  const whiteKeyCount = 14;
+  const startX = (width - whiteKeyWidth * whiteKeyCount) / 2;
+
+  const blackKeyWidth = 22;
+  const blackKeyHeight = 80;
+  const pianoY = 520;
+
+  const blackAfter = [
+    0, 1,
+    3, 4, 5,
+    7, 8,
+    10, 11, 12
+  ];
+
+  for (let i of blackAfter) {
+    const x =
+      startX +
+      (i + 1) * whiteKeyWidth -
+      blackKeyWidth / 2;
+
+    if (
+      mouseX >= x &&
+      mouseX < x + blackKeyWidth &&
+      mouseY >= pianoY &&
+      mouseY < pianoY + blackKeyHeight
+    ) {
+      return;
+    }
+  }
+
+  // 白鍵の音名
+  const whiteNotes = [
+    "C", "D", "E", "F", "G", "A", "B",
+    "C", "D", "E", "F", "G", "A", "B"
+  ];
+
+  // 白鍵をクリックしたか
+  for (let i = 0; i < whiteNotes.length; i++) {
+
+    const x = startX + i * whiteKeyWidth;
+
+    if (
+      mouseX >= x &&
+      mouseX < x + whiteKeyWidth &&
+      mouseY >= pianoY &&
+      mouseY < pianoY + 120
+    ) {
+
+      // 今回使う範囲：G～G_high
+      if (i >= 4 && i <= 11) {
+        checkAnswer(whiteNotes[i]);
+      }
+
+      // それ以外は何もしない（スルー）
+      return;
+    }
   }
 }
 
