@@ -140,14 +140,15 @@ function mousePressed() {
 
 function checkAnswer(answer) {
   const noteFreq = {
-    C: 523,
-    D: 587,
-    E: 659,
-    F: 698,
-    G: 784,
-    A: 880,
-    B: 988
-  };
+  G_low: 98,
+  A_low: 110,
+  B_low: 123,
+  C: 131,
+  D: 147,
+  E: 165,
+  F: 175,
+  G_high: 196
+};
 
   if (answer === currentNote) {
     result = "せいかい！";
