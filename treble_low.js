@@ -110,10 +110,10 @@ function mousePressed() {
   }
 
   // 白鍵の音名
-  const whiteNotes = [
-    "C", "D", "E", "F", "G", "A", "B",
-    "C", "D", "E", "F", "G", "A", "B"
-  ];
+ const whiteNotes = [
+  "C", "D", "E", "F", "G_low", "A_low", "B_low",
+  "C", "D", "E", "F", "G_high", "A_high", "B_high"
+];
 
   // 白鍵をクリックしたか
   for (let i = 0; i < whiteNotes.length; i++) {
