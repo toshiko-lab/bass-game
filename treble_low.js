@@ -14,16 +14,15 @@ let currentNote;
 let noteY;
 
 let noteData = [
-  {name: "G", y: startY + gap * 3.5},
-  {name: "A", y: startY + gap * 3},
-  {name: "B", y: startY + gap * 2.5},
-  {name: "C", y: startY + gap * 2},
-  {name: "D", y: startY + gap * 1.5},
-  {name: "E", y: startY + gap},
-  {name: "F", y: startY + gap * 0.5},
-  {name: "G_high", y: startY}
+  {name: "ソ", y: startY + gap * 3.5},
+  {name: "ラ", y: startY + gap * 3},
+  {name: "シ", y: startY + gap * 2.5},
+  {name: "ド", y: startY + gap * 2},
+  {name: "レ", y: startY + gap * 1.5},
+  {name: "ミ", y: startY + gap},
+  {name: "ファ", y: startY + gap * 0.5},
+  {name: "ソ_high", y: startY}
 ];
-
 function preload() {
   clefImg = loadImage("treble.png");
 }
@@ -76,21 +75,19 @@ function mousePressed() {
     return;
   }
 
-
   // 黒鍵はスルー
-  const whiteKeyWidth = 36;
-  const whiteKeyCount = 14;
+  const whiteKeyWidth = 50;
+  const whiteKeyCount = 8;
   const startX = (width - whiteKeyWidth * whiteKeyCount) / 2;
 
-  const blackKeyWidth = 22;
+  const blackKeyWidth = 30;
   const blackKeyHeight = 80;
   const pianoY = 520;
 
   const blackAfter = [
     0, 1,
-    3, 4, 5,
-    7, 8,
-    10, 11, 12
+    3, 4,
+    6, 7
   ];
 
   for (let i of blackAfter) {
@@ -110,10 +107,16 @@ function mousePressed() {
   }
 
   // 白鍵の音名
- const whiteNotes = [
-  "C", "D", "E", "F", "G_low", "A_low", "B_low",
-  "C", "D", "E", "F", "G_high", "A_high", "B_high"
-];
+  const whiteNotes = [
+    "ソ",
+    "ラ",
+    "シ",
+    "ド",
+    "レ",
+    "ミ",
+    "ファ",
+    "ソ_high"
+  ];
 
   // 白鍵をクリックしたか
   for (let i = 0; i < whiteNotes.length; i++) {
@@ -127,27 +130,22 @@ function mousePressed() {
       mouseY < pianoY + 120
     ) {
 
-      // 今回使う範囲：G～G_high
-      if (i >= 4 && i <= 11) {
-        checkAnswer(whiteNotes[i]);
-      }
-
-      // それ以外は何もしない（スルー）
+      checkAnswer(whiteNotes[i]);
       return;
     }
   }
 }
 
 function checkAnswer(answer) {
-  const noteFreq = {
-  G_low: 98,
-  A_low: 110,
-  B_low: 123,
-  C: 131,
-  D: 147,
-  E: 165,
-  F: 175,
-  G_high: 196
+ const noteFreq = {
+  "ソ": 196,
+  "ラ": 220,
+  "シ": 247,
+  "ド": 262,
+  "レ": 294,
+  "ミ": 330,
+  "ファ": 349,
+  "ソ_high": 392
 };
 
   if (answer === currentNote) {
@@ -180,10 +178,10 @@ ellipse(200, noteY, 24, 18);
 
 function drawKeyboard() {
 
-  // 2オクターブ：白鍵14個
-  const whiteKeyWidth = 36;
+  // 白鍵8個：ソ・ラ・シ・ド・レ・ミ・ファ・ソ
+  const whiteKeyWidth = 50;
   const whiteKeyHeight = 120;
-  const whiteKeyCount = 14;
+  const whiteKeyCount = 8;
   const startX = (width - whiteKeyWidth * whiteKeyCount) / 2;
   const pianoY = 520;
 
@@ -204,16 +202,14 @@ function drawKeyboard() {
   // 黒鍵
   fill(0);
 
-  const blackKeyWidth = 22;
+  const blackKeyWidth = 30;
   const blackKeyHeight = 80;
 
-  // ド♯・レ♯・ファ♯・ソ♯・ラ♯
-  // × 2オクターブ
+  // ソ♯・ラ♯・ド♯・レ♯・ファ♯・ソ♯
   const blackAfter = [
     0, 1,
-    3, 4, 5,
-    7, 8,
-    10, 11, 12
+    3, 4,
+    6, 7
   ];
 
   for (let i of blackAfter) {
