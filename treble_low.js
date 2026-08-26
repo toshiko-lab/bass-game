@@ -44,10 +44,27 @@ function draw() {
   fill(0);
 
  if (!gameStarted) {
-  text("クリックでスタート", width / 2, height / 2);
+
+  if (gameOver) {
+    textSize(36);
+    fill(0);
+    text("終了！", width / 2, 150);
+
+    textSize(28);
+    text("正解：" + score, width / 2, 210);
+    text("ミス：" + mistakes, width / 2, 250);
+
+    textSize(24);
+    text("クリックでスタート", width / 2, 330);
+
+  } else {
+    textSize(30);
+    fill(0);
+    text("クリックでスタート", width / 2, height / 2);
+  }
+
   return;
 }
-
 // タイマー
 let elapsed = int((millis() - startTime) / 1000);
 let remaining = max(0, timeLimit - elapsed);
@@ -86,14 +103,20 @@ textAlign(CENTER);
 function mousePressed() {
 
   // スタート
-  if (!gameStarted) {
-    userStartAudio();
-    getAudioContext().resume();
+ if (!gameStarted) {
+  userStartAudio();
+  getAudioContext().resume();
 
-    gameStarted = true;
-　　startTime = millis();
-　　newQuestion();
-　　return;
+  score = 0;
+  mistakes = 0;
+  result = "";
+  gameOver = false;
+
+  gameStarted = true;
+  startTime = millis();
+  newQuestion();
+  return;
+}
 
   // 黒鍵はスルー
   const whiteKeyWidth = 50;
