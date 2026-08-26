@@ -12,6 +12,8 @@ let synth;
 
 let currentNote;
 let noteY;
+let startTime;
+let timeLimit = 60;
 
 let noteData = [
   {name: "ソ", y: startY + gap * 3.5},
@@ -41,10 +43,28 @@ function draw() {
   textSize(30);
   fill(0);
 
-  if (!gameStarted) {
-    text("クリックでスタート", width / 2, height / 2);
-    return;
-  }
+ if (!gameStarted) {
+  text("クリックでスタート", width / 2, height / 2);
+  return;
+}
+
+// タイマー
+let elapsed = int((millis() - startTime) / 1000);
+let remaining = max(0, timeLimit - elapsed);
+
+textAlign(RIGHT);
+textSize(24);
+fill(0);
+text("Time: " + remaining, width - 20, 35);
+
+// 60秒終了
+if (remaining <= 0) {
+  gameStarted = false;
+  gameOver = true;
+  return;
+}
+
+textAlign(CENTER);
 
   text("ト音記号 ト～1点ト", width / 2, 55);
 
@@ -71,9 +91,9 @@ function mousePressed() {
     getAudioContext().resume();
 
     gameStarted = true;
-    newQuestion();
-    return;
-  }
+　　startTime = millis();
+　　newQuestion();
+　　return;
 
   // 黒鍵はスルー
   const whiteKeyWidth = 50;
